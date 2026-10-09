@@ -151,11 +151,6 @@ function ProductCard({ product }) {
               {fmtPrice(product.mrp)}
             </span>
           )}
-          {offerPct > 0 && (
-            <span style={{ fontSize: '0.72rem', fontWeight: 700, color: '#ef4444', background: '#fef2f2', borderRadius: 4, padding: '1px 6px' }}>
-              {offerPct}% off
-            </span>
-          )}
         </div>
 
         {/* Add to Cart → Qty pill */}

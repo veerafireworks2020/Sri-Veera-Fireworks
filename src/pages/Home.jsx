@@ -73,7 +73,6 @@ function ProductCard({ product }) {
         <p className="price-box">
           {fmtPrice(product.price)}
           {hasMrp && <del> {fmtPrice(product.mrp)}</del>}
-          {offerPct > 0 && <span className="off-tag">{offerPct}% off</span>}
         </p>
         {product.order_unit && <p className="text-[11px] text-gray-400 mt-0.5">{product.order_unit}</p>}
         <div className="flex-1" />
