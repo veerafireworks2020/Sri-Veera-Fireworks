@@ -55,9 +55,20 @@ export default function Header() {
                 <a
                   href={pricelistUrl}
                   download="Sri-Veera-Fireworks-Pricelist.pdf"
-                  className="hidden lg:flex items-center gap-1.5 bg-white border border-gray-200 text-gray-700 rounded-md px-3 py-2 text-sm font-semibold hover:bg-gray-50 transition-colors no-underline"
+                  className="hidden lg:flex items-center gap-1.5 no-underline"
+                  style={{
+                    background: 'linear-gradient(135deg, #ff8c00, #e87316)',
+                    color: '#fff',
+                    border: 'none',
+                    borderRadius: 8,
+                    padding: '8px 14px',
+                    fontSize: '0.85rem',
+                    fontWeight: 700,
+                    boxShadow: '0 2px 8px rgba(232,115,22,0.35)',
+                    letterSpacing: '0.2px',
+                  }}
                 >
-                  <Download size={18} color="#e87316" />
+                  <Download size={16} />
                   <span>Price List</span>
                 </a>
               )}
