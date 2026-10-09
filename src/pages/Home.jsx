@@ -32,6 +32,12 @@ function ProductCard({ product }) {
   const imgs      = parseImages(product.image_url)
   const qty       = cartQtys[product.id] || 0
   const wishlisted = isWishlisted(product.id)
+  const price  = parseFloat(product.price || 0)
+  const mrp    = parseFloat(product.mrp || 0)
+  const offerPct = product.discount_percentage > 0
+    ? product.discount_percentage
+    : (mrp > price && price > 0 ? Math.round((1 - price / mrp) * 100) : 0)
+  const hasMrp = mrp > price
 
   return (
     <div className="product-box rounded-lg overflow-hidden shadow-sm bg-white transition-transform hover:-translate-y-1 hover:shadow-md flex flex-col h-full">
@@ -40,12 +46,11 @@ function ProductCard({ product }) {
           <img src={imgs[0] || '/images/noimage.jpg'} alt={product.name} loading="lazy" />
           <div className="circle-shape" />
           <span className="background-text">FIREWORKS</span>
-          <div className="label-block">
-            {product.discount_percentage
-              ? <span className="label-theme">{product.discount_percentage}% Off</span>
-              : <span className="label-theme">Sale</span>
-            }
-          </div>
+          {offerPct > 0 && (
+            <div className="label-block">
+              <span className="label-theme">{offerPct}% Off</span>
+            </div>
+          )}
           <button
             className="wishlist-heart-btn"
             onClick={() => toggleWishlist(product.id)}
@@ -62,8 +67,8 @@ function ProductCard({ product }) {
         )}
         <p className="price-box">
           {fmtPrice(product.price)}
-          {product.discount_percentage > 0 && product.mrp && <del> {fmtPrice(product.mrp)}</del>}
-          {product.discount_percentage > 0 && <span className="off-tag">{product.discount_percentage}% off</span>}
+          {hasMrp && <del> {fmtPrice(product.mrp)}</del>}
+          {offerPct > 0 && <span className="off-tag">{offerPct}% off</span>}
         </p>
         {product.order_unit && <p className="text-[11px] text-gray-400 mt-0.5">{product.order_unit}</p>}
         <div className="flex-1" />

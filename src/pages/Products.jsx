@@ -30,6 +30,12 @@ function ProductCard({ product }) {
   const qty        = cartQtys[product.id] || 0
   const wishlisted = isWishlisted(product.id)
   const [activeImg, setActiveImg] = useState(0)
+  const price    = parseFloat(product.price || 0)
+  const mrp      = parseFloat(product.mrp || 0)
+  const offerPct = product.discount_percentage > 0
+    ? product.discount_percentage
+    : (mrp > price && price > 0 ? Math.round((1 - price / mrp) * 100) : 0)
+  const hasMrp = mrp > price
 
   return (
     <div style={{
@@ -66,14 +72,14 @@ function ProductCard({ product }) {
           </button>
 
           {/* Discount badge */}
-          {product.discount_percentage > 0 && (
+          {offerPct > 0 && (
             <span style={{
               position: 'absolute', top: 10, left: 10,
               background: '#ef4444', color: '#fff',
               fontSize: '0.7rem', fontWeight: 700,
               borderRadius: 6, padding: '2px 7px', zIndex: 2,
             }}>
-              -{product.discount_percentage}% OFF
+              {offerPct}% OFF
             </span>
           )}
 
@@ -142,13 +148,18 @@ function ProductCard({ product }) {
         <div style={{ flex: 1 }} />
 
         {/* Price */}
-        <div style={{ display: 'flex', alignItems: 'baseline', gap: 6, marginBottom: 10 }}>
+        <div style={{ display: 'flex', alignItems: 'baseline', gap: 6, marginBottom: 10, flexWrap: 'wrap' }}>
           <span style={{ fontSize: '1.2rem', fontWeight: 800, color: '#1a1a1a' }}>
             {fmtPrice(product.price)}
           </span>
-          {product.discount_percentage > 0 && product.mrp && (
+          {hasMrp && (
             <span style={{ fontSize: '0.8rem', color: '#94a3b8', textDecoration: 'line-through' }}>
               {fmtPrice(product.mrp)}
+            </span>
+          )}
+          {offerPct > 0 && (
+            <span style={{ fontSize: '0.72rem', fontWeight: 700, color: '#ef4444', background: '#fef2f2', borderRadius: 4, padding: '1px 6px' }}>
+              {offerPct}% off
             </span>
           )}
         </div>
