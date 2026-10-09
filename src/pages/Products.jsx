@@ -166,16 +166,8 @@ function ProductCard({ product }) {
         {/* Add to Cart → Qty pill */}
         {qty === 0 ? (
           <button
+            className="btn-add-cart"
             onClick={e => { e.stopPropagation(); addToCart(product.id) }}
-            style={{
-              display: 'block', width: '100%', boxSizing: 'border-box',
-              background: '#ff7011', color: '#fff',
-              border: 'none', borderRadius: 999,
-              padding: '9px 0', fontSize: '0.88rem', fontWeight: 700,
-              cursor: 'pointer', transition: 'background 0.2s',
-            }}
-            onMouseEnter={e => e.currentTarget.style.background = '#e06510'}
-            onMouseLeave={e => e.currentTarget.style.background = '#ff7011'}
           >
             Add to Cart
           </button>
