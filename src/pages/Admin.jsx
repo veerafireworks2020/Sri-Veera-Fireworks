@@ -2615,6 +2615,8 @@ export async function fetchSiteSettings() {
 export function AdminSettings() {
   const [minTN,    setMinTN]    = useState('');
   const [minOther, setMinOther] = useState('');
+  const [labelTN,    setLabelTN]    = useState('Tamil Nadu');
+  const [labelOther, setLabelOther] = useState('Other State');
   const [pricelistUrlState, setPricelistUrlState] = useState('');
   const [uploadingPdf, setUploadingPdf] = useState(false);
   const [saving,   setSaving]   = useState(false);
@@ -2627,6 +2629,8 @@ export function AdminSettings() {
       const s = await fetchSiteSettings();
       setMinTN   (s.min_order_tn    != null ? String(s.min_order_tn)    : '');
       setMinOther(s.min_order_other != null ? String(s.min_order_other) : '');
+      setLabelTN   (s.state_label_tn    || 'Tamil Nadu');
+      setLabelOther(s.state_label_other || 'Other State');
       setPricelistUrlState(s.pricelist_url || '');
       setLoading(false);
     })();
@@ -2663,6 +2667,8 @@ export function AdminSettings() {
     const settingsObj = {
       min_order_tn:    parseFloat(minTN)    || 0,
       min_order_other: parseFloat(minOther) || 0,
+      state_label_tn:    labelTN.trim()    || 'Tamil Nadu',
+      state_label_other: labelOther.trim() || 'Other State',
       pricelist_url:   pricelistUrlState || '',
     };
     const settingsJson = JSON.stringify(settingsObj);
@@ -2725,10 +2731,18 @@ export function AdminSettings() {
                   <div style={{ display: 'flex', alignItems: 'center', gap: 8, marginBottom: 10 }}>
                     <span style={{ fontSize: 22 }}>🏛️</span>
                     <div>
-                      <div style={{ fontWeight: 700, color: '#92400e', fontSize: 14 }}>Tamil Nadu</div>
-                      <div style={{ fontSize: 11, color: '#b45309' }}>Local state minimum</div>
+                      <div style={{ fontWeight: 700, color: '#92400e', fontSize: 14 }}>State 1 (Local)</div>
+                      <div style={{ fontSize: 11, color: '#b45309' }}>Label shown on cart toggle</div>
                     </div>
                   </div>
+                  <input
+                    className="adm-form-input"
+                    type="text"
+                    placeholder="e.g. Tamil Nadu"
+                    value={labelTN}
+                    onChange={e => setLabelTN(e.target.value)}
+                    style={{ background: '#fff', border: '1.5px solid #fcd34d', marginBottom: 10 }}
+                  />
                   <div className="adm-inp-wrap">
                     <span style={{ position: 'absolute', left: 14, top: '50%', transform: 'translateY(-50%)', fontWeight: 800, color: '#ff6b35', fontSize: 16, pointerEvents: 'none', zIndex: 5 }}>₹</span>
                     <input
@@ -2754,10 +2768,18 @@ export function AdminSettings() {
                   <div style={{ display: 'flex', alignItems: 'center', gap: 8, marginBottom: 10 }}>
                     <span style={{ fontSize: 22 }}>🇮🇳</span>
                     <div>
-                      <div style={{ fontWeight: 700, color: '#1e3a8a', fontSize: 14 }}>Other States</div>
-                      <div style={{ fontSize: 11, color: '#3b82f6' }}>Rest of India minimum</div>
+                      <div style={{ fontWeight: 700, color: '#1e3a8a', fontSize: 14 }}>State 2 (Other)</div>
+                      <div style={{ fontSize: 11, color: '#3b82f6' }}>Label shown on cart toggle</div>
                     </div>
                   </div>
+                  <input
+                    className="adm-form-input"
+                    type="text"
+                    placeholder="e.g. Other State"
+                    value={labelOther}
+                    onChange={e => setLabelOther(e.target.value)}
+                    style={{ background: '#fff', border: '1.5px solid #93c5fd', marginBottom: 10 }}
+                  />
                   <div className="adm-inp-wrap">
                     <span style={{ position: 'absolute', left: 14, top: '50%', transform: 'translateY(-50%)', fontWeight: 800, color: '#3b82f6', fontSize: 16, pointerEvents: 'none', zIndex: 5 }}>₹</span>
                     <input

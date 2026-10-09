@@ -22,6 +22,8 @@ function fmtPrice(v) {
 
 export default function Cart() {
   const { cartItems, cartTotal, cartCount, setQty, removeFromCart, clearCart, siteSettings } = useShop()
+  const labelTN    = siteSettings.state_label_tn    || 'Tamil Nadu'
+  const labelOther = siteSettings.state_label_other || 'Other State'
   const [form, setForm]       = useState({ name: '', phone: '', address: '', isTN: true })
   const [formErr, setFormErr] = useState({})
   const [submitted, setSubmitted] = useState(false)
@@ -43,7 +45,7 @@ export default function Cart() {
     }
     if (errs.name || errs.phone || errs.address) { setFormErr(errs); return }
     if (cartTotal < minOrder) {
-      setErrorToast({ show: true, message: `Minimum order is ₹${minOrder.toLocaleString('en-IN')} for ${form.isTN ? 'Tamil Nadu' : 'Other States'}.` })
+      setErrorToast({ show: true, message: `Minimum order is ₹${minOrder.toLocaleString('en-IN')} for ${form.isTN ? labelTN : labelOther}.` })
       return
     }
 
@@ -55,7 +57,7 @@ export default function Cart() {
       '',
       `*Name:* ${form.name}`,
       `*Phone:* ${form.phone}`,
-      `*State:* ${form.isTN ? 'Tamil Nadu' : 'Other State'}`,
+      `*State:* ${form.isTN ? labelTN : labelOther}`,
       `*Address:* ${form.address}`,
       '',
       '*Items:*',
@@ -87,7 +89,7 @@ export default function Cart() {
       body: JSON.stringify({
         customer_name: form.name,
         phone: form.phone,
-        address: `[${form.isTN ? 'Tamil Nadu' : 'Other State'}] ${form.address}`,
+        address: `[${form.isTN ? labelTN : labelOther}] ${form.address}`,
         items: JSON.stringify(cartItems.map(i => ({
           product_code: i.product.product_code,
           name: i.product.name,
@@ -206,7 +208,7 @@ export default function Cart() {
                   <span className="text-[#e87316]">{fmtPrice(cartTotal)}</span>
                 </div>
                 <div className="mt-3 text-xs text-gray-400 bg-orange-50 rounded-lg px-3 py-2">
-                  Min. order: ₹{minOrder.toLocaleString('en-IN')} ({form.isTN ? 'Tamil Nadu' : 'Other State'})
+                  Min. order: ₹{minOrder.toLocaleString('en-IN')} ({form.isTN ? labelTN : labelOther})
                 </div>
               </div>
 
@@ -214,8 +216,8 @@ export default function Cart() {
                 <h2 className="text-lg font-extrabold text-gray-900 mb-4">Your Details</h2>
                 <form onSubmit={handleEnquiry} className="flex flex-col gap-3">
                   <div className="cart-state-toggle">
-                    <button type="button" className={form.isTN ? 'active' : ''} onClick={() => setF('isTN', true)}>Tamil Nadu</button>
-                    <button type="button" className={!form.isTN ? 'active' : ''} onClick={() => setF('isTN', false)}>Other State</button>
+                    <button type="button" className={form.isTN ? 'active' : ''} onClick={() => setF('isTN', true)}>{labelTN}</button>
+                    <button type="button" className={!form.isTN ? 'active' : ''} onClick={() => setF('isTN', false)}>{labelOther}</button>
                   </div>
                   <input className={`cart-input ${formErr.name ? 'input-err' : ''}`} type="text" placeholder="Your Name *"
                     value={form.name} onChange={e => setF('name', e.target.value)} />

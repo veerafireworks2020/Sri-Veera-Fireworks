@@ -17,6 +17,8 @@ export function ShopProvider({ children }) {
     min_order_other: 5000,
     pricelist_url: '',
     whatsapp: '918300057711',
+    state_label_tn: 'Tamil Nadu',
+    state_label_other: 'Other State',
   })
 
   // ── Load cart & wishlist from localStorage ────────
