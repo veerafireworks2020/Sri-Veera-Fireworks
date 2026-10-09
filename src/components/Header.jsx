@@ -137,20 +137,17 @@ export default function Header() {
 
           {/* Download Price List — below Contact */}
           {pricelistUrl && (
-            <div style={{ padding: '8px 16px 4px' }}>
+            <div style={{ padding: '10px 16px 4px' }}>
               <a
                 href={pricelistUrl}
                 download="Sri-Veera-Fireworks-Pricelist.pdf"
                 onClick={() => setOpen(false)}
+                className="pricelist-btn"
                 style={{
-                  display: 'flex', alignItems: 'center', gap: 10,
-                  padding: '13px 4px',
-                  fontSize: 15, fontWeight: 500,
-                  color: '#e87316', textDecoration: 'none',
-                  borderLeft: '3px solid #e87316',
-                  paddingLeft: 17,
-                  background: '#fff8f0',
-                  borderRadius: 4,
+                  display: 'flex', alignItems: 'center', justifyContent: 'center',
+                  gap: 8, padding: '12px 16px', borderRadius: 10,
+                  fontSize: 14, fontWeight: 700, textDecoration: 'none',
+                  width: '100%', boxSizing: 'border-box',
                 }}
               >
                 <Download size={17} /> Download Price List
