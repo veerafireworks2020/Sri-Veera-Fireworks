@@ -1934,15 +1934,8 @@ export function AdminAnnouncement() {
 
   const fetchFromDB = useCallback(async () => {
     try {
-      let res;
-      try {
-        res = await api('/announcements?order=updated_at.desc');
-      } catch (err) {
-        res = await api('/products?category=eq.__SITE_ANNOUNCEMENT__');
-      }
-      if (res && res.length > 0 && (res[0].message || res[0].description)) {
-        setMessage(res[0].message || res[0].description);
-      }
+      const s = await fetchSiteSettings();
+      if (s.announcement) setMessage(s.announcement);
     } catch(e) {}
   }, []);
 
@@ -1956,43 +1949,15 @@ export function AdminAnnouncement() {
     setSuccess(false);
 
     try {
-      window.dispatchEvent(new CustomEvent('marquee_updated', { detail: message }));
-
-      try {
-        const existing = await api('/announcements');
-        if (existing && existing.length > 0) {
-          await api(`/announcements?id=eq.${existing[0].id}`, {
-            method: 'PATCH',
-            body: JSON.stringify({ message, is_active: true, updated_at: new Date().toISOString() })
-          });
-        } else {
-          await api('/announcements', {
-            method: 'POST',
-            body: JSON.stringify({ message, is_active: true })
-          });
-        }
-      } catch (err) {
-        const existingProd = await api('/products?category=eq.__SITE_ANNOUNCEMENT__');
-        if (existingProd && existingProd.length > 0) {
-          await api(`/products?id=eq.${existingProd[0].id}`, {
-            method: 'PATCH',
-            body: JSON.stringify({ description: message, name: 'Site Announcement Marquee', is_active: true })
-          });
-        } else {
-          await api('/products', {
-            method: 'POST',
-            body: JSON.stringify({
-              name: 'Site Announcement Marquee',
-              category: '__SITE_ANNOUNCEMENT__',
-              description: message,
-              price: 0,
-              stock: 0,
-              is_active: true
-            })
-          });
-        }
+      const existing = await api(`/products?category=eq.${encodeURIComponent(SETTINGS_KEY)}`);
+      if (existing && existing.length > 0) {
+        const current = (() => { try { return JSON.parse(existing[0].description || '{}'); } catch { return {}; } })();
+        await api(`/products?id=eq.${existing[0].id}`, {
+          method: 'PATCH',
+          body: JSON.stringify({ description: JSON.stringify({ ...current, announcement: message }), is_active: true }),
+        });
       }
-
+      window.dispatchEvent(new CustomEvent('marquee_updated', { detail: message }));
       setSuccess(true);
       setTimeout(() => setSuccess(false), 4000);
     } catch (err) {
@@ -2005,25 +1970,16 @@ export function AdminAnnouncement() {
   const handleReset = async () => {
     setMessage('');
     try {
-      try {
-        const existing = await api('/announcements');
-        if (existing && existing.length > 0) {
-          await api(`/announcements?id=eq.${existing[0].id}`, {
-            method: 'PATCH',
-            body: JSON.stringify({ message: '', is_active: false })
-          });
-        }
-      } catch (err) {
-        const existingProd = await api('/products?category=eq.__SITE_ANNOUNCEMENT__');
-        if (existingProd && existingProd.length > 0) {
-          await api(`/products?id=eq.${existingProd[0].id}`, {
-            method: 'PATCH',
-            body: JSON.stringify({ description: '', is_active: false })
-          });
-        }
+      const existing = await api(`/products?category=eq.${encodeURIComponent(SETTINGS_KEY)}`);
+      if (existing && existing.length > 0) {
+        const current = (() => { try { return JSON.parse(existing[0].description || '{}'); } catch { return {}; } })();
+        await api(`/products?id=eq.${existing[0].id}`, {
+          method: 'PATCH',
+          body: JSON.stringify({ description: JSON.stringify({ ...current, announcement: '' }), is_active: true }),
+        });
       }
       window.dispatchEvent(new CustomEvent('marquee_updated', { detail: '' }));
-    } catch(e){}
+    } catch(e) {}
   };
 
   return (
@@ -2829,24 +2785,6 @@ export function AdminSettings() {
                       : 'Set to 0 or leave blank — no minimum'}
                   </div>
                 </div>
-              </div>
-
-              {/* Top Bar Important Message */}
-              <div style={{ marginTop: 24, marginBottom: 24, borderTop: '1px solid #e2e8f0', paddingTop: 24 }}>
-                <div style={{ fontWeight: 700, color: '#0f172a', fontSize: 15, marginBottom: 4, display: 'flex', alignItems: 'center', gap: 8 }}>
-                  <Megaphone size={16} color="#ff6b35" /> Top Bar Important Message
-                </div>
-                <div style={{ fontSize: 12, color: '#64748b', marginBottom: 10 }}>
-                  This text shows in the announcement bar at the top of the site.
-                </div>
-                <textarea
-                  className="adm-form-input"
-                  rows={2}
-                  placeholder="Type your important message here..."
-                  value={announcement}
-                  onChange={e => setAnnouncement(e.target.value)}
-                  style={{ resize: 'vertical', fontFamily: 'inherit' }}
-                />
               </div>
 
               {/* Price List PDF Upload */}
