@@ -2636,28 +2636,45 @@ export function AdminSettings() {
     })();
   }, []);
 
-  const handlePdfUpload = (e) => {
+  const handlePdfUpload = async (e) => {
     const file = e.target.files[0];
     if (!file) return;
     if (file.type !== 'application/pdf') {
-      alert('Please select a valid PDF file.');
+      toast.error('Please select a valid PDF file.');
       return;
     }
-    if (file.size > 8 * 1024 * 1024) {
-      alert('File size too large. Please upload a PDF under 8MB.');
+    if (file.size > 20 * 1024 * 1024) {
+      toast.error('File too large. Max 20MB allowed.');
       return;
     }
     setUploadingPdf(true);
-    const reader = new FileReader();
-    reader.onload = (evt) => {
-      setPricelistUrlState(evt.target.result);
+    try {
+      const fileName = `pricelist.pdf`;
+      const uploadRes = await fetch(
+        `${SUPABASE_URL}/storage/v1/object/pricelists/${fileName}`,
+        {
+          method: 'POST',
+          headers: {
+            apikey: SUPABASE_KEY,
+            Authorization: `Bearer ${SUPABASE_KEY}`,
+            'Content-Type': 'application/pdf',
+            'x-upsert': 'true',
+          },
+          body: file,
+        }
+      );
+      if (!uploadRes.ok) {
+        const err = await uploadRes.text();
+        throw new Error(err);
+      }
+      const publicUrl = `${SUPABASE_URL}/storage/v1/object/public/pricelists/${fileName}`;
+      setPricelistUrlState(publicUrl);
+      toast.success('PDF uploaded successfully!');
+    } catch (err) {
+      toast.error('Upload failed: ' + err.message);
+    } finally {
       setUploadingPdf(false);
-    };
-    reader.onerror = () => {
-      alert('Failed to read PDF file.');
-      setUploadingPdf(false);
-    };
-    reader.readAsDataURL(file);
+    }
   };
 
   const handleSave = async (e) => {
