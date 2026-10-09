@@ -21,26 +21,22 @@ function PricelistFAB() {
   const navigate = useNavigate()
   if (pathname.startsWith('/admin') || pathname === '/products' || pathname.startsWith('/products/')) return null
   return (
-    <button
-      onClick={() => navigate('/products')}
+    <img
+      src="/images/product-0.png"
+      alt="View Products"
       title="View Products"
+      onClick={() => navigate('/products')}
       style={{
-        position: 'fixed', bottom: 24, right: 24, zIndex: 9990,
-        width: 64, height: 64, borderRadius: '50%',
-        background: 'linear-gradient(135deg, #ff7011, #e87316)',
-        border: 'none', cursor: 'pointer',
-        boxShadow: '0 4px 20px rgba(255,112,17,0.5)',
-        display: 'flex', flexDirection: 'column',
-        alignItems: 'center', justifyContent: 'center', gap: 2,
-        transition: 'transform 0.2s, box-shadow 0.2s',
-        animation: 'fab-pulse 2.5s ease-in-out infinite',
+        position: 'fixed', bottom: 20, right: 16, zIndex: 9990,
+        width: 80, height: 'auto',
+        cursor: 'pointer',
+        filter: 'drop-shadow(0 4px 10px rgba(0,0,0,0.25))',
+        transition: 'transform 0.2s, filter 0.2s',
+        animation: 'fab-float 3s ease-in-out infinite',
       }}
-      onMouseEnter={e => { e.currentTarget.style.transform = 'scale(1.1)'; e.currentTarget.style.boxShadow = '0 6px 28px rgba(255,112,17,0.65)' }}
-      onMouseLeave={e => { e.currentTarget.style.transform = 'scale(1)'; e.currentTarget.style.boxShadow = '0 4px 20px rgba(255,112,17,0.5)' }}
-    >
-      <span style={{ fontSize: 26, lineHeight: 1 }}>🎆</span>
-      <span style={{ fontSize: 9, fontWeight: 800, color: '#fff', letterSpacing: 0.3 }}>PRODUCTS</span>
-    </button>
+      onMouseEnter={e => { e.currentTarget.style.transform = 'scale(1.1)'; e.currentTarget.style.filter = 'drop-shadow(0 6px 16px rgba(0,0,0,0.35))' }}
+      onMouseLeave={e => { e.currentTarget.style.transform = 'scale(1)'; e.currentTarget.style.filter = 'drop-shadow(0 4px 10px rgba(0,0,0,0.25))' }}
+    />
   )
 }
 import Home from './pages/Home'
