@@ -75,14 +75,9 @@ function ProductCard({ product }) {
 
           {/* Discount badge */}
           {offerPct > 0 && (
-            <span style={{
-              position: 'absolute', top: 10, left: 10,
-              background: '#ef4444', color: '#fff',
-              fontSize: '0.7rem', fontWeight: 700,
-              borderRadius: 6, padding: '2px 7px', zIndex: 2,
-            }}>
-              {offerPct}% OFF
-            </span>
+            <div className="label-block">
+              <span className="label-theme">{offerPct}% Off</span>
+            </div>
           )}
 
           {/* Main image */}
