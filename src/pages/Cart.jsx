@@ -176,12 +176,12 @@ export default function Cart() {
                       <div style={{ display: 'flex', alignItems: 'center', background: '#f5f5f5', borderRadius: 8, padding: 4, gap: 0 }}>
                         <button
                           onClick={() => setQty(p.id, qty - 1)}
-                          style={{ background: 'linear-gradient(135deg,#c0392b,#8e44ad)', color: '#fff', border: 'none', borderRadius: 6, width: 34, height: 34, fontSize: 20, fontWeight: 700, cursor: 'pointer', display: 'flex', alignItems: 'center', justifyContent: 'center', flexShrink: 0 }}
+                          style={{ background: '#ff7011', color: '#fff', border: 'none', borderRadius: 6, width: 34, height: 34, fontSize: 20, fontWeight: 700, cursor: 'pointer', display: 'flex', alignItems: 'center', justifyContent: 'center', flexShrink: 0 }}
                         >−</button>
                         <span style={{ minWidth: 40, textAlign: 'center', fontWeight: 700, fontSize: 15 }}>{qty}</span>
                         <button
                           onClick={() => setQty(p.id, qty + 1)}
-                          style={{ background: 'linear-gradient(135deg,#c0392b,#8e44ad)', color: '#fff', border: 'none', borderRadius: 6, width: 34, height: 34, fontSize: 20, fontWeight: 700, cursor: 'pointer', display: 'flex', alignItems: 'center', justifyContent: 'center', flexShrink: 0 }}
+                          style={{ background: '#ff7011', color: '#fff', border: 'none', borderRadius: 6, width: 34, height: 34, fontSize: 20, fontWeight: 700, cursor: 'pointer', display: 'flex', alignItems: 'center', justifyContent: 'center', flexShrink: 0 }}
                         >+</button>
                       </div>
                       <div className="text-base font-extrabold text-gray-800">{fmtPrice(p.price * qty)}</div>
