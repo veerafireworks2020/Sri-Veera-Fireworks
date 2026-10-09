@@ -33,7 +33,7 @@ export default function Header() {
 
             {/* Logo */}
             <Link to="/" className="flex-shrink-0 no-underline">
-              <img src={LOGO} alt="Sri Veera Fireworks" className="h-10 w-auto object-contain" />
+              <img src={LOGO} alt="Sri Veera Fireworks" className="h-8 lg:h-10 w-auto object-contain" />
             </Link>
 
             {/* Desktop Nav */}
@@ -56,10 +56,11 @@ export default function Header() {
                 <a
                   href={pricelistUrl}
                   download="Sri-Veera-Fireworks-Pricelist.pdf"
-                  className="hidden lg:flex pricelist-btn"
+                  className="flex pricelist-btn"
+                  title="Download Price List"
                 >
                   <Download size={16} />
-                  <span>Price List</span>
+                  <span className="hidden lg:inline">Price List</span>
                 </a>
               )}
               <Link to="/wishlist" className="relative flex items-center gap-1.5 bg-white border border-gray-200 text-gray-700 rounded-md px-3 py-2 text-sm font-semibold hover:bg-gray-50 transition-colors no-underline">

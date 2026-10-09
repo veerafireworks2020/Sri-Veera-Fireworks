@@ -470,7 +470,6 @@ html, body {
   letter-spacing: 0.2px;
   cursor: pointer;
   text-decoration: none !important;
-  display: flex;
   align-items: center;
   gap: 6px;
 }
