@@ -229,12 +229,12 @@ function ProductCard({ product }) {
 }
 
 // ─── Filter Sidebar ────────────────────────────────────────────────────────────
-function FilterSidebar({ categories, selectedCats, onToggleCat, search, onSearch, priceRange, onPriceRange, maxPrice, totalCount, hasAnyFilter, onClearAll }) {
+function FilterSidebar({ categories, selectedCats, onToggleCat, search, onSearch, priceRange, onPriceRange, maxPrice, totalCount, hasAnyFilter, onClearAll, onClose }) {
   const [catOpen, setCatOpen]     = useState(true)
   const [priceOpen, setPriceOpen] = useState(true)
 
   return (
-    <div style={{
+    <div style={onClose ? {} : {
       background: '#fff', borderRadius: 16,
       boxShadow: '0 2px 12px rgba(0,0,0,0.07)',
       border: '1px solid #e2e8f0',
@@ -247,14 +247,18 @@ function FilterSidebar({ categories, selectedCats, onToggleCat, search, onSearch
           <SlidersHorizontal size={18} color="#ff7011" />
           Filters
         </h4>
-        {hasAnyFilter && (
-          <button
-            onClick={onClearAll}
-            style={{ background: 'none', border: 'none', cursor: 'pointer', color: '#ff7011', fontSize: '0.8rem', fontWeight: 600 }}
-          >
-            Clear all
-          </button>
-        )}
+        <div style={{ display: 'flex', alignItems: 'center', gap: 10 }}>
+          {hasAnyFilter && (
+            <button onClick={onClearAll} style={{ background: 'none', border: 'none', cursor: 'pointer', color: '#ff7011', fontSize: '0.8rem', fontWeight: 600 }}>
+              Clear all
+            </button>
+          )}
+          {onClose && (
+            <button onClick={onClose} style={{ background: '#f1f5f9', border: 'none', borderRadius: '50%', width: 30, height: 30, display: 'flex', alignItems: 'center', justifyContent: 'center', cursor: 'pointer' }}>
+              <X size={16} color="#333" />
+            </button>
+          )}
+        </div>
       </div>
 
       {/* Search */}
@@ -536,22 +540,26 @@ export default function Products() {
 
       {/* ── Mobile Filter Drawer ─────────────────────────────────────── */}
       {mobileFilter && (
-        <div style={{
-          position: 'fixed', inset: 0, zIndex: 100,
-          background: 'rgba(0,0,0,0.4)',
-          display: 'flex', alignItems: 'flex-end',
-        }} onClick={() => setMobileFilter(false)}>
-          <div style={{
-            background: '#f8fafc', borderRadius: '16px 16px 0 0', padding: 16,
-            width: '100%', maxHeight: '85vh', overflowY: 'auto',
-          }} onClick={e => e.stopPropagation()}>
-            <div style={{ display: 'flex', justifyContent: 'space-between', marginBottom: 12 }}>
-              <span style={{ fontWeight: 700, fontSize: '1.1rem' }}>Filters</span>
-              <button onClick={() => setMobileFilter(false)} style={{ background: 'none', border: 'none', cursor: 'pointer' }}>
-                <X size={20} />
-              </button>
+        <div
+          style={{ position: 'fixed', inset: 0, zIndex: 100, background: 'rgba(0,0,0,0.4)' }}
+          onClick={() => setMobileFilter(false)}
+        >
+          <div
+            style={{
+              position: 'absolute', bottom: 0, left: 0, right: 0,
+              background: '#fff', borderRadius: '20px 20px 0 0',
+              maxHeight: '88vh', overflowY: 'auto',
+              animation: 'slideUp 0.28s ease',
+            }}
+            onClick={e => e.stopPropagation()}
+          >
+            {/* drag handle */}
+            <div style={{ display: 'flex', justifyContent: 'center', padding: '10px 0 4px' }}>
+              <div style={{ width: 40, height: 4, borderRadius: 2, background: '#d1d5db' }} />
             </div>
-            <FilterSidebar {...sidebarProps} />
+            <div style={{ padding: '0 16px 24px' }}>
+              <FilterSidebar {...sidebarProps} onClose={() => setMobileFilter(false)} />
+            </div>
           </div>
         </div>
       )}
