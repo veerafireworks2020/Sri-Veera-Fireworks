@@ -558,15 +558,24 @@ export default function Products() {
           {/* Product Grid */}
           <div style={{ flex: 1, minWidth: 0 }}>
             {loading ? (
-              /* Skeleton — 4 cols desktop / 2 mobile */
               <div className="products-grid">
                 {Array.from({ length: 8 }).map((_, i) => (
-                  <div key={i} style={{ background: '#fff', borderRadius: 16, overflow: 'hidden', padding: 12 }}>
-                    <div style={{ background: '#f1f5f9', borderRadius: 12, height: 160, marginBottom: 12 }} className="skeleton" />
-                    <div style={{ background: '#f1f5f9', height: 11, borderRadius: 6, marginBottom: 8, width: '55%' }} className="skeleton" />
-                    <div style={{ background: '#f1f5f9', height: 15, borderRadius: 6, marginBottom: 6 }} className="skeleton" />
-                    <div style={{ background: '#f1f5f9', height: 11, borderRadius: 6, width: '35%', marginBottom: 16 }} className="skeleton" />
-                    <div style={{ background: '#f1f5f9', height: 36, borderRadius: 999 }} className="skeleton" />
+                  <div key={i} style={{ background: '#fff', borderRadius: 16, overflow: 'hidden', boxShadow: '0 2px 12px rgba(0,0,0,0.08)', border: '1px solid #f1f1f1', display: 'flex', flexDirection: 'column' }}>
+                    {/* image area */}
+                    <div style={{ padding: '8px 8px 0' }}>
+                      <div style={{ background: '#f5f5f7', borderRadius: 12, padding: 12 }}>
+                        <div className="skeleton" style={{ height: 160, borderRadius: 8 }} />
+                      </div>
+                    </div>
+                    {/* card body */}
+                    <div style={{ padding: '12px', flex: 1, display: 'flex', flexDirection: 'column', gap: 8 }}>
+                      <div className="skeleton" style={{ height: 10, width: '45%', borderRadius: 6 }} />
+                      <div className="skeleton" style={{ height: 15, borderRadius: 6 }} />
+                      <div className="skeleton" style={{ height: 10, width: '35%', borderRadius: 6 }} />
+                      <div style={{ flex: 1, minHeight: 8 }} />
+                      <div className="skeleton" style={{ height: 20, width: '50%', borderRadius: 6 }} />
+                      <div className="skeleton" style={{ height: 38, borderRadius: 999, marginTop: 4 }} />
+                    </div>
                   </div>
                 ))}
               </div>

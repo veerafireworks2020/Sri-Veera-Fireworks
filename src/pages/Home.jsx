@@ -97,6 +97,7 @@ export default function Home() {
 
   // ── Hero banners from Supabase ─────────────────────────────────────────────
   const [banners, setBanners] = useState([])
+  const [bannerLoading, setBannerLoading] = useState(true)
   const [activeSlide, setActiveSlide] = useState(0)
   const slideTimer = useRef(null)
 
@@ -106,6 +107,7 @@ export default function Home() {
     })
       .then(r => r.json())
       .then(data => { if (Array.isArray(data) && data.length) setBanners(data) })
+      .finally(() => setBannerLoading(false))
   }, [])
 
   useEffect(() => {
@@ -139,8 +141,20 @@ export default function Home() {
 
       <Header />
 
+      {/* ── Banner Skeleton ────────────────────────────────────────── */}
+      {bannerLoading && (
+        <div className="skeleton-banner-wrap">
+          <div className="skeleton skeleton-banner" />
+          <div className="skeleton-banner-dots">
+            {[0, 1, 2].map(i => (
+              <div key={i} className={`skeleton skeleton-banner-dot ${i === 0 ? 'active' : ''}`} />
+            ))}
+          </div>
+        </div>
+      )}
+
       {/* ── Hero Banner Carousel ───────────────────────────────────── */}
-      {banners.length > 0 && (
+      {!bannerLoading && banners.length > 0 && (
         <section style={{ position: 'relative', overflow: 'hidden', background: '#111', width: '100%' }}>
           <div style={{ display: 'flex', transition: 'transform 0.5s ease', transform: `translateX(-${activeSlide * 100}%)` }}>
             {banners.map((b, i) => (

@@ -481,3 +481,34 @@ html, body {
 .skeleton-card-line1 { height: 14px; margin: 12px 12px 6px; }
 .skeleton-card-line2 { height: 12px; width: 60%; margin: 0 12px 8px; }
 .skeleton-card-btn  { height: 34px; margin: 0 12px; border-radius: 6px; }
+
+/* ── Banner Skeleton ──────────────────────────────── */
+.skeleton-banner-wrap {
+  position: relative;
+  width: 100%;
+  overflow: hidden;
+  background: #111;
+}
+.skeleton-banner {
+  width: 100%;
+  height: clamp(180px, 40vw, 520px);
+  border-radius: 0;
+  background: linear-gradient(90deg, #1e1e1e 25%, #2a2a2a 50%, #1e1e1e 75%);
+  background-size: 1200px 100%;
+}
+.skeleton-banner-dots {
+  position: absolute;
+  bottom: 12px;
+  left: 50%;
+  transform: translateX(-50%);
+  display: flex;
+  gap: 6px;
+}
+.skeleton-banner-dot {
+  height: 8px;
+  border-radius: 4px;
+  background: linear-gradient(90deg, #333 25%, #444 50%, #333 75%);
+  background-size: 1200px 100%;
+  width: 8px;
+}
+.skeleton-banner-dot.active { width: 24px; }
