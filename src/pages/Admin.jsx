@@ -2632,7 +2632,7 @@ export function AdminSettings() {
       setMinOther(s.min_order_other != null ? String(s.min_order_other) : '');
       setLabelTN   (s.state_label_tn    || 'Tamil Nadu');
       setLabelOther(s.state_label_other || 'Other State');
-      setAnnouncement(s.announcement || '');
+      setAnnouncement(s.announcement ?? '');
       setPricelistUrlState(s.pricelist_url || '');
       setLoading(false);
     })();
@@ -2837,12 +2837,12 @@ export function AdminSettings() {
                   <Megaphone size={16} color="#ff6b35" /> Top Bar Important Message
                 </div>
                 <div style={{ fontSize: 12, color: '#64748b', marginBottom: 10 }}>
-                  This text shows in the announcement bar at the top of the site. Leave blank to show the default minimum order text.
+                  This text shows in the announcement bar at the top of the site.
                 </div>
                 <textarea
                   className="adm-form-input"
                   rows={2}
-                  placeholder={`e.g. Minimum Shopping For Tamil Nadu ₹3,000/- | Other State Above ₹5,000/- * Freight Extra`}
+                  placeholder="Type your important message here..."
                   value={announcement}
                   onChange={e => setAnnouncement(e.target.value)}
                   style={{ resize: 'vertical', fontFamily: 'inherit' }}
