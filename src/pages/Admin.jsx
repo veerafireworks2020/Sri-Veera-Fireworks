@@ -2669,7 +2669,17 @@ export function AdminSettings() {
       }
       const publicUrl = `${SUPABASE_URL}/storage/v1/object/public/pricelists/${fileName}`;
       setPricelistUrlState(publicUrl);
-      toast.success('PDF uploaded successfully!');
+
+      // Auto-save URL to DB immediately
+      const existing = await api(`/products?category=eq.${encodeURIComponent(SETTINGS_KEY)}`);
+      if (existing && existing.length > 0) {
+        const current = (() => { try { return JSON.parse(existing[0].description || '{}'); } catch { return {}; } })();
+        await api(`/products?id=eq.${existing[0].id}`, {
+          method: 'PATCH',
+          body: JSON.stringify({ description: JSON.stringify({ ...current, pricelist_url: publicUrl }), is_active: true }),
+        });
+      }
+      toast.success('PDF uploaded and saved!');
     } catch (err) {
       toast.error('Upload failed: ' + err.message);
     } finally {
