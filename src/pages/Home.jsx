@@ -1,18 +1,18 @@
 import { useState, useEffect, useRef } from 'react'
 import { Link } from 'react-router-dom'
 import {
-  Heart, ShoppingCart, Clock, ThumbsUp, Tag, Package, ChevronRight, ChevronLeft,
+  Heart, Clock, ThumbsUp, Tag, Package, ChevronRight, ChevronLeft,
 } from 'lucide-react'
 import { useShop } from '../context/ShopContext'
 import Footer from '../components/Footer'
 import TopBar from '../components/TopBar'
+import Header from '../components/Header'
 import '../App.css'
 
 const SUPABASE_URL = import.meta.env.VITE_SUPABASE_URL
 const SUPABASE_KEY = import.meta.env.VITE_SUPABASE_ANON_KEY
 
-const LOGO    = '/images/img-css-23.png'
-const CAT_IMG = '/images/img-css-28.png'
+
 
 // ─── Helpers ─────────────────────────────────────────────────────────────────
 function parseImages(imgUrl) {
@@ -51,7 +51,7 @@ function ProductCard({ product }) {
             onClick={() => toggleWishlist(product.id)}
             title={wishlisted ? 'Remove from wishlist' : 'Add to wishlist'}
           >
-            <Heart size={16} fill={wishlisted ? '#e87316' : 'none'} color={wishlisted ? '#e87316' : '#999'} />
+            <Heart size={16} fill={wishlisted ? '#ef4444' : 'none'} color={wishlisted ? '#ef4444' : '#999'} />
           </button>
         </div>
       </div>
@@ -93,7 +93,7 @@ function ProductCard({ product }) {
 
 // ─── Home Page ────────────────────────────────────────────────────────────────
 export default function Home() {
-  const { products, loading, cartCount, wishlistCount, siteSettings } = useShop()
+  const { products, loading, siteSettings } = useShop()
 
   // ── Hero banners from Supabase ─────────────────────────────────────────────
   const [banners, setBanners] = useState([])
@@ -137,38 +137,11 @@ export default function Home() {
 
       <TopBar />
 
-      {/* ── Main Header ────────────────────────────────────────────── */}
-      <header className="bg-white shadow-sm sticky top-0 z-50">
-        <div className="max-w-[1400px] mx-auto px-4">
-          <div className="flex items-center justify-between h-16 gap-4">
-            <a href="/" className="flex-shrink-0">
-              <img src={LOGO} alt="Sri Veera Fireworks" className="h-10 w-auto object-contain" />
-            </a>
-            <nav className="hidden lg:flex items-center gap-1">
-              <a href="#home" className="nav-link" style={{ color: '#e87316', fontWeight: 700 }}>Home</a>
-              <Link to="/about"   className="nav-link">About</Link>
-              <Link to="/products"  className="nav-link">Products</Link>
-              <Link to="/safety"  className="nav-link">Safety Tips</Link>
-              <Link to="/contact"  className="nav-link">Contact</Link>
-            </nav>
-            <div className="flex items-center gap-2">
-              <Link to="/wishlist" className="relative flex items-center gap-1.5 bg-white border border-gray-200 text-gray-700 rounded-md px-3 py-2 text-sm font-semibold hover:bg-gray-50 transition-colors no-underline">
-                <Heart size={18} />
-                <span className="hidden sm:inline">Wishlist</span>
-                {wishlistCount > 0 && <span className="bg-red-500 text-white rounded-full w-5 h-5 text-xs flex items-center justify-center font-bold">{wishlistCount}</span>}
-              </Link>
-              <Link to="/cart" className="flex items-center gap-1.5 bg-[#e87316] text-white border-none rounded-md px-3 py-2 text-sm font-semibold hover:bg-[#cf6512] transition-colors no-underline">
-                <ShoppingCart size={18} />
-                Cart {cartCount > 0 && <span className="bg-white text-[#e87316] rounded-full w-5 h-5 text-xs flex items-center justify-center font-bold">{cartCount}</span>}
-              </Link>
-            </div>
-          </div>
-        </div>
-      </header>
+      <Header />
 
       {/* ── Hero Banner Carousel ───────────────────────────────────── */}
       {banners.length > 0 && (
-        <section style={{ position: 'relative', overflow: 'hidden', background: '#111' }}>
+        <section style={{ position: 'relative', overflow: 'hidden', background: '#111', width: '100%' }}>
           <div style={{ display: 'flex', transition: 'transform 0.5s ease', transform: `translateX(-${activeSlide * 100}%)` }}>
             {banners.map((b, i) => (
               <img
@@ -181,10 +154,10 @@ export default function Home() {
           </div>
           {banners.length > 1 && (
             <>
-              <button onClick={() => goSlide(-1)} style={{ position: 'absolute', left: 12, top: '50%', transform: 'translateY(-50%)', background: '#fff', border: 'none', borderRadius: '50%', width: 40, height: 40, display: 'flex', alignItems: 'center', justifyContent: 'center', cursor: 'pointer', color: '#333', boxShadow: '0 2px 8px rgba(0,0,0,0.2)' }}>
+              <button onClick={() => goSlide(-1)} style={{ position: 'absolute', left: 12, top: '50%', transform: 'translateY(-50%)', background: '#FFF8DC', border: '1px solid #f5d87a', borderRadius: '50%', width: 40, height: 40, display: 'flex', alignItems: 'center', justifyContent: 'center', cursor: 'pointer', color: '#b45309', boxShadow: '0 2px 8px rgba(0,0,0,0.15)' }}>
                 <ChevronLeft size={22} />
               </button>
-              <button onClick={() => goSlide(1)} style={{ position: 'absolute', right: 12, top: '50%', transform: 'translateY(-50%)', background: '#fff', border: 'none', borderRadius: '50%', width: 40, height: 40, display: 'flex', alignItems: 'center', justifyContent: 'center', cursor: 'pointer', color: '#333', boxShadow: '0 2px 8px rgba(0,0,0,0.2)' }}>
+              <button onClick={() => goSlide(1)} style={{ position: 'absolute', right: 12, top: '50%', transform: 'translateY(-50%)', background: '#FFF8DC', border: '1px solid #f5d87a', borderRadius: '50%', width: 40, height: 40, display: 'flex', alignItems: 'center', justifyContent: 'center', cursor: 'pointer', color: '#b45309', boxShadow: '0 2px 8px rgba(0,0,0,0.15)' }}>
                 <ChevronRight size={22} />
               </button>
               <div style={{ position: 'absolute', bottom: 12, left: '50%', transform: 'translateX(-50%)', display: 'flex', gap: 6 }}>
@@ -199,7 +172,7 @@ export default function Home() {
 
       {/* ── Skeleton Loader ──────────────────────────────────────────── */}
       {loading && [0, 1, 2].map(s => (
-        <section key={s} className={`py-10 overflow-hidden ${s % 2 === 0 ? 'bg-gray-50' : 'bg-white'}`}>
+        <section key={s} className="py-10 overflow-hidden" style={{ background: s % 2 === 0 ? '#FFFBEB' : '#FFF8DC' }}>
           <div className="skeleton-section">
             <div className="skeleton-heading">
               <div className="skeleton skeleton-heading-sub" />
@@ -224,7 +197,7 @@ export default function Home() {
         <section
           key={cat}
           id={idx === 0 ? 'products' : undefined}
-          className={`py-10 overflow-hidden ${idx % 2 === 0 ? 'bg-gray-50' : 'bg-white'}`}
+          className={`py-10 overflow-hidden`} style={{ background: idx % 2 === 0 ? '#FFFBEB' : '#FFF8DC' }}
         >
           <div className="max-w-[1400px] mx-auto px-4">
             <div className="text-center mb-8">
@@ -238,37 +211,9 @@ export default function Home() {
         </section>
       ))}
 
-      {/* ── Our Collections / Categories ──────────────────────────── */}
-      <section className="py-10 bg-white overflow-hidden">
-        <div className="max-w-[1400px] mx-auto px-4">
-          <div className="text-center mb-8">
-            <p className="subtitle-two">Our Collections</p>
-            <h2 className="text-3xl font-extrabold text-gray-900">List of Category</h2>
-          </div>
-          <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 xl:grid-cols-6 gap-3">
-            {categoryOrder.map(cat => (
-              <a key={cat} href={`#products`} className="no-underline">
-                <div className="product-box product-box1 rounded-lg overflow-hidden shadow-sm bg-white transition-transform hover:-translate-y-1">
-                  <div className="img-wrapper relative">
-                    <img src={CAT_IMG} alt={cat} loading="lazy" className="w-full object-cover" style={{ height: '150px' }} />
-                    <div className="absolute top-2 left-2 z-10 bg-black/50 text-white text-[10px] px-2 py-1 rounded leading-tight">
-                      {cat}
-                    </div>
-                    <div className="insta-hover">
-                      <button className="bg-white/90 text-gray-800 border-none rounded px-4 py-1.5 text-xs font-semibold cursor-pointer flex items-center gap-1">
-                        Shop now <ChevronRight size={12} />
-                      </button>
-                    </div>
-                  </div>
-                </div>
-              </a>
-            ))}
-          </div>
-        </div>
-      </section>
 
       {/* ── Services ────────────────────────────────────────────────── */}
-      <section className="py-10 bg-gray-50">
+      <section className="py-10" style={{ background: '#FFF8DC' }}>
         <div className="max-w-[1400px] mx-auto px-4">
           <div className="grid grid-cols-1 sm:grid-cols-2 xl:grid-cols-4 gap-4">
             {[

@@ -1,6 +1,20 @@
-import { BrowserRouter, Routes, Route, Navigate } from 'react-router-dom'
+import { BrowserRouter, Routes, Route, Navigate, useLocation } from 'react-router-dom'
+import { useEffect } from 'react'
 import { ShopProvider } from './context/ShopContext'
 import { Toaster } from 'react-hot-toast'
+import Fireworks from './components/Fireworks'
+
+function ScrollToTop() {
+  const { pathname } = useLocation()
+  useEffect(() => { window.scrollTo(0, 0) }, [pathname])
+  return null
+}
+
+function FireworksOverlay() {
+  const { pathname } = useLocation()
+  if (pathname.startsWith('/admin')) return null
+  return <Fireworks />
+}
 import Home from './pages/Home'
 import Cart from './pages/Cart'
 import Wishlist from './pages/Wishlist'
@@ -17,12 +31,15 @@ import AdminLayout, {
   AdminHeroBanners,
   AdminSettings,
   AdminOrders,
+  AdminDashboard,
 } from './pages/Admin'
 
 export default function App() {
   return (
     <BrowserRouter>
       <ShopProvider>
+        <ScrollToTop />
+        <FireworksOverlay />
         <Toaster position="top-center" containerStyle={{ zIndex: 1000000 }} />
         <Routes>
           <Route path="/"             element={<Home />} />
@@ -35,7 +52,8 @@ export default function App() {
           <Route path="/contact"      element={<Contact />} />
           <Route path="/admin/login"  element={<AdminLogin />} />
           <Route path="/admin"        element={<AdminLayout />}>
-            <Route index              element={<Navigate to="/admin/orders" replace />} />
+            <Route index              element={<Navigate to="/admin/dashboard" replace />} />
+            <Route path="dashboard"   element={<AdminDashboard />} />
             <Route path="orders"      element={<AdminOrders />} />
             <Route path="categories"  element={<AdminCategories />} />
             <Route path="products"    element={<AdminProducts />} />

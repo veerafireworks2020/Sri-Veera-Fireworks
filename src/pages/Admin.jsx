@@ -1,6 +1,6 @@
 import React, { useState, useEffect, useCallback, createContext, useContext, useRef } from 'react';
 import { Outlet, NavLink, useNavigate, Navigate } from 'react-router-dom';
-import { jsPDF } from 'jspdf';
+import { downloadAdminOrderPDF } from '../utils/generateOrderPDF';
 import { DragDropContext, Droppable, Draggable } from '@hello-pangea/dnd';
 import { toast } from 'react-hot-toast';
 import {
@@ -376,15 +376,15 @@ export function AdminLogin() {
   const [loading, setLoading] = useState(false);
 
   useEffect(() => {
-    if (localStorage.getItem('sriveerafireworks_admin_logged_in') === 'true') navigate('/admin/orders', { replace: true });
+    if (localStorage.getItem('sriveerafireworks_admin_logged_in') === 'true') navigate('/admin/dashboard', { replace: true });
   }, [navigate]);
 
   const handleLogin = async (e) => {
     e.preventDefault(); setError(''); setLoading(true);
     await new Promise(r => setTimeout(r, 500));
-    if (email === 'admin@sriveerafireworks.com' && password === 'veera@2026') {
+    if (email.trim() === 'veerafireworks2020@gmail.com' && password.trim() === 'Sriveera$77') {
       localStorage.setItem('sriveerafireworks_admin_logged_in', 'true');
-      navigate('/admin/orders', { replace: true });
+      navigate('/admin/dashboard', { replace: true });
     } else {
       setError('Invalid email or password. Please try again.');
     }
@@ -451,6 +451,7 @@ export function AdminLayout() {
   const navigate = useNavigate();
   const [sidebarOpen, setSidebarOpen] = useState(false);
   const [products, setProducts] = useState([]);
+  const isLoggedIn = localStorage.getItem('sriveerafireworks_admin_logged_in') === 'true';
 
   const [categoryData, setCategoryData] = useState(() => {
     try {
@@ -465,12 +466,12 @@ export function AdminLayout() {
     } catch (e) {}
     return DEFAULT_CATEGORIES_DATA;
   });
-  const [loading, setLoading]   = useState(false);
+  const [loading, setLoading] = useState(false);
 
-  // Auth guard
-  if (localStorage.getItem('sriveerafireworks_admin_logged_in') !== 'true') {
-    return <Navigate to="/admin/login" replace />;
-  }
+  // Auth guard — moved to useEffect to avoid hooks-after-return violation
+  useEffect(() => {
+    if (!isLoggedIn) navigate('/admin/login', { replace: true });
+  }, [isLoggedIn, navigate]);
 
   const fetchAll = useCallback(async () => {
     if (products.length === 0) {
@@ -552,6 +553,8 @@ export function AdminLayout() {
     } catch (e) {}
   };
 
+  if (!isLoggedIn) return null;
+
   const categories = categoryData.map(c => c.name);
 
   const handleLogout = () => {
@@ -560,6 +563,7 @@ export function AdminLayout() {
   };
 
   const navItems = [
+    { to: '/admin/dashboard',    label: 'Dashboard',         icon: TrendingUp },
     { to: '/admin/orders',       label: 'Orders',            icon: ShoppingCart },
     { to: '/admin/categories',   label: 'Categories',        icon: Tag,             badge: categoryData.length || null },
     { to: '/admin/products',     label: 'Products',          icon: Package,         badge: products.length || null },
@@ -2865,259 +2869,65 @@ export default AdminLayout;
 /* ══════════════════════════════════════════════════
    ORDERS / ENQUIRIES  →  /admin/orders
 ══════════════════════════════════════════════════ */
-export function downloadOrderPDF(order) {
-  const doc = new jsPDF({ unit: 'mm', format: 'a4' });
-  const W = 210;
-  const H = 297;
-  const margin = 12;
-  const col2 = W - margin;
-  let y = 0;
-
-  const INR = (n) => `Rs. ${parseFloat(n).toLocaleString('en-IN')}`;
-  const lineH = 10.5;
-
-  const drawHeader = () => {
-    doc.setFillColor(255, 112, 17);
-    doc.rect(0, 0, W, 30, 'F');
-    doc.setTextColor(255, 255, 255);
-    doc.setFontSize(20);
-    doc.setFont('helvetica', 'bold');
-    doc.text('SRI VEERA FIREWORKS', margin, 13);
-    doc.setFontSize(11);
-    doc.setFont('helvetica', 'normal');
-    doc.text('Sri Veera Fireworks', margin, 21);
-    doc.setFontSize(12);
-    doc.setFont('helvetica', 'bold');
-    doc.text('+91 8300057711', col2, 13, { align: 'right' });
-    doc.setFontSize(10);
-    doc.setFont('helvetica', 'normal');
-    doc.text('Order Enquiry Sheet', col2, 21, { align: 'right' });
-  };
-
-  const drawTableHeader = (posY) => {
-    doc.setFillColor(15, 23, 42);
-    doc.rect(margin, posY, W - margin * 2, 10, 'F');
-    doc.setTextColor(255, 255, 255);
-    doc.setFontSize(10.5);
-    doc.setFont('helvetica', 'bold');
-    doc.text('#', margin + 3, posY + 6.5);
-    doc.text('Product Name', margin + 12, posY + 6.5);
-    doc.text('Unit', margin + 98, posY + 6.5);
-    doc.text('Qty', margin + 122, posY + 6.5);
-    doc.text('Price', margin + 135, posY + 6.5);
-    doc.text('Subtotal', col2 - 3, posY + 6.5, { align: 'right' });
-  };
-
-  // Header banner
-  drawHeader();
-  y = 38;
-
-  // Title
-  doc.setTextColor(15, 23, 42);
-  doc.setFontSize(15);
-  doc.setFont('helvetica', 'bold');
-  doc.text('ORDER ENQUIRY DETAILS', margin, y);
-  doc.setDrawColor(255, 112, 17);
-  doc.setLineWidth(1.0);
-  doc.line(margin, y + 2.5, col2, y + 2.5);
-
-  y += 12;
-
-  // Parse items
-  let items = [];
-  try {
-    items = typeof order.items === 'string' ? JSON.parse(order.items) : (order.items || []);
-  } catch (e) {
-    items = [];
-  }
-
-  // Calculate total
-  const totalPayable = items.reduce((acc, item) => acc + (parseFloat(item.price || 0) * (item.quantity || 0)), 0);
-
-  // Region detection from address format
-  let region = 'Tamil Nadu';
-  let cleanAddress = order.address || '';
-  if (cleanAddress.startsWith('[Other State]')) {
-    region = 'Other State';
-    cleanAddress = cleanAddress.replace('[Other State]', '').trim();
-  } else if (cleanAddress.startsWith('[Tamil Nadu]')) {
-    region = 'Tamil Nadu';
-    cleanAddress = cleanAddress.replace('[Tamil Nadu]', '').trim();
-  }
-
-  // Customer info box
-  doc.setFillColor(248, 250, 252);
-  doc.setDrawColor(203, 213, 225);
-  doc.setLineWidth(0.3);
-  doc.roundedRect(margin, y, W - margin * 2, 36, 3, 3, 'FD');
-  doc.setFontSize(10.5);
-  doc.setFont('helvetica', 'bold');
-  doc.setTextColor(71, 85, 105);
-  doc.text('CUSTOMER INFORMATION', margin + 5, y + 7);
-
-  doc.setFont('helvetica', 'bold');
-  doc.setTextColor(15, 23, 42);
-  doc.setFontSize(11.5);
-  doc.text(`Name:    ${order.customer_name || '—'}`, margin + 5, y + 15);
-  doc.text(`Phone:   ${order.phone || '—'}`, margin + 5, y + 23);
-  doc.text(`Region:  ${region}`, margin + 5, y + 31);
-  if (cleanAddress) {
-    const addrLines = doc.splitTextToSize(`Address: ${cleanAddress}`, W - margin * 2 - 10);
-    doc.text(addrLines, margin + 5, y + 39);
-    y += addrLines.length * 6;
-  }
-
-  y += 42;
-
-  // Table header
-  drawTableHeader(y);
-  y += 10;
-
-  // Items rows
-  items.forEach((item, idx) => {
-    if (y + lineH > H - 28) {
-      doc.addPage();
-      drawHeader();
-      y = 38;
-      drawTableHeader(y);
-      y += 10;
-    }
-
-    const price = parseFloat(item.price || 0);
-    const qty = parseInt(item.quantity || 0);
-    const sub = price * qty;
-    const unit = item.unit || '—';
-    const rowBg = idx % 2 === 0 ? [255, 255, 255] : [248, 250, 252];
-    doc.setFillColor(...rowBg);
-    doc.rect(margin, y, W - margin * 2, lineH, 'F');
-
-    doc.setTextColor(15, 23, 42);
-    doc.setFont('helvetica', 'bold');
-    doc.setFontSize(11);
-    doc.text(String(idx + 1), margin + 3, y + 7);
-
-    const nameLines = doc.splitTextToSize(item.name || '—', 82);
-    doc.text(nameLines[0], margin + 12, y + 7);
-
-    doc.setFont('helvetica', 'normal');
-    doc.text(String(unit).substring(0, 14), margin + 98, y + 7);
-    doc.setFont('helvetica', 'bold');
-    doc.text(String(qty), margin + 122, y + 7);
-    doc.setFont('helvetica', 'normal');
-    doc.text(INR(price), margin + 135, y + 7);
-    doc.setFont('helvetica', 'bold');
-    doc.text(INR(sub), col2 - 3, y + 7, { align: 'right' });
-
-    // thick separator for print clarity
-    doc.setDrawColor(203, 213, 225);
-    doc.setLineWidth(0.3);
-    doc.line(margin, y + lineH, col2, y + lineH);
-
-    y += lineH;
-  });
-
-  y += 8;
-
-  if (y + 24 > H - 20) {
-    doc.addPage();
-    drawHeader();
-    y = 38;
-  }
-
-  // Totals box
-  const totW = 95;
-  const totX = col2 - totW;
-  doc.setFillColor(255, 112, 17);
-  doc.roundedRect(totX, y, totW, 14, 2, 2, 'F');
-  doc.setTextColor(255, 255, 255);
-  doc.setFont('helvetica', 'bold');
-  doc.setFontSize(13);
-  doc.text('Total Payable:', totX + 5, y + 9);
-  doc.text(INR(totalPayable), col2 - 5, y + 9, { align: 'right' });
-
-  y += 24;
-
-  // Footer
-  doc.setDrawColor(203, 213, 225);
-  doc.setLineWidth(0.5);
-  doc.line(margin, y, col2, y);
-  y += 7;
-  doc.setFont('helvetica', 'bold');
-  doc.setFontSize(10);
-  doc.setTextColor(71, 85, 105);
-  doc.text(`Generated: ${new Date().toLocaleString('en-IN')}`, col2, y, { align: 'right' });
-
-  // Download
-  const cleanName = (order.customer_name || 'Customer').replace(/\s+/g, '_');
-  const cleanPhone = (order.phone || 'NoPhone').replace(/\s+/g, '_');
-  const fileName = `${cleanName}_${cleanPhone}.pdf`;
-  doc.save(fileName);
-}
+// downloadOrderPDF is now handled by downloadAdminOrderPDF from utils/generateOrderPDF
 
 export function AdminOrders() {
-  const [orders, setOrders] = useState([]);
-  const [loading, setLoading] = useState(true);
+  const [orders, setOrders]           = useState([]);
+  const [loading, setLoading]         = useState(true);
   const [searchQuery, setSearchQuery] = useState('');
+  const [filterYear, setFilterYear]   = useState('all');
+  const [filterMonth, setFilterMonth] = useState('all');
 
   const fetchOrders = useCallback(async () => {
     setLoading(true);
     try {
       const res = await api('/orders?order=created_at.desc');
       setOrders(res || []);
-    } catch (e) {
-      console.error('Failed to fetch orders:', e);
-    } finally {
-      setLoading(false);
-    }
+    } catch (e) { console.error(e); }
+    finally { setLoading(false); }
   }, []);
 
-  useEffect(() => {
-    fetchOrders();
-  }, [fetchOrders]);
+  useEffect(() => { fetchOrders(); }, [fetchOrders]);
 
   const handleUpdateStatus = async (orderId, newStatus) => {
     try {
-      await api(`/orders?id=eq.${orderId}`, {
-        method: 'PATCH',
-        body: JSON.stringify({ status: newStatus })
-      });
+      await api(`/orders?id=eq.${orderId}`, { method: 'PATCH', body: JSON.stringify({ status: newStatus }) });
       setOrders(orders.map(o => o.id === orderId ? { ...o, status: newStatus } : o));
-    } catch (err) {
-      console.error('Failed to update status:', err);
-    }
+    } catch (err) { console.error(err); }
   };
 
   const handleDeleteOrder = async (orderId) => {
-    if (!window.confirm('Are you sure you want to delete this order?')) return;
+    if (!window.confirm('Delete this order?')) return;
     try {
       await api(`/orders?id=eq.${orderId}`, { method: 'DELETE' });
       setOrders(orders.filter(o => o.id !== orderId));
-    } catch (err) {
-      console.error('Failed to delete order:', err);
-    }
+    } catch (err) { console.error(err); }
   };
 
   const getStatusColorStyle = (status) => {
     const cfg = STATUS_CONFIG[status] || { color: '#64748b', bg: 'rgba(100,116,139,0.1)' };
-    return {
-      color: cfg.color,
-      backgroundColor: cfg.bg,
-      padding: '4px 10px',
-      borderRadius: '20px',
-      fontSize: '0.78rem',
-      fontWeight: 700,
-      display: 'inline-block'
-    };
+    return { color: cfg.color, backgroundColor: cfg.bg, padding: '4px 10px', borderRadius: '20px', fontSize: '0.78rem', fontWeight: 700, display: 'inline-block' };
   };
+
+  const getOrderTotal = (order) => {
+    try {
+      const items = typeof order.items === 'string' ? JSON.parse(order.items) : (order.items || []);
+      return items.reduce((s, i) => s + parseFloat(i.price || 0) * parseInt(i.quantity || 0), 0);
+    } catch { return 0; }
+  };
+
+  const MONTHS = ['Jan','Feb','Mar','Apr','May','Jun','Jul','Aug','Sep','Oct','Nov','Dec'];
+  const years  = [...new Set([new Date().getFullYear(), ...orders.map(o => new Date(o.created_at).getFullYear())])].sort((a,b) => b-a);
 
   const filteredOrders = orders.filter(o => {
     const q = searchQuery.toLowerCase().trim();
+    const dt = new Date(o.created_at);
+    if (filterYear  !== 'all' && dt.getFullYear() !== parseInt(filterYear))  return false;
+    if (filterMonth !== 'all' && dt.getMonth()    !== parseInt(filterMonth)) return false;
     if (!q) return true;
-    return (
-      (o.customer_name || '').toLowerCase().includes(q) ||
-      (o.phone || '').toLowerCase().includes(q)
-    );
+    return (o.customer_name || '').toLowerCase().includes(q) || (o.phone || '').toLowerCase().includes(q);
   });
+  const filteredRevenue = filteredOrders.reduce((s, o) => s + getOrderTotal(o), 0);
 
   return (
     <div className="adm-page-container">
@@ -3126,24 +2936,36 @@ export function AdminOrders() {
           <h1 className="adm-title" style={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
             <ShoppingCart color="#ff6b35" /> Order Enquiries
           </h1>
-          <p className="adm-sub">Manage customer enquiries, update order statuses, and download print-ready PDF invoice sheets.</p>
+          <p className="adm-sub">Manage enquiries, update statuses, and download PDF sheets.</p>
         </div>
       </div>
 
-      {/* Search Bar */}
-      <div className="adm-search-bar" style={{ marginBottom: 20 }}>
-        <div className="adm-search-wrap" style={{ maxWidth: '360px', flex: 1 }}>
+      {/* ── Filters + Search ──────────────────────────────────────────────────── */}
+      <div style={{ display: 'flex', flexWrap: 'wrap', gap: 10, marginBottom: 16, alignItems: 'center' }}>
+        <div className="adm-search-wrap" style={{ flex: 1, minWidth: 200, maxWidth: 340 }}>
           <Search className="si" />
-          <input
-            type="text"
-            className="adm-form-input"
-            placeholder="Search by customer name or phone..."
-            value={searchQuery}
-            onChange={e => setSearchQuery(e.target.value)}
-          />
+          <input type="text" className="adm-form-input" placeholder="Search name or phone…" value={searchQuery} onChange={e => setSearchQuery(e.target.value)} />
         </div>
+        <CustomSelect
+          value={filterYear}
+          onChange={val => { setFilterYear(val); setFilterMonth('all'); }}
+          options={[{ value: 'all', label: 'All Years' }, ...years.map(y => ({ value: y, label: String(y) }))]}
+          minWidth={130}
+        />
+        <CustomSelect
+          value={filterMonth}
+          onChange={val => setFilterMonth(val)}
+          options={[{ value: 'all', label: 'All Months' }, ...MONTHS.map((m, i) => ({ value: i, label: m }))]}
+          minWidth={140}
+        />
+        {(filterYear !== 'all' || filterMonth !== 'all' || searchQuery) && (
+          <div style={{ fontSize: '0.82rem', color: '#64748b', background: '#f1f5f9', borderRadius: 8, padding: '8px 12px', fontWeight: 600 }}>
+            {filteredOrders.length} orders · ₹{filteredRevenue.toLocaleString('en-IN')}
+          </div>
+        )}
       </div>
 
+      {/* ── Orders List ───────────────────────────────────────────────────────── */}
       <div className="adm-card adm-scroll-card">
         <div className="adm-scroll-list" style={{ padding: '12px' }}>
           {loading ? (
@@ -3153,62 +2975,45 @@ export function AdminOrders() {
             </div>
           ) : filteredOrders.length === 0 ? (
             <div style={{ textAlign: 'center', padding: '40px 0', color: '#64748b' }}>
-              {searchQuery ? 'No matching enquiries found.' : 'No order enquiries found.'}
+              {searchQuery || filterYear !== 'all' || filterMonth !== 'all' ? 'No matching enquiries found.' : 'No order enquiries found.'}
             </div>
           ) : (
-            filteredOrders.map((order) => {
+            filteredOrders.map((order, idx) => {
               let items = [];
-              try {
-                items = typeof order.items === 'string' ? JSON.parse(order.items) : (order.items || []);
-              } catch (e) {}
-
-              const totalVal = items.reduce((acc, i) => acc + (parseFloat(i.price || 0) * (i.quantity || 0)), 0);
+              try { items = typeof order.items === 'string' ? JSON.parse(order.items) : (order.items || []); } catch {}
+              const totalVal  = items.reduce((acc, i) => acc + (parseFloat(i.price || 0) * (i.quantity || 0)), 0);
               const itemCount = items.reduce((acc, i) => acc + (i.quantity || 0), 0);
-
               let region = 'Tamil Nadu';
               let cleanAddress = order.address || '';
-              if (cleanAddress.startsWith('[Other State]')) {
-                region = 'Other State';
-                cleanAddress = cleanAddress.replace('[Other State]', '').trim();
-              } else if (cleanAddress.startsWith('[Tamil Nadu]')) {
-                region = 'Tamil Nadu';
-                cleanAddress = cleanAddress.replace('[Tamil Nadu]', '').trim();
-              }
-
+              if (cleanAddress.startsWith('[Other State]')) { region = 'Other State'; cleanAddress = cleanAddress.replace('[Other State]', '').trim(); }
+              else if (cleanAddress.startsWith('[Tamil Nadu]')) { cleanAddress = cleanAddress.replace('[Tamil Nadu]', '').trim(); }
               const regionStyle = {
                 backgroundColor: region === 'Tamil Nadu' ? '#fff7ed' : '#eff6ff',
                 color: region === 'Tamil Nadu' ? '#c2410c' : '#1d4ed8',
                 border: `1px solid ${region === 'Tamil Nadu' ? '#fed7aa' : '#bfdbfe'}`,
-                padding: '2px 8px',
-                borderRadius: '4px',
-                fontSize: '0.72rem',
-                fontWeight: 700,
-                display: 'inline-block',
+                padding: '2px 8px', borderRadius: '4px', fontSize: '0.72rem', fontWeight: 700, display: 'inline-block',
               };
 
               return (
                 <div key={order.id} className="order-card">
-                  {/* Top row: ID + date + status */}
+                  {/* Top row: serial + date + status */}
                   <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'flex-start', marginBottom: 10 }}>
-                    <div>
-                      <div style={{ fontSize: '0.7rem', color: '#94a3b8', fontFamily: 'monospace', marginBottom: 2 }}>
-                        #{String(order.id).substring(0, 8)}
+                    <div style={{ display: 'flex', alignItems: 'center', gap: 10 }}>
+                      <div style={{ width: 28, height: 28, borderRadius: '50%', background: '#ff6b35', color: '#fff', display: 'flex', alignItems: 'center', justifyContent: 'center', fontSize: '0.72rem', fontWeight: 900, flexShrink: 0 }}>
+                        {filteredOrders.length - idx}
                       </div>
-                      <div style={{ fontSize: '0.8rem', fontWeight: 600, color: '#475569' }}>
-                        {fmtDate(order.created_at)}
+                      <div>
+                        <div style={{ fontSize: '0.7rem', color: '#94a3b8', fontFamily: 'monospace', marginBottom: 1 }}>#{String(order.id).substring(0, 8)}</div>
+                        <div style={{ fontSize: '0.8rem', fontWeight: 600, color: '#475569' }}>{fmtDate(order.created_at)}</div>
                       </div>
                     </div>
-                    <span style={getStatusColorStyle(order.status || 'Payment Pending')}>
-                      {order.status || 'Payment Pending'}
-                    </span>
+                    <span style={getStatusColorStyle(order.status || 'Payment Pending')}>{order.status || 'Payment Pending'}</span>
                   </div>
 
-                  {/* Customer + region row */}
+                  {/* Customer + region */}
                   <div style={{ display: 'flex', gap: 12, marginBottom: 10, flexWrap: 'wrap' }}>
                     <div style={{ flex: 1, minWidth: 140 }}>
-                      <div style={{ fontWeight: 700, color: '#0f172a', fontSize: '0.95rem', marginBottom: 2 }}>
-                        {order.customer_name || '—'}
-                      </div>
+                      <div style={{ fontWeight: 700, color: '#0f172a', fontSize: '0.95rem', marginBottom: 2 }}>{order.customer_name || '—'}</div>
                       <div style={{ fontSize: '0.82rem', color: '#475569' }}>📞 {order.phone || '—'}</div>
                     </div>
                     <div style={{ flex: 1, minWidth: 140 }}>
@@ -3226,31 +3031,21 @@ export function AdminOrders() {
                       <div style={{ fontSize: '0.72rem', color: '#94a3b8' }}>{itemCount} item{itemCount !== 1 ? 's' : ''}</div>
                     </div>
                     <div style={{ display: 'flex', gap: 6, alignItems: 'center', flexWrap: 'wrap' }}>
-                      <button
-                        onClick={() => downloadOrderPDF(order)}
-                        className="adm-btn adm-btn-sm adm-btn-secondary"
-                        style={{ padding: '6px 12px', fontSize: '0.78rem', fontWeight: 600 }}
-                        title="Download PDF Invoice"
-                      >
+                      <button onClick={() => downloadAdminOrderPDF(order)} className="adm-btn adm-btn-sm adm-btn-secondary" style={{ padding: '6px 12px', fontSize: '0.78rem', fontWeight: 600 }} title="Download PDF">
                         <Download size={12} style={{ marginRight: 4 }} /> PDF
                       </button>
                       <CustomSelect
                         value={order.status || 'Payment Pending'}
                         options={[
-                          { label: 'Payment Pending', value: 'Payment Pending' },
+                          { label: 'Payment Pending',   value: 'Payment Pending' },
                           { label: 'Payment Confirmed', value: 'Payment Confirmed' },
-                          { label: 'Shipped', value: 'Shipped' },
-                          { label: 'Delivered', value: 'Delivered' },
+                          { label: 'Shipped',           value: 'Shipped' },
+                          { label: 'Delivered',         value: 'Delivered' },
                         ]}
                         onChange={val => handleUpdateStatus(order.id, val)}
                         style={{ width: '160px' }}
                       />
-                      <button
-                        onClick={() => handleDeleteOrder(order.id)}
-                        className="adm-btn adm-btn-sm"
-                        style={{ backgroundColor: '#fef2f2', borderColor: '#fca5a5', color: '#dc2626', padding: '6px 8px' }}
-                        title="Delete Enquiry"
-                      >
+                      <button onClick={() => handleDeleteOrder(order.id)} className="adm-btn adm-btn-sm" style={{ backgroundColor: '#fef2f2', borderColor: '#fca5a5', color: '#dc2626', padding: '6px 8px' }} title="Delete">
                         <Trash2 size={13} />
                       </button>
                     </div>
@@ -3259,6 +3054,150 @@ export function AdminOrders() {
               );
             })
           )}
+        </div>
+      </div>
+    </div>
+  );
+}
+
+/* ══════════════════════════════════════════════════
+   DASHBOARD  →  /admin/dashboard
+══════════════════════════════════════════════════ */
+export function AdminDashboard() {
+  const [orders, setOrders]   = useState([]);
+  const [loading, setLoading] = useState(true);
+  const [filterYear, setFilterYear] = useState('all');
+
+  useEffect(() => {
+    api('/orders?order=created_at.desc')
+      .then(res => setOrders(res || []))
+      .catch(console.error)
+      .finally(() => setLoading(false));
+  }, []);
+
+  const getOrderTotal = (order) => {
+    try {
+      const items = typeof order.items === 'string' ? JSON.parse(order.items) : (order.items || []);
+      return items.reduce((s, i) => s + parseFloat(i.price || 0) * parseInt(i.quantity || 0), 0);
+    } catch { return 0; }
+  };
+
+  const MONTHS = ['Jan','Feb','Mar','Apr','May','Jun','Jul','Aug','Sep','Oct','Nov','Dec'];
+  const years  = [...new Set([new Date().getFullYear(), ...orders.map(o => new Date(o.created_at).getFullYear())])].sort((a,b) => b-a);
+  const curYear = new Date().getFullYear();
+
+  const totalRevenue    = orders.reduce((s, o) => s + getOrderTotal(o), 0);
+  const thisYearOrders  = orders.filter(o => new Date(o.created_at).getFullYear() === curYear);
+  const thisYearRevenue = thisYearOrders.reduce((s, o) => s + getOrderTotal(o), 0);
+  const thisMonth       = new Date().getMonth();
+  const thisMonthOrders = thisYearOrders.filter(o => new Date(o.created_at).getMonth() === thisMonth);
+  const thisMonthRevenue= thisMonthOrders.reduce((s, o) => s + getOrderTotal(o), 0);
+
+  const yearStats = years.map(yr => {
+    const yo = orders.filter(o => new Date(o.created_at).getFullYear() === yr);
+    return { year: yr, count: yo.length, revenue: yo.reduce((s, o) => s + getOrderTotal(o), 0) };
+  });
+
+  const baseForMonth = filterYear === 'all' ? orders : orders.filter(o => new Date(o.created_at).getFullYear() === parseInt(filterYear));
+  const monthStats = MONTHS.map((m, idx) => {
+    const mo = baseForMonth.filter(o => new Date(o.created_at).getMonth() === idx);
+    return { month: m, idx, count: mo.length, revenue: mo.reduce((s, o) => s + getOrderTotal(o), 0) };
+  });
+  const maxMonthRev = Math.max(...monthStats.map(m => m.revenue), 1);
+
+  if (loading) return (
+    <div className="adm-page-container" style={{ display: 'flex', alignItems: 'center', justifyContent: 'center', minHeight: 300 }}>
+      <RefreshCw size={28} className="spinning" color="#ff6b35" />
+    </div>
+  );
+
+  return (
+    <div className="adm-page-container">
+      <div className="adm-page-header mb-4">
+        <h1 className="adm-title" style={{ display: 'flex', alignItems: 'center', gap: 8 }}>
+          <TrendingUp color="#ff6b35" /> Dashboard
+        </h1>
+        <p className="adm-sub">Overview of all order enquiries and revenue.</p>
+      </div>
+
+      {/* ── Top stat cards ──────────────────────────────────────────────────── */}
+      <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit,minmax(160px,1fr))', gap: 14, marginBottom: 24 }}>
+        {[
+          { label: 'Total Orders',      value: orders.length,                                         icon: <ShoppingCart size={22} color="#ff6b35"/>, bg: '#fff5ef', border: '#fed7aa', val_color: '#ff6b35' },
+          { label: 'Total Revenue',     value: `₹${totalRevenue.toLocaleString('en-IN')}`,            icon: <TrendingUp   size={22} color="#22c55e"/>, bg: '#f0fdf4', border: '#86efac', val_color: '#16a34a' },
+          { label: `${curYear} Orders`, value: thisYearOrders.length,                                 icon: <Star         size={22} color="#8b5cf6"/>, bg: '#faf5ff', border: '#c4b5fd', val_color: '#7c3aed' },
+          { label: `${curYear} Revenue`,value: `₹${thisYearRevenue.toLocaleString('en-IN')}`,         icon: <ArrowUpRight size={22} color="#0ea5e9"/>, bg: '#f0f9ff', border: '#7dd3fc', val_color: '#0284c7' },
+          { label: 'This Month Orders', value: thisMonthOrders.length,                                icon: <Clock        size={22} color="#f59e0b"/>, bg: '#fffbeb', border: '#fde68a', val_color: '#d97706' },
+          { label: 'This Month Rev.',   value: `₹${thisMonthRevenue.toLocaleString('en-IN')}`,        icon: <CheckCircle  size={22} color="#10b981"/>, bg: '#ecfdf5', border: '#6ee7b7', val_color: '#059669' },
+        ].map(card => (
+          <div key={card.label} style={{ background: card.bg, border: `1.5px solid ${card.border}`, borderRadius: 12, padding: '14px 16px' }}>
+            <div style={{ display: 'flex', alignItems: 'center', gap: 8, marginBottom: 8 }}>
+              {card.icon}
+              <span style={{ fontSize: '0.73rem', fontWeight: 600, color: '#64748b' }}>{card.label}</span>
+            </div>
+            <div style={{ fontSize: '1.2rem', fontWeight: 900, color: card.val_color }}>{card.value}</div>
+          </div>
+        ))}
+      </div>
+
+      {/* ── Year-wise summary ───────────────────────────────────────────────── */}
+      {yearStats.length > 0 && (
+        <div className="adm-card" style={{ marginBottom: 20, padding: '16px 18px' }}>
+          <div style={{ fontSize: '0.78rem', fontWeight: 800, color: '#475569', textTransform: 'uppercase', letterSpacing: '0.6px', marginBottom: 14 }}>Year-wise Summary</div>
+          <div style={{ display: 'flex', flexWrap: 'wrap', gap: 12 }}>
+            {yearStats.map(y => (
+              <div key={y.year} style={{ background: y.year === curYear ? '#fff5ef' : '#f8fafc', border: `1.5px solid ${y.year === curYear ? '#fed7aa' : '#e2e8f0'}`, borderRadius: 10, padding: '10px 16px', minWidth: 140 }}>
+                <div style={{ fontWeight: 900, color: '#ff6b35', fontSize: '1.1rem' }}>{y.year}</div>
+                <div style={{ fontSize: '0.82rem', color: '#475569', marginTop: 3 }}>{y.count} orders</div>
+                <div style={{ fontSize: '0.9rem', fontWeight: 700, color: '#0f172a', marginTop: 2 }}>₹{y.revenue.toLocaleString('en-IN')}</div>
+              </div>
+            ))}
+          </div>
+        </div>
+      )}
+
+      {/* ── Month-wise bar chart ─────────────────────────────────────────────── */}
+      <div className="adm-card" style={{ padding: '16px 18px' }}>
+        <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', marginBottom: 14 }}>
+          <div style={{ fontSize: '0.78rem', fontWeight: 800, color: '#475569', textTransform: 'uppercase', letterSpacing: '0.6px' }}>
+            Month-wise Summary
+          </div>
+          <CustomSelect
+            value={filterYear}
+            onChange={val => setFilterYear(val)}
+            options={[{ value: 'all', label: 'All Years' }, ...years.map(y => ({ value: y, label: String(y) }))]}
+            minWidth={130}
+          />
+        </div>
+
+        {/* Bar chart */}
+        <div style={{ display: 'flex', alignItems: 'flex-end', gap: 6, height: 140, overflowX: 'auto', paddingBottom: 4 }}>
+          {monthStats.map(m => {
+            const pct = maxMonthRev > 0 ? (m.revenue / maxMonthRev) * 100 : 0;
+            const isCurrentMonth = m.idx === thisMonth && (filterYear === 'all' || parseInt(filterYear) === curYear);
+            return (
+              <div key={m.month} style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', gap: 4, flex: '1 0 40px', minWidth: 40 }}>
+                {m.count > 0 && (
+                  <div style={{ fontSize: '0.65rem', fontWeight: 700, color: '#64748b', whiteSpace: 'nowrap' }}>
+                    {m.count}
+                  </div>
+                )}
+                <div style={{ width: '100%', borderRadius: '4px 4px 0 0', background: m.count === 0 ? '#f1f5f9' : isCurrentMonth ? '#ff6b35' : '#fb923c', height: `${Math.max(pct, m.count > 0 ? 6 : 2)}%`, transition: 'height 0.3s', position: 'relative', minHeight: m.count > 0 ? 6 : 2 }} />
+                <div style={{ fontSize: '0.68rem', fontWeight: 600, color: isCurrentMonth ? '#ff6b35' : '#64748b' }}>{m.month}</div>
+              </div>
+            );
+          })}
+        </div>
+
+        {/* Month detail cards for months with data */}
+        <div style={{ display: 'flex', flexWrap: 'wrap', gap: 8, marginTop: 16 }}>
+          {monthStats.filter(m => m.count > 0).map(m => (
+            <div key={m.month} style={{ background: '#f8fafc', border: '1px solid #e2e8f0', borderRadius: 8, padding: '7px 12px', minWidth: 110 }}>
+              <div style={{ fontWeight: 700, color: '#0ea5e9', fontSize: '0.85rem' }}>{m.month}</div>
+              <div style={{ fontSize: '0.75rem', color: '#475569', marginTop: 2 }}>{m.count} orders</div>
+              <div style={{ fontSize: '0.82rem', fontWeight: 700, color: '#0f172a' }}>₹{m.revenue.toLocaleString('en-IN')}</div>
+            </div>
+          ))}
         </div>
       </div>
     </div>

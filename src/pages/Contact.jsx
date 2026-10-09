@@ -1,16 +1,17 @@
 import { useState } from 'react'
 import { Link } from 'react-router-dom'
-import { Heart, ShoppingCart, Phone, MapPin, Mail, Send } from 'lucide-react'
+import { Phone, MapPin, Mail, Send } from 'lucide-react'
 import { useShop } from '../context/ShopContext'
 import Footer from '../components/Footer'
 import TopBar from '../components/TopBar'
+import Header from '../components/Header'
 import contactImg from '../assets/contactus.png'
 import '../App.css'
 
-const LOGO = '/images/img-css-23.png'
+
 
 export default function Contact() {
-  const { cartCount, wishlistCount, siteSettings } = useShop()
+  const { siteSettings } = useShop()
   const [form, setForm]   = useState({ name: '', phone: '', email: '', message: '' })
   const [sent, setSent]   = useState(false)
 
@@ -70,48 +71,7 @@ export default function Contact() {
 
       <TopBar />
 
-      {/* ── Header ── */}
-      <header style={{ background: '#fff', boxShadow: '0 1px 8px rgba(0,0,0,0.07)', position: 'sticky', top: 0, zIndex: 50 }}>
-        <div style={{ maxWidth: 1400, margin: '0 auto', padding: '0 16px' }}>
-          <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', height: 64, gap: 16 }}>
-            <Link to="/" style={{ flexShrink: 0, textDecoration: 'none' }}>
-              <img src={LOGO} alt="Sri Veera Fireworks" style={{ height: 40, objectFit: 'contain' }} />
-            </Link>
-            <nav className="hidden lg:flex" style={{ alignItems: 'center', gap: 4 }}>
-              <Link to="/"         className="nav-link">Home</Link>
-              <Link to="/about"    className="nav-link">About</Link>
-              <Link to="/products" className="nav-link">Products</Link>
-              <Link to="/safety"   className="nav-link">Safety Tips</Link>
-              <Link to="/contact"  className="nav-link" style={{ color: '#e87316', fontWeight: 700 }}>Contact</Link>
-            </nav>
-            <div style={{ display: 'flex', alignItems: 'center', gap: 8 }}>
-              <Link to="/wishlist" style={{
-                display: 'flex', alignItems: 'center', gap: 6,
-                background: '#fff', border: '1px solid #e2e8f0', color: '#374151',
-                borderRadius: 8, padding: '7px 12px', fontSize: 14, fontWeight: 600,
-                textDecoration: 'none', flexShrink: 0,
-              }}>
-                <Heart size={17} />
-                <span className="hidden sm:inline">Wishlist</span>
-                {wishlistCount > 0 && (
-                  <span style={{ background: '#ef4444', color: '#fff', borderRadius: '50%', width: 20, height: 20, fontSize: 11, display: 'flex', alignItems: 'center', justifyContent: 'center', fontWeight: 700 }}>{wishlistCount}</span>
-                )}
-              </Link>
-              <Link to="/cart" style={{
-                display: 'flex', alignItems: 'center', gap: 6,
-                background: '#e87316', color: '#fff', border: 'none',
-                borderRadius: 8, padding: '7px 12px', fontSize: 14, fontWeight: 600,
-                textDecoration: 'none', flexShrink: 0,
-              }}>
-                <ShoppingCart size={17} />
-                Cart {cartCount > 0 && (
-                  <span style={{ background: '#fff', color: '#e87316', borderRadius: '50%', width: 20, height: 20, fontSize: 11, display: 'flex', alignItems: 'center', justifyContent: 'center', fontWeight: 700 }}>{cartCount}</span>
-                )}
-              </Link>
-            </div>
-          </div>
-        </div>
-      </header>
+      <Header />
 
       {/* ── Hero Image ── */}
       <div style={{ width: '100%', lineHeight: 0 }}>

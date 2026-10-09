@@ -1,11 +1,14 @@
 import { useState } from 'react'
 import { Link } from 'react-router-dom'
-import { Heart, ShoppingCart, X, CheckCircle2, MessageCircle, ShoppingBag } from 'lucide-react'
+import { X, CheckCircle2, MessageCircle, ShoppingBag } from 'lucide-react'
 import { useShop } from '../context/ShopContext'
 import Footer from '../components/Footer'
+import Header from '../components/Header'
+import OrderToast from '../components/OrderToast'
+import { generateOrderPDF } from '../utils/generateOrderPDF'
 import '../App.css'
 
-const LOGO = '/images/img-css-23.png'
+
 
 function parseImages(imgUrl) {
   if (!imgUrl) return []
@@ -18,10 +21,12 @@ function fmtPrice(v) {
 }
 
 export default function Cart() {
-  const { cartItems, cartTotal, cartCount, setQty, removeFromCart, clearCart, siteSettings, wishlistCount } = useShop()
+  const { cartItems, cartTotal, cartCount, setQty, removeFromCart, clearCart, siteSettings } = useShop()
   const [form, setForm]       = useState({ name: '', phone: '', address: '', isTN: true })
   const [formErr, setFormErr] = useState({})
   const [submitted, setSubmitted] = useState(false)
+  const [showToast, setShowToast] = useState(false)
+  const [errorToast, setErrorToast] = useState({ show: false, message: '' })
 
   const setF = (k, v) => { setForm(f => ({ ...f, [k]: v })); setFormErr(e => ({ ...e, [k]: false })) }
 
@@ -38,7 +43,7 @@ export default function Cart() {
     }
     if (errs.name || errs.phone || errs.address) { setFormErr(errs); return }
     if (cartTotal < minOrder) {
-      alert(`Minimum order is ₹${minOrder.toLocaleString('en-IN')} for ${form.isTN ? 'Tamil Nadu' : 'Other States'}.`)
+      setErrorToast({ show: true, message: `Minimum order is ₹${minOrder.toLocaleString('en-IN')} for ${form.isTN ? 'Tamil Nadu' : 'Other States'}.` })
       return
     }
 
@@ -61,8 +66,13 @@ export default function Cart() {
       '_Sent from sriveerafireworks.com_',
     ].join('\n')
 
+    // Generate and download PDF
+    await generateOrderPDF({ form, cartItems, cartTotal })
+
     const wa = siteSettings.whatsapp || '918300057711'
-    window.open(`https://wa.me/${wa}?text=${encodeURIComponent(msg)}`, '_blank')
+    setTimeout(() => {
+      window.open(`https://wa.me/${wa}?text=${encodeURIComponent(msg)}`, '_blank')
+    }, 600)
 
     const SUPABASE_URL = import.meta.env.VITE_SUPABASE_URL
     const SUPABASE_KEY = import.meta.env.VITE_SUPABASE_ANON_KEY
@@ -92,39 +102,13 @@ export default function Cart() {
 
     clearCart()
     setSubmitted(true)
+    setShowToast(true)
   }
 
   return (
     <div className="theme-color4 light ltr" style={{ minHeight: '100vh', background: '#f8f8f8' }}>
 
-      {/* Header */}
-      <header className="bg-white shadow-sm sticky top-0 z-50">
-        <div className="max-w-[1400px] mx-auto px-4">
-          <div className="flex items-center justify-between h-16 gap-4">
-            <Link to="/" className="flex-shrink-0">
-              <img src={LOGO} alt="Sri Veera Fireworks" className="h-10 w-auto object-contain" />
-            </Link>
-            <nav className="hidden lg:flex items-center gap-1">
-              <Link to="/"          className="nav-link">Home</Link>
-              <Link to="/about"     className="nav-link">About</Link>
-              <Link to="/#products" className="nav-link">Products</Link>
-              <Link to="/safety"    className="nav-link">Safety Tips</Link>
-              <Link to="/#contact"  className="nav-link">Contact</Link>
-            </nav>
-            <div className="flex items-center gap-2">
-              <Link to="/wishlist" className="relative flex items-center gap-1.5 bg-white border border-gray-200 text-gray-700 rounded-md px-3 py-2 text-sm font-semibold hover:bg-gray-50 transition-colors no-underline">
-                <Heart size={18} />
-                <span className="hidden sm:inline">Wishlist</span>
-                {wishlistCount > 0 && <span className="bg-red-500 text-white rounded-full w-5 h-5 text-xs flex items-center justify-center font-bold">{wishlistCount}</span>}
-              </Link>
-              <Link to="/cart" className="flex items-center gap-1.5 bg-[#e87316] text-white border-none rounded-md px-3 py-2 text-sm font-semibold hover:bg-[#cf6512] transition-colors no-underline">
-                <ShoppingCart size={18} />
-                Cart {cartCount > 0 && <span className="bg-white text-[#e87316] rounded-full w-5 h-5 text-xs flex items-center justify-center font-bold">{cartCount}</span>}
-              </Link>
-            </div>
-          </div>
-        </div>
-      </header>
+      <Header />
 
       {/* Breadcrumb */}
       <div className="bg-white border-b border-gray-100">
@@ -164,35 +148,41 @@ export default function Cart() {
               {cartItems.map(({ product: p, qty }) => {
                 const imgs = parseImages(p.image_url)
                 return (
-                  <div key={p.id} className="bg-white rounded-2xl shadow-sm p-4 flex items-center gap-4">
-                    <img
-                      src={imgs[0] || '/images/noimage.jpg'}
-                      alt={p.name}
-                      className="rounded-xl object-cover flex-shrink-0"
-                      style={{ width: 80, height: 80 }}
-                    />
-                    <div className="flex-1 min-w-0">
-                      <div className="font-bold text-gray-800 text-sm leading-tight">{p.name}</div>
-                      {p.description && <div className="text-xs text-gray-400 mt-0.5">{p.description}</div>}
-                      {p.order_unit && <div className="text-xs text-gray-400">{p.order_unit}</div>}
-                      <div className="text-[#e87316] font-bold mt-1">{fmtPrice(p.price)}</div>
-                    </div>
-                    <div className="flex flex-col items-end gap-3">
-                      <button className="text-gray-400 hover:text-red-500" onClick={() => removeFromCart(p.id)}><X size={18} /></button>
-                      <div className="qty-row">
-                        <button onClick={() => setQty(p.id, qty - 1)}>−</button>
-                        <input
-                          type="number"
-                          value={qty}
-                          min={1}
-                          onChange={e => {
-                            const v = parseInt(e.target.value)
-                            if (!isNaN(v) && v > 0) setQty(p.id, v)
-                          }}
-                        />
-                        <button onClick={() => setQty(p.id, qty + 1)}>+</button>
+                  <div key={p.id} className="bg-white rounded-2xl shadow-sm p-4">
+                    <div className="flex items-start gap-4">
+                      {/* Image */}
+                      <img
+                        src={imgs[0] || '/images/noimage.jpg'}
+                        alt={p.name}
+                        className="rounded-xl object-cover flex-shrink-0"
+                        style={{ width: 80, height: 80 }}
+                      />
+                      {/* Info */}
+                      <div className="flex-1 min-w-0">
+                        <div className="font-bold text-gray-800 text-sm leading-tight">{p.name}</div>
+                        {p.description && <div className="text-xs text-gray-400 mt-0.5">{p.description}</div>}
+                        {p.order_unit && <div className="text-xs text-gray-400">{p.order_unit}</div>}
+                        <div className="text-[#e87316] font-bold mt-1 text-sm">{fmtPrice(p.price)}</div>
                       </div>
-                      <div className="text-sm font-bold text-gray-700">{fmtPrice(p.price * qty)}</div>
+                      {/* Remove */}
+                      <button className="text-gray-400 hover:text-red-500 flex-shrink-0" onClick={() => removeFromCart(p.id)}>
+                        <X size={18} />
+                      </button>
+                    </div>
+                    {/* Qty + Total row */}
+                    <div className="flex items-center justify-between mt-3 pt-3 border-t border-gray-100">
+                      <div style={{ display: 'flex', alignItems: 'center', background: '#f5f5f5', borderRadius: 8, padding: 4, gap: 0 }}>
+                        <button
+                          onClick={() => setQty(p.id, qty - 1)}
+                          style={{ background: 'linear-gradient(135deg,#c0392b,#8e44ad)', color: '#fff', border: 'none', borderRadius: 6, width: 34, height: 34, fontSize: 20, fontWeight: 700, cursor: 'pointer', display: 'flex', alignItems: 'center', justifyContent: 'center', flexShrink: 0 }}
+                        >−</button>
+                        <span style={{ minWidth: 40, textAlign: 'center', fontWeight: 700, fontSize: 15 }}>{qty}</span>
+                        <button
+                          onClick={() => setQty(p.id, qty + 1)}
+                          style={{ background: 'linear-gradient(135deg,#c0392b,#8e44ad)', color: '#fff', border: 'none', borderRadius: 6, width: 34, height: 34, fontSize: 20, fontWeight: 700, cursor: 'pointer', display: 'flex', alignItems: 'center', justifyContent: 'center', flexShrink: 0 }}
+                        >+</button>
+                      </div>
+                      <div className="text-base font-extrabold text-gray-800">{fmtPrice(p.price * qty)}</div>
                     </div>
                   </div>
                 )
@@ -243,6 +233,9 @@ export default function Cart() {
         )}
       </div>
       <Footer />
+
+      <OrderToast show={showToast} onClose={() => setShowToast(false)} customerName={form.name} />
+      <OrderToast type="error" show={errorToast.show} message={errorToast.message} onClose={() => setErrorToast({ show: false, message: '' })} />
     </div>
   )
 }

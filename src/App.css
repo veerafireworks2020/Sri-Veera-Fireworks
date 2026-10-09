@@ -3,6 +3,11 @@
   --theme: #e87316;
 }
 
+html, body {
+  overflow-x: clip;
+  max-width: 100vw;
+}
+
 /* ── Products Page Grid ──────────────────────────── */
 .products-grid {
   display: grid;
@@ -128,7 +133,7 @@
   width: 100%;
 }
 .qty-row button {
-  background: #e87316;
+  background: linear-gradient(135deg, #c0392b 0%, #8e44ad 100%);
   color: #fff;
   border: none;
   border-radius: 6px;
@@ -141,6 +146,7 @@
   display: flex;
   align-items: center;
   justify-content: center;
+  box-shadow: 0 2px 6px rgba(142,68,173,0.3);
 }
 .qty-row input {
   flex: 1;
@@ -283,17 +289,19 @@
 /* Add to cart */
 .btn-add-cart {
   width: 100%;
-  background: var(--theme);
+  background: linear-gradient(135deg, #c0392b 0%, #8e44ad 100%);
   color: #fff;
   border: none;
   border-radius: 6px;
   padding: 8px;
   font-size: 13px;
-  font-weight: 600;
+  font-weight: 700;
   cursor: pointer;
-  transition: background 0.2s;
+  transition: opacity 0.2s, transform 0.15s;
+  letter-spacing: 0.4px;
+  box-shadow: 0 2px 8px rgba(142,68,173,0.35);
 }
-.btn-add-cart:hover { background: #cf6512; }
+.btn-add-cart:hover { opacity: 0.88; transform: translateY(-1px); }
 
 /* Section title */
 .subtitle-two {

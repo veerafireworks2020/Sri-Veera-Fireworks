@@ -1,49 +1,23 @@
 import { Link } from 'react-router-dom'
-import { Heart, ShoppingCart, Phone, MapPin, Mail } from 'lucide-react'
+import { Phone, MapPin, Mail } from 'lucide-react'
 import { useShop } from '../context/ShopContext'
 import Footer from '../components/Footer'
 import TopBar from '../components/TopBar'
+import Header from '../components/Header'
 import aboutImg from '../assets/aboutus.png'
 import '../App.css'
 
-const LOGO = '/images/img-css-23.png'
+
 
 export default function About() {
-  const { cartCount, wishlistCount } = useShop()
+  const { } = useShop()
 
   return (
     <div className="theme-color4 light ltr" style={{ minHeight: '100vh', background: '#f8f8f8' }}>
 
       <TopBar />
 
-      {/* Header */}
-      <header className="bg-white shadow-sm sticky top-0 z-50">
-        <div className="max-w-[1400px] mx-auto px-4">
-          <div className="flex items-center justify-between h-16 gap-4">
-            <Link to="/" className="flex-shrink-0">
-              <img src={LOGO} alt="Sri Veera Fireworks" className="h-10 w-auto object-contain" />
-            </Link>
-            <nav className="hidden lg:flex items-center gap-1">
-              <Link to="/"         className="nav-link">Home</Link>
-              <Link to="/about"    className="nav-link" style={{ color: '#e87316', fontWeight: 700 }}>About</Link>
-              <Link to="/products" className="nav-link">Products</Link>
-              <Link to="/safety"   className="nav-link">Safety Tips</Link>
-              <Link to="/contact"  className="nav-link">Contact</Link>
-            </nav>
-            <div className="flex items-center gap-2">
-              <Link to="/wishlist" className="relative flex items-center gap-1.5 bg-white border border-gray-200 text-gray-700 rounded-md px-3 py-2 text-sm font-semibold hover:bg-gray-50 transition-colors no-underline">
-                <Heart size={18} />
-                <span className="hidden sm:inline">Wishlist</span>
-                {wishlistCount > 0 && <span className="bg-red-500 text-white rounded-full w-5 h-5 text-xs flex items-center justify-center font-bold">{wishlistCount}</span>}
-              </Link>
-              <Link to="/cart" className="flex items-center gap-1.5 bg-[#e87316] text-white border-none rounded-md px-3 py-2 text-sm font-semibold hover:bg-[#cf6512] transition-colors no-underline">
-                <ShoppingCart size={18} />
-                Cart {cartCount > 0 && <span className="bg-white text-[#e87316] rounded-full w-5 h-5 text-xs flex items-center justify-center font-bold">{cartCount}</span>}
-              </Link>
-            </div>
-          </div>
-        </div>
-      </header>
+      <Header />
 
       {/* Breadcrumb */}
       <div className="bg-white border-b border-gray-100">
