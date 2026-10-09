@@ -448,6 +448,36 @@ html, body {
 .wishlist-heart-btn:hover { transform: scale(1.2); }
 
 /* ── Skeleton Loader ──────────────────────────────── */
+@keyframes pricelist-pulse {
+  0%   { box-shadow: 0 0 0 0 rgba(99,102,241,0.55); transform: scale(1); }
+  50%  { box-shadow: 0 0 0 7px rgba(99,102,241,0); transform: scale(1.04); }
+  100% { box-shadow: 0 0 0 0 rgba(99,102,241,0); transform: scale(1); }
+}
+@keyframes pricelist-shimmer {
+  0%   { background-position: -200% center; }
+  100% { background-position: 200% center; }
+}
+.pricelist-btn {
+  background: linear-gradient(270deg, #6366f1, #8b5cf6, #06b6d4, #6366f1);
+  background-size: 300% 100%;
+  animation: pricelist-pulse 1.8s ease-in-out infinite, pricelist-shimmer 3s linear infinite;
+  color: #fff !important;
+  border: none !important;
+  border-radius: 8px;
+  padding: 8px 14px;
+  font-size: 0.85rem;
+  font-weight: 700;
+  letter-spacing: 0.2px;
+  cursor: pointer;
+  text-decoration: none !important;
+  display: flex;
+  align-items: center;
+  gap: 6px;
+}
+.pricelist-btn:hover {
+  filter: brightness(1.12);
+}
+
 @keyframes skeleton-shimmer {
   0%   { background-position: -600px 0; }
   100% { background-position:  600px 0; }

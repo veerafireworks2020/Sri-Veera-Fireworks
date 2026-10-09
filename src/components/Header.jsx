@@ -2,6 +2,7 @@ import { useState } from 'react'
 import { Link, useLocation } from 'react-router-dom'
 import { Heart, ShoppingCart, Menu, X, Download } from 'lucide-react'
 import { useShop } from '../context/ShopContext'
+import '../App.css'
 
 const LOGO = '/images/img-css-23.png'
 
@@ -55,18 +56,7 @@ export default function Header() {
                 <a
                   href={pricelistUrl}
                   download="Sri-Veera-Fireworks-Pricelist.pdf"
-                  className="hidden lg:flex items-center gap-1.5 no-underline"
-                  style={{
-                    background: 'linear-gradient(135deg, #ff8c00, #e87316)',
-                    color: '#fff',
-                    border: 'none',
-                    borderRadius: 8,
-                    padding: '8px 14px',
-                    fontSize: '0.85rem',
-                    fontWeight: 700,
-                    boxShadow: '0 2px 8px rgba(232,115,22,0.35)',
-                    letterSpacing: '0.2px',
-                  }}
+                  className="hidden lg:flex pricelist-btn"
                 >
                   <Download size={16} />
                   <span>Price List</span>
