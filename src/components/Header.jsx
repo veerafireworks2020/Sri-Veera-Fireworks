@@ -16,7 +16,7 @@ const NAV = [
 
 export default function Header() {
   const { cartCount, wishlistCount, siteSettings } = useShop()
-  const pricelistUrl = siteSettings?.pricelist_url || ''
+  const pricelistUrl = siteSettings?.pricelist_url
   const { pathname } = useLocation()
   const [open, setOpen] = useState(false)
 

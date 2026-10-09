@@ -13,12 +13,13 @@ export function ShopProvider({ children }) {
   const [cartQtys, setCartQtys]         = useState({})
   const [wishlistIds, setWishlistIds]   = useState([])
   const [siteSettings, setSiteSettings] = useState({
-    min_order_tn: 3000,
-    min_order_other: 5000,
+    min_order_tn: 0,
+    min_order_other: 0,
     pricelist_url: '',
-    whatsapp: '918300057711',
-    state_label_tn: 'Tamil Nadu',
-    state_label_other: 'Other State',
+    whatsapp: '',
+    state_label_tn: '',
+    state_label_other: '',
+    announcement: '',
   })
 
   // ── Load cart & wishlist from localStorage ────────

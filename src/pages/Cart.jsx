@@ -22,8 +22,8 @@ function fmtPrice(v) {
 
 export default function Cart() {
   const { cartItems, cartTotal, cartCount, setQty, removeFromCart, clearCart, siteSettings } = useShop()
-  const labelTN    = siteSettings.state_label_tn    || 'Tamil Nadu'
-  const labelOther = siteSettings.state_label_other || 'Other State'
+  const labelTN    = siteSettings.state_label_tn
+  const labelOther = siteSettings.state_label_other
   const [form, setForm]       = useState({ name: '', phone: '', address: '', isTN: true })
   const [formErr, setFormErr] = useState({})
   const [submitted, setSubmitted] = useState(false)
