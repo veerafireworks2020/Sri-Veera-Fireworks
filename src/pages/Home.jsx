@@ -1,5 +1,5 @@
 import { useState, useEffect, useRef } from 'react'
-import { Link } from 'react-router-dom'
+import { Link, useNavigate } from 'react-router-dom'
 import {
   Heart, Clock, ThumbsUp, Tag, Package, ChevronRight, ChevronLeft,
 } from 'lucide-react'
@@ -29,6 +29,7 @@ function fmtPrice(v) {
 // ─── Product Card ─────────────────────────────────────────────────────────────
 function ProductCard({ product }) {
   const { addToCart, cartQtys, setQty, toggleWishlist, isWishlisted } = useShop()
+  const navigate   = useNavigate()
   const imgs      = parseImages(product.image_url)
   const qty       = cartQtys[product.id] || 0
   const wishlisted = isWishlisted(product.id)
@@ -40,7 +41,11 @@ function ProductCard({ product }) {
   const hasMrp = mrp > price
 
   return (
-    <div className="product-box rounded-lg overflow-hidden shadow-sm bg-white transition-transform hover:-translate-y-1 hover:shadow-md flex flex-col h-full">
+    <div
+      className="product-box rounded-lg overflow-hidden shadow-sm bg-white transition-transform hover:-translate-y-1 hover:shadow-md flex flex-col h-full"
+      onClick={() => navigate(`/products/${product.id}`)}
+      style={{ cursor: 'pointer' }}
+    >
       <div className="img-wrapper relative">
         <div className="img-host">
           <img src={imgs[0] || '/images/noimage.jpg'} alt={product.name} loading="lazy" />
@@ -53,7 +58,7 @@ function ProductCard({ product }) {
           )}
           <button
             className="wishlist-heart-btn"
-            onClick={() => toggleWishlist(product.id)}
+            onClick={e => { e.stopPropagation(); toggleWishlist(product.id) }}
             title={wishlisted ? 'Remove from wishlist' : 'Add to wishlist'}
           >
             <Heart size={16} fill={wishlisted ? '#ef4444' : 'none'} color={wishlisted ? '#ef4444' : '#999'} />
@@ -75,9 +80,9 @@ function ProductCard({ product }) {
       </div>
       <div className="px-3 pb-3 pt-1">
         {qty === 0 ? (
-          <button className="btn-add-cart" onClick={() => addToCart(product.id)}>Add to Cart</button>
+          <button className="btn-add-cart" onClick={e => { e.stopPropagation(); addToCart(product.id) }}>Add to Cart</button>
         ) : (
-          <div className="qty-row">
+          <div className="qty-row" onClick={e => e.stopPropagation()}>
             <button onClick={() => setQty(product.id, qty - 1)}>−</button>
             <input
               type="number"

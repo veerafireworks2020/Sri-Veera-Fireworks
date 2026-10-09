@@ -48,7 +48,9 @@ function ProductCard({ product }) {
       flexDirection: 'column',
       height: '100%',
       transition: 'transform 0.2s, box-shadow 0.2s',
+      cursor: 'pointer',
     }}
+      onClick={() => navigate(`/products/${product.id}`)}
       onMouseEnter={e => { e.currentTarget.style.transform = 'translateY(-4px)'; e.currentTarget.style.boxShadow = '0 8px 24px rgba(0,0,0,0.13)' }}
       onMouseLeave={e => { e.currentTarget.style.transform = ''; e.currentTarget.style.boxShadow = '0 2px 12px rgba(0,0,0,0.08)' }}
     >
@@ -57,7 +59,7 @@ function ProductCard({ product }) {
         <div style={{ background: '#f5f5f7', borderRadius: 12, padding: '12px', textAlign: 'center', position: 'relative' }}>
           {/* Wishlist btn */}
           <button
-            onClick={() => toggleWishlist(product.id)}
+            onClick={e => { e.stopPropagation(); toggleWishlist(product.id) }}
             style={{
               position: 'absolute', top: 10, right: 10,
               width: 34, height: 34, borderRadius: '50%',
@@ -83,10 +85,9 @@ function ProductCard({ product }) {
             </span>
           )}
 
-          {/* Main image — click to open detail */}
+          {/* Main image */}
           <div
-            onClick={() => navigate(`/products/${product.id}`)}
-            style={{ height: 160, display: 'flex', alignItems: 'center', justifyContent: 'center', overflow: 'hidden', cursor: 'pointer' }}
+            style={{ height: 160, display: 'flex', alignItems: 'center', justifyContent: 'center', overflow: 'hidden' }}
           >
             <img
               src={imgs[activeImg] || '/images/noimage.jpg'}
@@ -102,7 +103,7 @@ function ProductCard({ product }) {
               {imgs.slice(0, 4).map((src, i) => (
                 <button
                   key={i}
-                  onClick={() => setActiveImg(i)}
+                  onClick={e => { e.stopPropagation(); setActiveImg(i) }}
                   style={{
                     width: 26, height: 26, borderRadius: 6, overflow: 'hidden', padding: 0,
                     border: i === activeImg ? '2px solid #ff7011' : '1px solid #d1d5db',
@@ -127,12 +128,10 @@ function ProductCard({ product }) {
           {product.category}
         </span>
 
-        {/* Name — click to open detail */}
         <h3
-          onClick={() => navigate(`/products/${product.id}`)}
           style={{
             fontSize: '0.92rem', fontWeight: 700, color: '#1a1a1a',
-            margin: '0 0 4px', lineHeight: 1.3, cursor: 'pointer',
+            margin: '0 0 4px', lineHeight: 1.3,
           }}
         >
           {product.name}
@@ -167,7 +166,7 @@ function ProductCard({ product }) {
         {/* Add to Cart → Qty pill */}
         {qty === 0 ? (
           <button
-            onClick={() => addToCart(product.id)}
+            onClick={e => { e.stopPropagation(); addToCart(product.id) }}
             style={{
               display: 'block', width: '100%', boxSizing: 'border-box',
               background: '#ff7011', color: '#fff',
@@ -181,7 +180,7 @@ function ProductCard({ product }) {
             Add to Cart
           </button>
         ) : (
-          <div style={{
+          <div onClick={e => e.stopPropagation()} style={{
             display: 'flex', alignItems: 'center',
             border: '2px solid #ff7011', borderRadius: 999,
             height: 40, background: '#fff',
