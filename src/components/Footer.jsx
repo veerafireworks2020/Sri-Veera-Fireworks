@@ -124,8 +124,6 @@ export default function Footer() {
         <img src={whatsappImg} alt="WhatsApp" style={{ width: 56, height: 56, display: 'block' }} />
       </a>
 
-      {/* Back to top */}
-      <div className="tap-to-top"><a href="#" title="Back to top"><ChevronUp size={18} /></a></div>
     </>
   )
 }

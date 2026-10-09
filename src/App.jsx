@@ -3,6 +3,7 @@ import { useEffect } from 'react'
 import { ShopProvider } from './context/ShopContext'
 import { Toaster } from 'react-hot-toast'
 import Fireworks from './components/Fireworks'
+import pricelistImg from './assets/pricelist.png'
 
 function ScrollToTop() {
   const { pathname } = useLocation()
@@ -22,7 +23,7 @@ function PricelistFAB() {
   if (pathname.startsWith('/admin') || pathname === '/products' || pathname.startsWith('/products/')) return null
   return (
     <img
-      src="/images/product-0.png"
+      src={pricelistImg}
       alt="View Products"
       title="View Products"
       onClick={() => navigate('/products')}
