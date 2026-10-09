@@ -2617,6 +2617,7 @@ export function AdminSettings() {
   const [minOther, setMinOther] = useState('');
   const [labelTN,    setLabelTN]    = useState('Tamil Nadu');
   const [labelOther, setLabelOther] = useState('Other State');
+  const [announcement, setAnnouncement] = useState('');
   const [pricelistUrlState, setPricelistUrlState] = useState('');
   const [uploadingPdf, setUploadingPdf] = useState(false);
   const [saving,   setSaving]   = useState(false);
@@ -2631,6 +2632,7 @@ export function AdminSettings() {
       setMinOther(s.min_order_other != null ? String(s.min_order_other) : '');
       setLabelTN   (s.state_label_tn    || 'Tamil Nadu');
       setLabelOther(s.state_label_other || 'Other State');
+      setAnnouncement(s.announcement || '');
       setPricelistUrlState(s.pricelist_url || '');
       setLoading(false);
     })();
@@ -2696,6 +2698,7 @@ export function AdminSettings() {
       min_order_other: parseFloat(minOther) || 0,
       state_label_tn:    labelTN.trim()    || 'Tamil Nadu',
       state_label_other: labelOther.trim() || 'Other State',
+      announcement:    announcement.trim(),
       pricelist_url:   pricelistUrlState || '',
     };
     const settingsJson = JSON.stringify(settingsObj);
@@ -2828,8 +2831,26 @@ export function AdminSettings() {
                 </div>
               </div>
 
-              {/* Price List PDF Upload */}
+              {/* Top Bar Important Message */}
               <div style={{ marginTop: 24, marginBottom: 24, borderTop: '1px solid #e2e8f0', paddingTop: 24 }}>
+                <div style={{ fontWeight: 700, color: '#0f172a', fontSize: 15, marginBottom: 4, display: 'flex', alignItems: 'center', gap: 8 }}>
+                  <Megaphone size={16} color="#ff6b35" /> Top Bar Important Message
+                </div>
+                <div style={{ fontSize: 12, color: '#64748b', marginBottom: 10 }}>
+                  This text shows in the announcement bar at the top of the site. Leave blank to show the default minimum order text.
+                </div>
+                <textarea
+                  className="adm-form-input"
+                  rows={2}
+                  placeholder={`e.g. Minimum Shopping For Tamil Nadu ₹3,000/- | Other State Above ₹5,000/- * Freight Extra`}
+                  value={announcement}
+                  onChange={e => setAnnouncement(e.target.value)}
+                  style={{ resize: 'vertical', fontFamily: 'inherit' }}
+                />
+              </div>
+
+              {/* Price List PDF Upload */}
+              <div style={{ marginBottom: 24, borderTop: '1px solid #e2e8f0', paddingTop: 24 }}>
                 <div style={{ fontWeight: 700, color: '#0f172a', fontSize: 15, marginBottom: 4 }}>Price List PDF Document</div>
                 <div style={{ fontSize: 12, color: '#64748b', marginBottom: 14 }}>Upload a PDF price list sheet. This file will be downloaded by customers when they click "Download Pricelist" on the website.</div>
                 
