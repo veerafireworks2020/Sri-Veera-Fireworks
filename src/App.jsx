@@ -29,11 +29,11 @@ function PricelistFAB() {
       onClick={() => navigate('/products')}
       style={{
         position: 'fixed', bottom: 20, right: 16, zIndex: 9990,
-        width: 80, height: 'auto',
+        width: 110, height: 'auto',
         cursor: 'pointer',
         filter: 'drop-shadow(0 4px 10px rgba(0,0,0,0.25))',
         transition: 'transform 0.2s, filter 0.2s',
-        animation: 'fab-float 3s ease-in-out infinite',
+        animation: 'fab-float 3s ease-in-out infinite, fab-blink 1.2s ease-in-out infinite',
       }}
       onMouseEnter={e => { e.currentTarget.style.transform = 'scale(1.1)'; e.currentTarget.style.filter = 'drop-shadow(0 6px 16px rgba(0,0,0,0.35))' }}
       onMouseLeave={e => { e.currentTarget.style.transform = 'scale(1)'; e.currentTarget.style.filter = 'drop-shadow(0 4px 10px rgba(0,0,0,0.25))' }}
