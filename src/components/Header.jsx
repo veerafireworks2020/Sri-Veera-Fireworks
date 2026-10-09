@@ -1,6 +1,6 @@
 import { useState } from 'react'
 import { Link, useLocation } from 'react-router-dom'
-import { Heart, ShoppingCart, Menu, X } from 'lucide-react'
+import { Heart, ShoppingCart, Menu, X, Download } from 'lucide-react'
 import { useShop } from '../context/ShopContext'
 
 const LOGO = '/images/img-css-23.png'
@@ -14,7 +14,8 @@ const NAV = [
 ]
 
 export default function Header() {
-  const { cartCount, wishlistCount } = useShop()
+  const { cartCount, wishlistCount, siteSettings } = useShop()
+  const pricelistUrl = siteSettings?.pricelist_url || ''
   const { pathname } = useLocation()
   const [open, setOpen] = useState(false)
 
@@ -50,6 +51,16 @@ export default function Header() {
 
             {/* Right side */}
             <div className="flex items-center gap-2">
+              {pricelistUrl && (
+                <a
+                  href={pricelistUrl}
+                  download="Sri-Veera-Fireworks-Pricelist.pdf"
+                  className="hidden lg:flex items-center gap-1.5 bg-white border border-gray-200 text-gray-700 rounded-md px-3 py-2 text-sm font-semibold hover:bg-gray-50 transition-colors no-underline"
+                >
+                  <Download size={18} color="#e87316" />
+                  <span>Price List</span>
+                </a>
+              )}
               <Link to="/wishlist" className="relative flex items-center gap-1.5 bg-white border border-gray-200 text-gray-700 rounded-md px-3 py-2 text-sm font-semibold hover:bg-gray-50 transition-colors no-underline">
                 <Heart size={18} />
                 <span className="hidden lg:inline">Wishlist</span>
@@ -123,6 +134,25 @@ export default function Header() {
             </Link>
           ))}
         </nav>
+
+        {/* Download Price List */}
+        {pricelistUrl && (
+          <div style={{ padding: '0 16px 12px' }}>
+            <a
+              href={pricelistUrl}
+              download="Sri-Veera-Fireworks-Pricelist.pdf"
+              onClick={() => setOpen(false)}
+              style={{
+                display: 'flex', alignItems: 'center', justifyContent: 'center', gap: 8,
+                padding: '11px', borderRadius: 8, textDecoration: 'none',
+                background: '#fff8f0', border: '1.5px solid #e87316',
+                color: '#e87316', fontSize: 13, fontWeight: 700,
+              }}
+            >
+              <Download size={16} /> Download Price List
+            </a>
+          </div>
+        )}
 
         {/* Cart & Wishlist in sidebar */}
         <div style={{ padding: '16px', borderTop: '1px solid #f1f5f9', display: 'flex', gap: 10 }}>
