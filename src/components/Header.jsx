@@ -133,26 +133,30 @@ export default function Header() {
               {label}
             </Link>
           ))}
-        </nav>
 
-        {/* Download Price List */}
-        {pricelistUrl && (
-          <div style={{ padding: '0 16px 12px' }}>
-            <a
-              href={pricelistUrl}
-              download="Sri-Veera-Fireworks-Pricelist.pdf"
-              onClick={() => setOpen(false)}
-              style={{
-                display: 'flex', alignItems: 'center', justifyContent: 'center', gap: 8,
-                padding: '11px', borderRadius: 8, textDecoration: 'none',
-                background: '#fff8f0', border: '1.5px solid #e87316',
-                color: '#e87316', fontSize: 13, fontWeight: 700,
-              }}
-            >
-              <Download size={16} /> Download Price List
-            </a>
-          </div>
-        )}
+          {/* Download Price List — below Contact */}
+          {pricelistUrl && (
+            <div style={{ padding: '8px 16px 4px' }}>
+              <a
+                href={pricelistUrl}
+                download="Sri-Veera-Fireworks-Pricelist.pdf"
+                onClick={() => setOpen(false)}
+                style={{
+                  display: 'flex', alignItems: 'center', gap: 10,
+                  padding: '13px 4px',
+                  fontSize: 15, fontWeight: 500,
+                  color: '#e87316', textDecoration: 'none',
+                  borderLeft: '3px solid #e87316',
+                  paddingLeft: 17,
+                  background: '#fff8f0',
+                  borderRadius: 4,
+                }}
+              >
+                <Download size={17} /> Download Price List
+              </a>
+            </div>
+          )}
+        </nav>
 
         {/* Cart & Wishlist in sidebar */}
         <div style={{ padding: '16px', borderTop: '1px solid #f1f5f9', display: 'flex', gap: 10 }}>
