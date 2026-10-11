@@ -7,6 +7,7 @@ import { useShop } from '../context/ShopContext'
 import Footer from '../components/Footer'
 import TopBar from '../components/TopBar'
 import Header from '../components/Header'
+import useSEO from '../utils/useSEO'
 import '../App.css'
 
 const SUPABASE_URL = import.meta.env.VITE_SUPABASE_URL
@@ -106,6 +107,12 @@ function ProductCard({ product }) {
 
 // ─── Home Page ────────────────────────────────────────────────────────────────
 export default function Home() {
+  useSEO({
+    title: 'Sri Veera Fireworks | Buy Crackers Online – Sivakasi',
+    description: 'Buy premium quality fireworks and crackers online from Sri Veera Fireworks, Sivakasi. Huge collection of sparklers, rockets, bombs, fancy items. Best prices, safe delivery across Tamil Nadu and all India.',
+    url: '/',
+  })
+
   const { products, loading, siteSettings } = useShop()
 
   // ── Hero banners from Supabase ─────────────────────────────────────────────

@@ -11,6 +11,7 @@ import {
   CheckCircle, Clock, XCircle, ArrowUpRight, RefreshCw, Save, Lock, Mail, ChevronDown, Check, Megaphone, Bell, Image, Upload, Settings, ShoppingCart, Download, GripVertical
 } from 'lucide-react';
 import '../Admin.css';
+import LOGO from '../assets/websitelogo.jpeg';
 
 /* ── Supabase ─────────────────────────────────────── */
 const SUPABASE_URL = import.meta.env.VITE_SUPABASE_URL || 'https://zjjlqewqzhnyfhjqsbwu.supabase.co';
@@ -397,9 +398,7 @@ export function AdminLogin() {
         <div className="login-glow" />
         <div className="login-card">
           <div className="login-logo">
-            <div className="login-icon"><Flame style={{width:28,height:28,color:'white'}} /></div>
-            <div className="login-brand">SRI VEERA FIREWORKS</div>
-            <div className="login-sub2">SIVAKASI, TAMIL NADU</div>
+            <img src={LOGO} alt="Sri Veera Fireworks" style={{height:72,width:'auto',objectFit:'contain',borderRadius:10,marginBottom:6}} />
           </div>
           <div className="login-title">Admin Sign In</div>
           <div className="login-desc">Enter your credentials to access the dashboard</div>
@@ -581,9 +580,7 @@ export function AdminLayout() {
           {/* Sidebar */}
           <aside className={`adm-sidebar${sidebarOpen ? ' sb-open' : ''}`}>
             <div className="sb-logo">
-              <div style={{width:36,height:36,borderRadius:10,background:'linear-gradient(135deg,#ff6b35,#e85d23)',display:'flex',alignItems:'center',justifyContent:'center',flexShrink:0}}>
-                <Flame style={{width:18,height:18,color:'white'}} />
-              </div>
+              <img src={LOGO} alt="Sri Veera Fireworks" style={{height:40,width:'auto',objectFit:'contain',borderRadius:8,flexShrink:0}} />
               <div><div className="sb-brand">Sri Veera Fireworks</div><div className="sb-sub">Admin Panel</div></div>
             </div>
             <div className="sb-section">Navigation</div>
@@ -619,9 +616,7 @@ export function AdminLayout() {
                 <button className="menu-toggle" onClick={()=>setSidebarOpen(!sidebarOpen)}>
                   {sidebarOpen ? <X style={{width:18,height:18}} /> : <Menu style={{width:18,height:18}} />}
                 </button>
-                <span style={{fontWeight:700,fontSize:'1rem',color:'#0f172a',letterSpacing:'-0.3px'}} className="hdr-title">
-                  Sri Veera Fireworks
-                </span>
+                <img src={LOGO} alt="Sri Veera Fireworks" className="hdr-title" style={{height:36,width:'auto',objectFit:'contain'}} />
               </div>
               <div className="hdr-right">
                 <button className="adm-btn adm-btn-secondary adm-btn-sm" onClick={fetchAll} disabled={loading}>

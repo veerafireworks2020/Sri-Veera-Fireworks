@@ -5,11 +5,18 @@ import Footer from '../components/Footer'
 import TopBar from '../components/TopBar'
 import Header from '../components/Header'
 import aboutImg from '../assets/aboutus.png'
+import useSEO from '../utils/useSEO'
 import '../App.css'
 
 
 
 export default function About() {
+  useSEO({
+    title: 'About Us – Sri Veera Fireworks | Sivakasi Crackers Manufacturer',
+    description: 'Learn about Sri Veera Fireworks, a trusted crackers brand from Sivakasi, Tamil Nadu. Quality fireworks, 100% legal & licensed, safe packaging and delivery.',
+    url: '/about',
+  })
+
   const { } = useShop()
 
   return (

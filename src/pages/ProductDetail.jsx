@@ -5,6 +5,7 @@ import { useShop } from '../context/ShopContext'
 import Footer from '../components/Footer'
 import TopBar from '../components/TopBar'
 import Header from '../components/Header'
+import useSEO from '../utils/useSEO'
 import '../App.css'
 
 
@@ -135,6 +136,14 @@ export default function ProductDetail() {
   const { products, cartQtys, addToCart, setQty, toggleWishlist, isWishlisted } = useShop()
 
   const product = products.find(p => String(p.id) === String(id))
+
+  useSEO({
+    title: product ? `${product.name} – Sri Veera Fireworks` : 'Product – Sri Veera Fireworks',
+    description: product
+      ? `Buy ${product.name} from Sri Veera Fireworks, Sivakasi. ${product.description || 'Premium quality fireworks at best prices.'}`
+      : 'Premium fireworks at best prices.',
+    url: product ? `/products/${product.id}` : '/products',
+  })
 
   const [activeImg, setActiveImg] = useState(0)
 

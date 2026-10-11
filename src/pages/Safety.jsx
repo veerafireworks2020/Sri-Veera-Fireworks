@@ -5,6 +5,7 @@ import Footer from '../components/Footer'
 import TopBar from '../components/TopBar'
 import Header from '../components/Header'
 import safetyImg from '../assets/saftey.png'
+import useSEO from '../utils/useSEO'
 import '../App.css'
 
 
@@ -28,6 +29,12 @@ const DONTS = [
 ]
 
 export default function Safety() {
+  useSEO({
+    title: 'Firecracker Safety Tips – Sri Veera Fireworks',
+    description: 'Important safety tips for using fireworks and crackers. Follow these guidelines to enjoy a safe and happy Diwali with Sri Veera Fireworks.',
+    url: '/safety',
+  })
+
   const { } = useShop()
 
   return (

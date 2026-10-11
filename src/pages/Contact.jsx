@@ -6,11 +6,17 @@ import Footer from '../components/Footer'
 import TopBar from '../components/TopBar'
 import Header from '../components/Header'
 import contactImg from '../assets/contactus.png'
+import useSEO from '../utils/useSEO'
 import '../App.css'
 
 
 
 export default function Contact() {
+  useSEO({
+    title: 'Contact Sri Veera Fireworks | Sivakasi – 83000 57711',
+    description: 'Contact Sri Veera Fireworks at 83000 57711. Shop at 1/204-6, NH-07, Chatram Road, Vachakkarapatti, Virudhunagar District. WhatsApp order enquiries welcome.',
+    url: '/contact',
+  })
   const { siteSettings } = useShop()
   const [form, setForm]   = useState({ name: '', phone: '', email: '', message: '' })
   const [sent, setSent]   = useState(false)

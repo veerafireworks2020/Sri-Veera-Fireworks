@@ -6,6 +6,7 @@ import Footer from '../components/Footer'
 import Header from '../components/Header'
 import OrderToast from '../components/OrderToast'
 import { generateOrderPDF } from '../utils/generateOrderPDF'
+import useSEO from '../utils/useSEO'
 import '../App.css'
 import paymentImg from '../assets/payment.jpeg'
 
@@ -22,6 +23,13 @@ function fmtPrice(v) {
 }
 
 export default function Cart() {
+  useSEO({
+    title: 'Your Cart – Sri Veera Fireworks',
+    description: 'Review your fireworks order and send a WhatsApp enquiry to Sri Veera Fireworks.',
+    url: '/cart',
+    noIndex: true,
+  })
+
   const { cartItems, cartTotal, cartCount, setQty, removeFromCart, clearCart, siteSettings } = useShop()
   const labelTN    = siteSettings.state_label_tn
   const labelOther = siteSettings.state_label_other
