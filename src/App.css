@@ -3,6 +3,11 @@
   --theme: #e87316;
 }
 
+@keyframes marquee-scroll {
+  0%   { transform: translateX(0); }
+  100% { transform: translateX(-33.333%); }
+}
+
 @keyframes slideUp {
   from { transform: translateY(100%); }
   to   { transform: translateY(0); }
