@@ -1,5 +1,5 @@
 import { useShop } from '../context/ShopContext'
-import LOGO from '../assets/websitelogo.jpeg'
+import LOGO from '../assets/new.png'
 
 export default function TopBar() {
   const { siteSettings } = useShop()
