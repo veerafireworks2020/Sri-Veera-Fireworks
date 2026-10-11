@@ -1,3 +1,13 @@
+/* Ballemi Font */
+@font-face {
+  font-family: 'Ballemi';
+  src: url('./font/ballemi.woff') format('woff'),
+       url('./font/ballemi.ttf') format('truetype');
+  font-weight: normal;
+  font-style: normal;
+  font-display: swap;
+}
+
 /* Theme */
 :root {
   --theme: #e87316;

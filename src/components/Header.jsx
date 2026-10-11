@@ -26,7 +26,7 @@ export default function Header() {
 
   return (
     <>
-      <header className="sticky top-0 z-50" style={{ background: '#1a1a2e', boxShadow: '0 2px 16px rgba(0,0,0,0.35)' }}>
+      <header className="sticky top-0 z-50" style={{ background: '#1a1a2e', boxShadow: '0 2px 16px rgba(0,0,0,0.35)', paddingBottom: 8 }}>
         <div className="max-w-[1400px] mx-auto px-4">
           <div className="flex items-center justify-between h-20 gap-4">
 
@@ -34,10 +34,10 @@ export default function Header() {
             <Link to="/" className="flex-shrink-0 no-underline" style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', gap: 2 }}>
               <img src={LOGO} alt="Sri Veera Fireworks" className="h-14 lg:h-16 w-auto object-contain" />
               <span style={{
-                fontSize: '0.65rem',
-                fontWeight: 800,
-                letterSpacing: '0.12em',
-                textTransform: 'uppercase',
+                fontFamily: "'Ballemi', cursive",
+                fontSize: '1rem',
+                fontWeight: 'normal',
+                letterSpacing: '0.06em',
                 background: 'linear-gradient(90deg, #e87316, #f59e0b, #ef4444, #e87316)',
                 backgroundSize: '200% auto',
                 WebkitBackgroundClip: 'text',
