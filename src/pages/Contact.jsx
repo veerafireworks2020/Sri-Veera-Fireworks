@@ -67,7 +67,7 @@ export default function Contact() {
   ]
 
   return (
-    <div style={{ minHeight: '100vh', background: '#f8fafc' }}>
+    <div style={{ minHeight: '100vh', background: 'rgb(255,251,235)' }}>
 
       <TopBar />
 

@@ -26,13 +26,25 @@ export default function Header() {
 
   return (
     <>
-      <header className="bg-white shadow-sm sticky top-0 z-50">
+      <header className="sticky top-0 z-50" style={{ background: '#1a1a2e', boxShadow: '0 2px 16px rgba(0,0,0,0.35)' }}>
         <div className="max-w-[1400px] mx-auto px-4">
-          <div className="flex items-center justify-between h-16 gap-4">
+          <div className="flex items-center justify-between h-20 gap-4">
 
             {/* Logo */}
-            <Link to="/" className="flex-shrink-0 no-underline">
-              <img src={LOGO} alt="Sri Veera Fireworks" className="h-8 lg:h-10 w-auto object-contain" />
+            <Link to="/" className="flex-shrink-0 no-underline" style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', gap: 2 }}>
+              <img src={LOGO} alt="Sri Veera Fireworks" className="h-14 lg:h-16 w-auto object-contain" />
+              <span style={{
+                fontSize: '0.65rem',
+                fontWeight: 800,
+                letterSpacing: '0.12em',
+                textTransform: 'uppercase',
+                background: 'linear-gradient(90deg, #e87316, #f59e0b, #ef4444, #e87316)',
+                backgroundSize: '200% auto',
+                WebkitBackgroundClip: 'text',
+                WebkitTextFillColor: 'transparent',
+                backgroundClip: 'text',
+                animation: 'tagline-shine 2.5s linear infinite',
+              }}>✦ Treats on Fire ✦</span>
             </Link>
 
             {/* Desktop Nav */}
@@ -42,7 +54,7 @@ export default function Header() {
                   key={to}
                   to={to}
                   className="nav-link"
-                  style={isActive(to) ? { color: '#e87316', fontWeight: 700 } : {}}
+                  style={isActive(to) ? { color: '#f59e0b', fontWeight: 700 } : { color: '#e2e8f0' }}
                 >
                   {label}
                 </Link>
@@ -62,7 +74,7 @@ export default function Header() {
                   <span className="hidden lg:inline">Price List</span>
                 </a>
               )}
-              <Link to="/wishlist" className="relative flex items-center gap-1.5 bg-white border border-gray-200 text-gray-700 rounded-md px-3 py-2 text-sm font-semibold hover:bg-gray-50 transition-colors no-underline">
+              <Link to="/wishlist" className="relative flex items-center gap-1.5 rounded-md px-3 py-2 text-sm font-semibold transition-colors no-underline" style={{ background: 'rgba(255,255,255,0.1)', border: '1px solid rgba(255,255,255,0.2)', color: '#e2e8f0' }}>
                 <Heart size={18} />
                 <span className="hidden lg:inline">Wishlist</span>
                 {wishlistCount > 0 && <span className="bg-red-500 text-white rounded-full w-5 h-5 text-xs flex items-center justify-center font-bold">{wishlistCount}</span>}
@@ -75,7 +87,7 @@ export default function Header() {
 
               {/* Hamburger — mobile only */}
               <button
-                className="lg:hidden flex items-center justify-center w-10 h-10 rounded-md border border-gray-200 bg-white text-gray-700"
+                className="lg:hidden flex items-center justify-center w-10 h-10 rounded-md" style={{ background: 'rgba(255,255,255,0.1)', border: '1px solid rgba(255,255,255,0.2)', color: '#e2e8f0' }}
                 onClick={() => setOpen(true)}
                 aria-label="Open menu"
               >

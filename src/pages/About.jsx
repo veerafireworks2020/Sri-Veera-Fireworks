@@ -13,20 +13,12 @@ export default function About() {
   const { } = useShop()
 
   return (
-    <div className="theme-color4 light ltr" style={{ minHeight: '100vh', background: '#f8f8f8' }}>
+    <div className="theme-color4 light ltr" style={{ minHeight: '100vh', background: 'rgb(255,251,235)' }}>
 
       <TopBar />
 
       <Header />
 
-      {/* Breadcrumb */}
-      <div className="bg-white border-b border-gray-100">
-        <div className="max-w-[1400px] mx-auto px-4 py-3 flex items-center gap-2 text-sm text-gray-500">
-          <Link to="/" className="hover:text-[#e87316] no-underline text-gray-500">Home</Link>
-          <span>›</span>
-          <span className="text-gray-800 font-medium">About</span>
-        </div>
-      </div>
 
       {/* Hero Image */}
       <div style={{ width: '100%', lineHeight: 0 }}>

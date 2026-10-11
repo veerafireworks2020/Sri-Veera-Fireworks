@@ -31,7 +31,7 @@ export default function Safety() {
   const { } = useShop()
 
   return (
-    <div className="theme-color4 light ltr" style={{ minHeight: '100vh', background: '#f8f8f8' }}>
+    <div className="theme-color4 light ltr" style={{ minHeight: '100vh', background: 'rgb(255,251,235)' }}>
 
       <TopBar />
 

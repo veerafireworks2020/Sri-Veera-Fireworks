@@ -1,16 +1,10 @@
 import { Link } from 'react-router-dom'
-import { Phone, MapPin, Mail, Send, ChevronUp } from 'lucide-react'
+import { Phone, MapPin, Mail } from 'lucide-react'
 import { useShop } from '../context/ShopContext'
 import whatsappImg from '../assets/WhatsApp.svg.webp'
 import LOGO from '../assets/websitelogo.jpeg'
+import paymentImg from '../assets/payment.jpeg'
 
-const NAV_LINKS = [
-  { label: 'Home', href: '/', isRoute: true },
-  { label: 'About', href: '/about', isRoute: true },
-  { label: 'Products', href: '/#products', isRoute: false },
-  { label: 'Safety Tips', href: '/safety', isRoute: true },
-  { label: 'Contact', href: '/contact', isRoute: true },
-]
 
 export default function Footer() {
   const { siteSettings } = useShop()
@@ -19,10 +13,10 @@ export default function Footer() {
     <>
       <footer id="contact" className="bg-[#1a1a1a] text-gray-400 pt-12 pb-6">
         <div className="max-w-[1400px] mx-auto px-4">
-          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 xl:grid-cols-5 gap-8">
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
 
             {/* Brand */}
-            <div className="xl:col-span-2">
+            <div>
               <img src={LOGO} alt="Sri Veera Fireworks" className="h-10 w-auto object-contain mb-4" />
               <ul className="space-y-2 text-[13px] list-none p-0">
                 <li className="flex gap-2">
@@ -40,39 +34,10 @@ export default function Footer() {
               </ul>
             </div>
 
-            {/* Quick Links */}
-            <div>
-              <h3 className="text-base font-bold text-white mb-4 pb-2 border-b-2 border-[#e87316] inline-block">Quick Link</h3>
-              <ul className="space-y-2 text-[13px] list-none p-0">
-                {NAV_LINKS.map(({ label, href, isRoute }) => (
-                  <li key={label}>
-                    {isRoute
-                      ? <Link to={href} className="text-gray-400 hover:text-[#e87316] transition-colors no-underline">{label}</Link>
-                      : <a href={href} className="text-gray-400 hover:text-[#e87316] transition-colors no-underline">{label}</a>
-                    }
-                  </li>
-                ))}
-              </ul>
-            </div>
-
-            {/* Get Help */}
-            <div>
-              <h3 className="text-base font-bold text-white mb-4 pb-2 border-b-2 border-[#e87316] inline-block">Get Help</h3>
-              <ul className="space-y-2 text-[13px] list-none p-0">
-                <li><Link to="/safety" className="text-gray-400 hover:text-[#e87316] transition-colors no-underline">Safety Tips</Link></li>
-                <li><a href="#" className="text-gray-400 hover:text-[#e87316] transition-colors no-underline">Shopping FAQs</a></li>
-                <li><a href="#" className="text-gray-400 hover:text-[#e87316] transition-colors no-underline">Track Orders</a></li>
-              </ul>
-            </div>
-
-            {/* Newsletter */}
-            <div>
-              <h3 className="text-base font-bold text-white mb-3">Let&apos;s stay in touch</h3>
-              <div className="newsletter-input mb-3">
-                <input type="email" placeholder="Your Email Address" />
-                <button type="button"><Send size={14} /></button>
-              </div>
-              <p className="text-[12px] text-gray-500">Keep up to date with our latest news and special offers.</p>
+            {/* Payment image */}
+            <div className="flex flex-col justify-center items-center">
+              <h3 className="text-base font-bold text-white mb-4 pb-2 border-b-2 border-[#e87316] inline-block">Accepted Payments</h3>
+              <img src={paymentImg} alt="Payment Options" style={{ maxWidth: 300, width: '100%', objectFit: 'contain', borderRadius: 8 }} />
             </div>
 
           </div>
@@ -102,11 +67,16 @@ export default function Footer() {
       <a
         href="tel:+918300057711"
         title="Call Us"
-        style={{ position: 'fixed', bottom: 84, left: 25, width: 44, height: 44, textDecoration: 'none', zIndex: 999, transition: 'transform 0.2s', display: 'block' }}
-        onMouseEnter={e => e.currentTarget.style.transform = 'scale(1.1)'}
-        onMouseLeave={e => e.currentTarget.style.transform = 'scale(1)'}
+        style={{ position: 'fixed', bottom: 100, right: 16, textDecoration: 'none', zIndex: 999, display: 'flex', alignItems: 'center', gap: 8 }}
       >
-        <svg xmlns="http://www.w3.org/2000/svg" width="44" height="44" viewBox="0 0 52 52" style={{ display: 'block' }}>
+        <span style={{
+          fontSize: 11, fontWeight: 800, color: '#fff',
+          background: 'linear-gradient(135deg, #e87316, #f59e0b)',
+          borderRadius: 6, padding: '4px 10px', whiteSpace: 'nowrap',
+          boxShadow: '0 2px 8px rgba(232,115,22,0.4)',
+          animation: 'float-label 2s ease-in-out infinite',
+        }}>📞 Call Us</span>
+        <svg xmlns="http://www.w3.org/2000/svg" width="44" height="44" viewBox="0 0 52 52" style={{ display: 'block', flexShrink: 0 }}>
           <circle cx="26" cy="26" r="26" fill="#00b900"/>
           <path fill="#fff" d="M36.5 32.1c-.7-.7-4.4-2.9-5.2-2.9-.4 0-.8.2-1.1.5l-1.5 1.5c-.2.2-.5.3-.7.2-1-.4-3.2-2.2-4.6-3.6-1.4-1.4-3.2-3.6-3.6-4.6-.1-.3 0-.5.2-.7l1.5-1.5c.3-.3.5-.7.5-1.1 0-.8-2.2-4.5-2.9-5.2-.3-.3-.7-.5-1.1-.5-1.5 0-4.5 2-4.5 4 0 5.5 6.5 12.5 10.5 15.5 2 1.5 5.5 3.5 8 3.5 2 0 4-3 4-4.5 0-.4-.2-.8-.5-1.1z"/>
         </svg>
@@ -116,11 +86,16 @@ export default function Footer() {
       <a
         href={`https://api.whatsapp.com/send?phone=${siteSettings?.whatsapp || '918300057711'}&text=Hello,%20Sri%20Veera%20Fireworks`}
         target="_blank" rel="noreferrer" title="Chat on WhatsApp"
-        style={{ position: 'fixed', bottom: 16, left: 20, width: 56, height: 56, textDecoration: 'none', zIndex: 999, transition: 'transform 0.2s', display: 'block', borderRadius: '50%', overflow: 'hidden' }}
-        onMouseEnter={e => e.currentTarget.style.transform = 'scale(1.1)'}
-        onMouseLeave={e => e.currentTarget.style.transform = 'scale(1)'}
+        style={{ position: 'fixed', bottom: 16, right: 16, textDecoration: 'none', zIndex: 999, display: 'flex', alignItems: 'center', gap: 8 }}
       >
-        <img src={whatsappImg} alt="WhatsApp" style={{ width: 56, height: 56, display: 'block' }} />
+        <span style={{
+          fontSize: 11, fontWeight: 800, color: '#fff',
+          background: 'linear-gradient(135deg, #8b5cf6, #ec4899)',
+          borderRadius: 6, padding: '4px 10px', whiteSpace: 'nowrap',
+          boxShadow: '0 2px 8px rgba(139,92,246,0.4)',
+          animation: 'float-label 2s ease-in-out infinite 0.5s',
+        }}>💬 WhatsApp</span>
+        <img src={whatsappImg} alt="WhatsApp" style={{ width: 56, height: 56, display: 'block', borderRadius: '50%', flexShrink: 0 }} />
       </a>
 
     </>

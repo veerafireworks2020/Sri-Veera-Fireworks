@@ -7,6 +7,7 @@ import Header from '../components/Header'
 import OrderToast from '../components/OrderToast'
 import { generateOrderPDF } from '../utils/generateOrderPDF'
 import '../App.css'
+import paymentImg from '../assets/payment.jpeg'
 
 
 
@@ -108,18 +109,10 @@ export default function Cart() {
   }
 
   return (
-    <div className="theme-color4 light ltr" style={{ minHeight: '100vh', background: '#f8f8f8' }}>
+    <div className="theme-color4 light ltr" style={{ minHeight: '100vh', background: 'rgb(255,251,235)' }}>
 
       <Header />
 
-      {/* Breadcrumb */}
-      <div className="bg-white border-b border-gray-100">
-        <div className="max-w-[1400px] mx-auto px-4 py-3 flex items-center gap-2 text-sm text-gray-500">
-          <Link to="/" className="hover:text-[#e87316] no-underline text-gray-500">Home</Link>
-          <span>›</span>
-          <span className="text-gray-800 font-medium">Cart</span>
-        </div>
-      </div>
 
       <div className="max-w-[1100px] mx-auto px-4 py-10">
 
@@ -229,6 +222,12 @@ export default function Cart() {
                     <MessageCircle size={18} /> Send WhatsApp Enquiry
                   </button>
                 </form>
+              </div>
+
+              {/* Payment options */}
+              <div className="bg-white rounded-2xl shadow-sm p-4 text-center">
+                <p className="text-xs text-gray-400 font-semibold mb-2 uppercase tracking-wide">Accepted Payments</p>
+                <img src={paymentImg} alt="Payment Options" style={{ width: '100%', maxWidth: 280, margin: '0 auto', display: 'block', objectFit: 'contain' }} />
               </div>
             </div>
           </div>

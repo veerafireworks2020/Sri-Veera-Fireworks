@@ -28,7 +28,7 @@ function PricelistFAB() {
       title="View Products"
       onClick={() => navigate('/products')}
       style={{
-        position: 'fixed', bottom: 20, right: 16, zIndex: 9990,
+        position: 'fixed', bottom: 20, left: 16, zIndex: 9990,
         width: 110, height: 'auto',
         cursor: 'pointer',
         filter: 'drop-shadow(0 4px 10px rgba(0,0,0,0.25))',

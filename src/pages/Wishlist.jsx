@@ -19,7 +19,7 @@ export default function Wishlist() {
   const { wishlistItems, toggleWishlist, addToCart, setQty, cartQtys, cartCount, wishlistCount } = useShop()
 
   return (
-    <div className="theme-color4 light ltr" style={{ minHeight: '100vh', background: '#f8f8f8' }}>
+    <div className="theme-color4 light ltr" style={{ minHeight: '100vh', background: 'rgb(255,251,235)' }}>
 
       {/* Header */}
       <header className="bg-white shadow-sm sticky top-0 z-50">
@@ -50,14 +50,6 @@ export default function Wishlist() {
         </div>
       </header>
 
-      {/* Breadcrumb */}
-      <div className="bg-white border-b border-gray-100">
-        <div className="max-w-[1400px] mx-auto px-4 py-3 flex items-center gap-2 text-sm text-gray-500">
-          <Link to="/" className="hover:text-[#e87316] no-underline text-gray-500">Home</Link>
-          <span>›</span>
-          <span className="text-gray-800 font-medium">Wishlist</span>
-        </div>
-      </div>
 
       <div className="max-w-[1100px] mx-auto px-4 py-10">
         <h1 className="text-2xl font-extrabold text-gray-900 mb-6">
