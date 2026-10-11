@@ -60,9 +60,9 @@ export function ShopProvider({ children }) {
           try { setSiteSettings(s => ({ ...s, ...JSON.parse(settingsRow.description) })) }
           catch { /* ignore */ }
         }
-        // Public products only
+        // All public products (active + inactive), inactive shown as out of stock
         const clean = data
-          .filter(p => p.category && !p.category.startsWith('__') && p.is_active)
+          .filter(p => p.category && !p.category.startsWith('__'))
           .sort((a, b) => (parseInt(a.product_code) || 0) - (parseInt(b.product_code) || 0))
         setProducts(clean)
       }

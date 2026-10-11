@@ -154,7 +154,11 @@ function ProductCard({ product }) {
         </div>
 
         {/* Add to Cart → Qty pill */}
-        {qty === 0 ? (
+        {!product.is_active ? (
+          <button disabled style={{ display: 'block', width: '100%', boxSizing: 'border-box', background: '#e2e8f0', color: '#94a3b8', border: 'none', borderRadius: 999, padding: '9px 0', fontSize: '0.88rem', fontWeight: 700, cursor: 'not-allowed' }}>
+            Out of Stock
+          </button>
+        ) : qty === 0 ? (
           <button
             className="btn-add-cart"
             onClick={e => { e.stopPropagation(); addToCart(product.id) }}

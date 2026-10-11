@@ -78,7 +78,11 @@ function ProductCard({ product }) {
         <div className="flex-1" />
       </div>
       <div className="px-3 pb-3 pt-1">
-        {qty === 0 ? (
+        {!product.is_active ? (
+          <button disabled style={{ width: '100%', background: '#e2e8f0', color: '#94a3b8', border: 'none', borderRadius: 6, padding: '9px 0', fontSize: '0.88rem', fontWeight: 700, cursor: 'not-allowed' }}>
+            Out of Stock
+          </button>
+        ) : qty === 0 ? (
           <button className="btn-add-cart" onClick={e => { e.stopPropagation(); addToCart(product.id) }}>Add to Cart</button>
         ) : (
           <div className="qty-row" onClick={e => e.stopPropagation()}>
