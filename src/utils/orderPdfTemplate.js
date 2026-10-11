@@ -98,10 +98,10 @@ export function buildOrderHTML({ name, phone, state, address, items, total }) {
   <div class="hdr">
     <div class="hdr-l">
       <div class="brand">SRI VEERA FIREWORKS</div>
-      <div class="addr">NH-07, Vachakkarapatti RR Nagar, Virudhunagar District, Tamil Nadu</div>
+      <div class="addr">1/204-6, NH-07, Chatram Road, Vachakkarapatti, RR Nagar, Virudhunagar District - 626204</div>
     </div>
     <div class="hdr-r">
-      <div class="phone">83000 57711 / 83000 57722</div>
+      <div class="phone">83000 57711</div>
       <div class="lbl">Order Enquiry Sheet</div>
     </div>
   </div>

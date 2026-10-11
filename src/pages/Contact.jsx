@@ -32,7 +32,7 @@ export default function Contact() {
       title: 'Address',
       content: (
         <p style={{ margin: 0, fontSize: '0.95rem', color: '#475569', lineHeight: 1.7 }}>
-          1/235/1 SIVAGANAPURAM,<br />Sivagnanapuram,<br />Virudhunagar – 626 002
+          SRI VEERA FIREWORKS<br />1/204-6, NH-07, Chatram Road,<br />Vachakkarapatti, RR Nagar,<br />Virudhunagar District - 626204
         </p>
       ),
     },
@@ -41,7 +41,7 @@ export default function Contact() {
       title: 'Mobile',
       content: (
         <div style={{ display: 'flex', flexDirection: 'column', gap: 4 }}>
-          {['83000 57711', '83000 57722', '80000 57733', '80000 57744'].map(n => (
+          {['83000 57711'].map(n => (
             <a key={n} href={`tel:+91${n.replace(/\s/g,'')}`}
               style={{ fontSize: '0.95rem', color: '#475569', textDecoration: 'none', whiteSpace: 'nowrap' }}
               onMouseEnter={e => e.currentTarget.style.color = '#ff7011'}
@@ -138,7 +138,7 @@ export default function Contact() {
               <div>
                 <p style={{ margin: '0 0 2px', fontWeight: 700, color: '#0f172a', fontSize: '0.9rem' }}>Sri Veera Fireworks</p>
                 <p style={{ margin: 0, color: '#64748b', fontSize: '0.82rem', lineHeight: 1.5 }}>
-                  NH-07, Vachakkarapatti RR Nagar,<br />Virudhunagar District, Tamil Nadu
+                  1/204-6, NH-07, Chatram Road,<br />Vachakkarapatti, RR Nagar,<br />Virudhunagar District - 626204
                 </p>
               </div>
             </div>

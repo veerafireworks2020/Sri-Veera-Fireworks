@@ -107,14 +107,14 @@ export default function About() {
               <Phone size={22} color="#e87316" className="flex-shrink-0" />
               <div className="text-left">
                 <div className="font-bold text-gray-800 text-sm">Phone</div>
-                <div className="text-gray-500 text-sm">83000 57711 &nbsp;|&nbsp; 83000 57722 &nbsp;|&nbsp; 80000 57733 &nbsp;|&nbsp; 80000 57744</div>
+                <div className="text-gray-500 text-sm">83000 57711</div>
               </div>
             </div>
             <div className="bg-white rounded-2xl p-5 flex items-center gap-4 shadow-sm">
               <MapPin size={22} color="#e87316" className="flex-shrink-0" />
               <div className="text-left">
                 <div className="font-bold text-gray-800 text-sm">Address</div>
-                <div className="text-gray-500 text-sm">NH-07, Vachakkarapatti RR Nagar, Virudhunagar District, Tamil Nadu</div>
+                <div className="text-gray-500 text-sm">1/204-6, NH-07, Chatram Road, Vachakkarapatti, RR Nagar, Virudhunagar District - 626204</div>
               </div>
             </div>
             <div className="bg-white rounded-2xl p-5 flex items-center gap-4 shadow-sm">

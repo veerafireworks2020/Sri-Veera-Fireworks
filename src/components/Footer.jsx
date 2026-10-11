@@ -21,11 +21,11 @@ export default function Footer() {
               <ul className="space-y-2 text-[13px] list-none p-0">
                 <li className="flex gap-2">
                   <Phone size={14} className="mt-0.5 flex-shrink-0 text-[#e87316]" />
-                  <span>83000 57711, 83000 57722<br />80000 57733, 80000 57744</span>
+                  <span>83000 57711</span>
                 </li>
                 <li className="flex gap-2">
                   <MapPin size={14} className="mt-0.5 flex-shrink-0 text-[#e87316]" />
-                  <span>NH-07, Vachakkarapatti RR Nagar, Virudhungar District Tamil Nadu</span>
+                  <span>1/204-6, NH-07, Chatram Road, Vachakkarapatti, RR Nagar, Virudhunagar District - 626204</span>
                 </li>
                 <li className="flex gap-2">
                   <Mail size={14} className="mt-0.5 flex-shrink-0 text-[#e87316]" />

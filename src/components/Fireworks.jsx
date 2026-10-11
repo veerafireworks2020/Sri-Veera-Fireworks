@@ -2,12 +2,12 @@ import { useEffect, useRef } from 'react'
 
 // ── Configuration ─────────────────────────────────────────────────────────────
 const CFG = {
-  maxRockets: 6,
-  burstCount: 3,            // rockets per burst
-  burstSpacing: 400,        // ms between rockets in a burst
-  gapMin: 30000,            // min gap between bursts (ms)
-  gapMax: 30000,            // max gap between bursts (ms)
-  particleDensity: 1.0,
+  maxRockets: 12,
+  burstCount: 6,            // rockets per burst
+  burstSpacing: 200,        // ms between rockets in a burst
+  gapMin: 4000,             // min gap between bursts (ms)
+  gapMax: 7000,             // max gap between bursts (ms)
+  particleDensity: 2.0,
   maxDpr: 2,
 }
 
@@ -52,77 +52,77 @@ function explode(x, y, type, palette, particles) {
   const density = CFG.particleDensity
   switch (type) {
     case 'chrysanthemum': {
-      const count = Math.floor(rand(180, 260) * density)
+      const count = Math.floor(rand(260, 380) * density)
       for (let i = 0; i < count; i++) {
         const angle = (i / count) * Math.PI * 2 + rand(-0.05, 0.05)
-        const speed = rand(2.5, 6.5)
+        const speed = rand(5, 12)
         const color = choice(palette)
         particles.push(createParticle(x, y, color,
           Math.cos(angle) * speed, Math.sin(angle) * speed,
-          { maxLife: rand(80, 140), gravity: 0.035, drag: 0.96, size: rand(1.5, 3), glow: true }
+          { maxLife: rand(100, 170), gravity: 0.035, drag: 0.96, size: rand(2, 4.5), glow: true }
         ))
       }
       break
     }
     case 'peony': {
-      const count = Math.floor(rand(120, 200) * density)
+      const count = Math.floor(rand(200, 300) * density)
       for (let i = 0; i < count; i++) {
         const angle = rand(0, Math.PI * 2)
-        const speed = rand(1.5, 5.5)
+        const speed = rand(3.5, 10)
         particles.push(createParticle(x, y, choice(palette),
           Math.cos(angle) * speed, Math.sin(angle) * speed,
-          { maxLife: rand(70, 110), gravity: 0.045, drag: 0.965, size: rand(2, 4) }
+          { maxLife: rand(90, 140), gravity: 0.045, drag: 0.965, size: rand(2.5, 5.5) }
         ))
       }
       break
     }
     case 'willow': {
-      const count = Math.floor(rand(80, 140) * density)
+      const count = Math.floor(rand(140, 220) * density)
       for (let i = 0; i < count; i++) {
         const angle = rand(-Math.PI, 0)
-        const speed = rand(1.5, 4.5)
+        const speed = rand(3, 8)
         particles.push(createParticle(x, y, choice(['#FFD700', '#FFA500', '#FFEC8B', '#FFFACD']),
           Math.cos(angle) * speed, Math.sin(angle) * speed * 0.5,
-          { maxLife: rand(100, 160), gravity: 0.055, drag: 0.985, size: rand(1, 2.5), trail: true }
+          { maxLife: rand(120, 190), gravity: 0.055, drag: 0.985, size: rand(1.5, 3.5), trail: true }
         ))
       }
       break
     }
     case 'ring': {
-      const count = Math.floor(rand(80, 130) * density)
-      const speed = rand(3.5, 6)
+      const count = Math.floor(rand(130, 200) * density)
+      const speed = rand(6, 11)
       for (let i = 0; i < count; i++) {
         const angle = (i / count) * Math.PI * 2
         particles.push(createParticle(x, y, choice(palette),
           Math.cos(angle) * speed, Math.sin(angle) * speed,
-          { maxLife: rand(60, 90), gravity: 0.015, drag: 0.99, size: rand(2, 3.5) }
+          { maxLife: rand(80, 120), gravity: 0.015, drag: 0.99, size: rand(2.5, 4.5) }
         ))
       }
       break
     }
     case 'palm': {
-      const count = Math.floor(rand(60, 100) * density)
+      const count = Math.floor(rand(100, 160) * density)
       for (let i = 0; i < count; i++) {
         const angle = rand(-Math.PI * 0.7, -Math.PI * 0.3)
-        const speed = rand(3, 7)
+        const speed = rand(6, 13)
         particles.push(createParticle(x, y, choice(['#FFD700', '#FFA500', '#FF8C00']),
           Math.cos(angle) * speed, Math.sin(angle) * speed,
-          { maxLife: rand(90, 150), gravity: 0.06, drag: 0.98, size: rand(2, 4), trail: true }
+          { maxLife: rand(110, 180), gravity: 0.06, drag: 0.98, size: rand(2.5, 5), trail: true }
         ))
       }
       break
     }
     case 'starburst': {
-      const arms = randInt(6, 12)
-      const perArm = Math.floor(rand(8, 16) * density)
+      const arms = randInt(8, 14)
+      const perArm = Math.floor(rand(14, 24) * density)
       for (let a = 0; a < arms; a++) {
         const baseAngle = (a / arms) * Math.PI * 2
         for (let j = 0; j < perArm; j++) {
           const angle = baseAngle + rand(-0.12, 0.12)
-          const speed = rand(2, 6.5)
+          const speed = rand(4, 11)
           particles.push(createParticle(x, y, choice(palette),
             Math.cos(angle) * speed, Math.sin(angle) * speed,
-            { maxLife: rand(60, 100), gravity: 0.04, drag: 0.97, size: rand(1.5, 3) }
+            { maxLife: rand(80, 130), gravity: 0.04, drag: 0.97, size: rand(2, 4.5) }
           ))
         }
       }
@@ -146,11 +146,11 @@ function createRocket(canvasW, canvasH) {
   // Keep targetX close to launch x — slight drift only (±10% of canvas width)
   const drift = rand(-canvasW * 0.10, canvasW * 0.10)
   const targetX = Math.max(canvasW * 0.05, Math.min(canvasW * 0.95, x + drift))
-  const targetY = rand(canvasH * 0.10, canvasH * 0.42)
+  const targetY = rand(canvasH * 0.08, canvasH * 0.78)
   const dx = targetX - x
   const dy = targetY - canvasH
   const dist = Math.sqrt(dx * dx + dy * dy)
-  const speed = rand(5, 10)
+  const speed = rand(9, 16)
   const type = choice(EXPLOSION_TYPES)
   const palette = randPalette()
   return {
@@ -297,7 +297,7 @@ export default function Fireworks() {
         if (r.trail.length > r.trailLen) r.trail.length = r.trailLen
 
         // Force-explode if rocket escapes viewport
-        if (r.x < -20 || r.x > W + 20 || r.y < -20) {
+        if (r.x < -20 || r.x > W + 20 || r.y < -40) {
           r.exploded = true
           return false
         }
@@ -387,7 +387,7 @@ export default function Fireworks() {
 
         // Glow halo
         if (p.glow && alpha > 0.15) {
-          const glowR = p.size * 4
+          const glowR = p.size * 6
           const { r, g, b } = hexToRgb(p.color.startsWith('#') ? p.color : '#FFD700')
           const grd = ctx.createRadialGradient(p.x, p.y, 0, p.x, p.y, glowR)
           grd.addColorStop(0, `rgba(${r},${g},${b},${alpha * 0.6})`)
