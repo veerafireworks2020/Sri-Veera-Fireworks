@@ -2,8 +2,7 @@ import { Link } from 'react-router-dom'
 import { Phone, MapPin, Mail, Send, ChevronUp } from 'lucide-react'
 import { useShop } from '../context/ShopContext'
 import whatsappImg from '../assets/WhatsApp.svg.webp'
-
-const LOGO = '/images/img-css-23.png'
+import LOGO from '../assets/websitelogo.jpeg'
 
 const NAV_LINKS = [
   { label: 'Home', href: '/', isRoute: true },
@@ -24,7 +23,7 @@ export default function Footer() {
 
             {/* Brand */}
             <div className="xl:col-span-2">
-              <img src={LOGO} alt="Sri Veera Fireworks" className="h-10 w-auto object-contain mb-4" style={{ filter: 'brightness(0) invert(1)' }} />
+              <img src={LOGO} alt="Sri Veera Fireworks" className="h-10 w-auto object-contain mb-4" />
               <ul className="space-y-2 text-[13px] list-none p-0">
                 <li className="flex gap-2">
                   <Phone size={14} className="mt-0.5 flex-shrink-0 text-[#e87316]" />

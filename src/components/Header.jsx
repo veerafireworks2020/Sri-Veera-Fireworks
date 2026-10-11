@@ -3,8 +3,7 @@ import { Link, useLocation } from 'react-router-dom'
 import { Heart, ShoppingCart, Menu, X, Download } from 'lucide-react'
 import { useShop } from '../context/ShopContext'
 import '../App.css'
-
-const LOGO = '/images/img-css-23.png'
+import LOGO from '../assets/websitelogo.jpeg'
 
 const NAV = [
   { label: 'Home',        to: '/' },

@@ -3,8 +3,7 @@ import { Heart, ShoppingCart, X, ShoppingBag } from 'lucide-react'
 import { useShop } from '../context/ShopContext'
 import Footer from '../components/Footer'
 import '../App.css'
-
-const LOGO = '/images/img-css-23.png'
+import LOGO from '../assets/websitelogo.jpeg'
 
 function parseImages(imgUrl) {
   if (!imgUrl) return []
