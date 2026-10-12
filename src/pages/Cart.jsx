@@ -9,6 +9,7 @@ import { generateOrderPDF } from '../utils/generateOrderPDF'
 import useSEO from '../utils/useSEO'
 import '../App.css'
 import paymentImg from '../assets/payment.jpeg'
+import gpayImg from '../assets/gpay.jpeg'
 
 
 
@@ -235,7 +236,10 @@ export default function Cart() {
               {/* Payment options */}
               <div className="bg-white rounded-2xl shadow-sm p-4 text-center">
                 <p className="text-xs text-gray-400 font-semibold mb-2 uppercase tracking-wide">Accepted Payments</p>
-                <img src={paymentImg} alt="Payment Options" style={{ width: '100%', maxWidth: 280, margin: '0 auto', display: 'block', objectFit: 'contain' }} />
+                <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'center', gap: 12, flexWrap: 'wrap' }}>
+                  <img src={paymentImg} alt="Payment Options" style={{ maxWidth: 200, width: '100%', objectFit: 'contain' }} />
+                  <img src={gpayImg} alt="GPay" style={{ maxWidth: 300, width: '100%', objectFit: 'contain', borderRadius: 8 }} />
+                </div>
               </div>
             </div>
           </div>

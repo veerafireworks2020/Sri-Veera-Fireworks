@@ -5,6 +5,7 @@ import whatsappImg from '../assets/WhatsApp.svg.webp'
 import facebookImg from '../assets/facebook.png'
 import LOGO from '../assets/websitelogo.jpeg'
 import paymentImg from '../assets/payment.jpeg'
+import gpayImg from '../assets/gpay.jpeg'
 
 
 export default function Footer() {
@@ -38,7 +39,10 @@ export default function Footer() {
             {/* Payment image */}
             <div className="flex flex-col justify-center items-center">
               <h3 className="text-base font-bold text-white mb-4 pb-2 border-b-2 border-[#e87316] inline-block">Accepted Payments</h3>
-              <img src={paymentImg} alt="Payment Options" style={{ maxWidth: 300, width: '100%', objectFit: 'contain', borderRadius: 8 }} />
+              <div style={{ display: 'flex', alignItems: 'center', gap: 12, flexWrap: 'wrap', justifyContent: 'center' }}>
+                <img src={paymentImg} alt="Payment Options" style={{ maxWidth: 280, width: '100%', objectFit: 'contain', borderRadius: 8 }} />
+                <img src={gpayImg} alt="GPay" style={{ maxWidth: 300, width: '100%', objectFit: 'contain', borderRadius: 8 }} />
+              </div>
             </div>
 
           </div>

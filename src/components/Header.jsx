@@ -48,20 +48,8 @@ export default function Header() {
           <div className="flex items-center justify-between h-20 gap-4">
 
             {/* Logo */}
-            <Link to="/" className="flex-shrink-0 no-underline" style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', gap: 2 }}>
-              <img src={LOGO} alt="Sri Veera Fireworks" className="h-14 lg:h-16 w-auto object-contain" />
-              <span style={{
-                fontFamily: "'Ballemi', cursive",
-                fontSize: '1rem',
-                fontWeight: 'normal',
-                letterSpacing: '0.06em',
-                background: 'linear-gradient(90deg, #e87316, #f59e0b, #ef4444, #e87316)',
-                backgroundSize: '200% auto',
-                WebkitBackgroundClip: 'text',
-                WebkitTextFillColor: 'transparent',
-                backgroundClip: 'text',
-                animation: 'tagline-shine 2.5s linear infinite',
-              }}>✦ Treats on Fire ✦</span>
+            <Link to="/" className="flex-shrink-0 no-underline">
+              <img src={LOGO} alt="Sri Veera Fireworks" style={{ height: 90, width: 90, borderRadius: '50%', objectFit: 'contain', background: '#fff' }} />
             </Link>
 
             {/* Desktop Nav */}
