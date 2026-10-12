@@ -13,6 +13,8 @@ const NAV = [
   { label: 'Contact',     to: '/contact' },
 ]
 
+const TRACKING_URL = 'https://www.metturtransports.com/tracking/'
+
 export default function Header() {
   const { cartCount, wishlistCount, siteSettings } = useShop()
   const pricelistUrl = siteSettings?.pricelist_url
@@ -64,6 +66,15 @@ export default function Header() {
                   {label}
                 </Link>
               ))}
+              <a
+                href={TRACKING_URL}
+                target="_blank"
+                rel="noopener noreferrer"
+                className="nav-link"
+                style={{ color: '#e2e8f0' }}
+              >
+                Tracking
+              </a>
             </nav>
 
             {/* Right side */}
@@ -194,6 +205,25 @@ export default function Header() {
               {label}
             </Link>
           ))}
+
+          {/* Tracking link */}
+          <a
+            href={TRACKING_URL}
+            target="_blank"
+            rel="noopener noreferrer"
+            onClick={() => setOpen(false)}
+            style={{
+              display: 'block', padding: '13px 20px',
+              fontSize: 15, fontWeight: 500,
+              color: '#222',
+              textDecoration: 'none',
+              borderLeft: '3px solid transparent',
+              background: 'transparent',
+              transition: 'background 0.15s',
+            }}
+          >
+            Tracking
+          </a>
 
           {/* Download Price List — below Contact */}
           {pricelistUrl && (
