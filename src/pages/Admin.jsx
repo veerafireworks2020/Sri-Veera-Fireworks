@@ -3034,6 +3034,17 @@ export function AdminOrders() {
                       <div style={{ fontSize: '0.72rem', color: '#94a3b8' }}>{itemCount} item{itemCount !== 1 ? 's' : ''}</div>
                     </div>
                     <div style={{ display: 'flex', gap: 6, alignItems: 'center', flexWrap: 'wrap' }}>
+                      {order.phone && (
+                        <a
+                          href={`https://wa.me/91${order.phone.replace(/\D/g, '')}?text=${encodeURIComponent(`Hello ${order.customer_name || ''},\n\nThank you for your order with Sri Veera Fireworks!\n\nYour order total: ₹${totalVal.toLocaleString('en-IN')}\n\nPlease let us know if you have any questions.`)}`}
+                          target="_blank" rel="noreferrer"
+                          className="adm-btn adm-btn-sm"
+                          style={{ padding: '6px 12px', fontSize: '0.78rem', fontWeight: 600, background: '#25d366', color: '#fff', textDecoration: 'none', display: 'flex', alignItems: 'center', gap: 4 }}
+                          title="Reply on WhatsApp"
+                        >
+                          💬 Reply
+                        </a>
+                      )}
                       <button onClick={() => downloadAdminOrderPDF(order)} className="adm-btn adm-btn-sm adm-btn-secondary" style={{ padding: '6px 12px', fontSize: '0.78rem', fontWeight: 600 }} title="Download PDF">
                         <Download size={12} style={{ marginRight: 4 }} /> PDF
                       </button>
