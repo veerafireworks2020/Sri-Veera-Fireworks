@@ -126,7 +126,7 @@ export default function Contact() {
             <div style={{ borderRadius: 16, overflow: 'hidden', boxShadow: '0 2px 12px rgba(0,0,0,0.08)', border: '1px solid #e2e8f0', marginBottom: 14 }}>
               <iframe
                 title="Sri Veera Fireworks Location"
-                src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3931.0!2d77.9!3d9.6!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x0%3A0x0!2zOcKwMzYnMDAuMCJOIDc3wrA1NCcwMC4wIkU!5e0!3m2!1sen!2sin!4v1700000000000!5m2!1sen!2sin"
+                src="https://maps.google.com/maps?q=9.4672358,77.9356098&z=16&output=embed"
                 width="100%"
                 height="300"
                 style={{ border: 0, display: 'block' }}
@@ -141,11 +141,23 @@ export default function Contact() {
               display: 'flex', gap: 12, alignItems: 'flex-start',
             }}>
               <MapPin size={18} color="#ff7011" style={{ flexShrink: 0, marginTop: 2 }} />
-              <div>
+              <div style={{ flex: 1 }}>
                 <p style={{ margin: '0 0 2px', fontWeight: 700, color: '#0f172a', fontSize: '0.9rem' }}>Sri Veera Fireworks</p>
-                <p style={{ margin: 0, color: '#64748b', fontSize: '0.82rem', lineHeight: 1.5 }}>
+                <p style={{ margin: '0 0 10px', color: '#64748b', fontSize: '0.82rem', lineHeight: 1.5 }}>
                   1/204-6, NH-07, Chatram Road,<br />Vachakkarapatti, RR Nagar,<br />Virudhunagar District - 626204
                 </p>
+                <a
+                  href="https://www.google.com/maps/dir/?api=1&destination=9.4672358,77.9356098"
+                  target="_blank"
+                  rel="noreferrer"
+                  style={{
+                    display: 'inline-flex', alignItems: 'center', gap: 6,
+                    background: '#e87316', color: '#fff', textDecoration: 'none',
+                    borderRadius: 8, padding: '8px 16px', fontSize: '0.82rem', fontWeight: 700,
+                  }}
+                >
+                  <MapPin size={14} /> Get Directions
+                </a>
               </div>
             </div>
           </div>
