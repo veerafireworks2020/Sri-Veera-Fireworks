@@ -2,6 +2,7 @@ import { Link } from 'react-router-dom'
 import { Phone, MapPin, Mail } from 'lucide-react'
 import { useShop } from '../context/ShopContext'
 import whatsappImg from '../assets/WhatsApp.svg.webp'
+import facebookImg from '../assets/facebook.png'
 import LOGO from '../assets/websitelogo.jpeg'
 import paymentImg from '../assets/payment.jpeg'
 
@@ -67,7 +68,7 @@ export default function Footer() {
       <a
         href="tel:+918300057711"
         title="Call Us"
-        style={{ position: 'fixed', bottom: 100, right: 16, textDecoration: 'none', zIndex: 999, display: 'flex', alignItems: 'center', gap: 8 }}
+        style={{ position: 'fixed', bottom: 180, right: 16, textDecoration: 'none', zIndex: 999, display: 'flex', alignItems: 'center', gap: 8 }}
       >
         <span style={{
           fontSize: 11, fontWeight: 800, color: '#fff',
@@ -86,7 +87,7 @@ export default function Footer() {
       <a
         href={`https://api.whatsapp.com/send?phone=${siteSettings?.whatsapp || '918300057711'}&text=Hello,%20Sri%20Veera%20Fireworks`}
         target="_blank" rel="noreferrer" title="Chat on WhatsApp"
-        style={{ position: 'fixed', bottom: 16, right: 16, textDecoration: 'none', zIndex: 999, display: 'flex', alignItems: 'center', gap: 8 }}
+        style={{ position: 'fixed', bottom: 96, right: 16, textDecoration: 'none', zIndex: 999, display: 'flex', alignItems: 'center', gap: 8 }}
       >
         <span style={{
           fontSize: 11, fontWeight: 800, color: '#fff',
@@ -96,6 +97,22 @@ export default function Footer() {
           animation: 'float-label 2s ease-in-out infinite 0.5s',
         }}>💬 WhatsApp</span>
         <img src={whatsappImg} alt="WhatsApp" style={{ width: 56, height: 56, display: 'block', borderRadius: '50%', flexShrink: 0 }} />
+      </a>
+
+      {/* Facebook Float */}
+      <a
+        href="https://www.facebook.com/profile.php?id=61579704510215"
+        target="_blank" rel="noreferrer" title="Follow on Facebook"
+        style={{ position: 'fixed', bottom: 16, right: 16, textDecoration: 'none', zIndex: 999, display: 'flex', alignItems: 'center', gap: 8 }}
+      >
+        <span style={{
+          fontSize: 11, fontWeight: 800, color: '#fff',
+          background: 'linear-gradient(135deg, #1877f2, #0a5dc2)',
+          borderRadius: 6, padding: '4px 10px', whiteSpace: 'nowrap',
+          boxShadow: '0 2px 8px rgba(24,119,242,0.4)',
+          animation: 'float-label 2s ease-in-out infinite 1s',
+        }}>👍 Facebook</span>
+        <img src={facebookImg} alt="Facebook" style={{ width: 48, height: 48, display: 'block', borderRadius: '50%', flexShrink: 0 }} />
       </a>
 
     </>

@@ -204,6 +204,7 @@ export default function Home() {
         </section>
       )}
 
+
       {/* ── Skeleton Loader ──────────────────────────────────────────── */}
       {loading && [0, 1, 2].map(s => (
         <section key={s} className="py-10 overflow-hidden" style={{ background: s % 2 === 0 ? '#FFFBEB' : '#FFF8DC' }}>

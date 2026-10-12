@@ -1,5 +1,5 @@
-import { useState, useMemo } from 'react'
-import { Link, useNavigate } from 'react-router-dom'
+import { useState, useMemo, useEffect } from 'react'
+import { Link, useNavigate, useSearchParams } from 'react-router-dom'
 import {
   Heart, Search, SlidersHorizontal,
   ChevronUp, ChevronDown, X, SlidersVertical,
@@ -430,7 +430,13 @@ export default function Products() {
   })
 
   const { products, loading } = useShop()
-  const [search, setSearch]           = useState('')
+  const [searchParams] = useSearchParams()
+  const [search, setSearch]           = useState(searchParams.get('q') || '')
+
+  useEffect(() => {
+    const q = searchParams.get('q')
+    if (q) setSearch(q)
+  }, [searchParams])
   const [selectedCats, setSelectedCats] = useState([])
   const [priceRange, setPriceRange]   = useState([0, 0])
   const [priceInited, setPriceInited] = useState(false)
@@ -511,23 +517,49 @@ export default function Products() {
               {loading ? 'Loading...' : `${filtered.length} product${filtered.length !== 1 ? 's' : ''} found`}
             </p>
           </div>
-          {/* Mobile filter toggle */}
-          <button
-            onClick={() => setMobileFilter(o => !o)}
-            className="lg:hidden"
-            style={{
-              display: 'flex', alignItems: 'center', gap: 6,
-              background: '#ff7011', color: '#fff', border: 'none',
-              borderRadius: 8, padding: '8px 14px', fontSize: 14, fontWeight: 600, cursor: 'pointer',
-            }}
-          >
-            <SlidersVertical size={16} /> Filters
-            {hasAnyFilter && (
-              <span style={{ background: '#fff', color: '#ff7011', borderRadius: '50%', width: 18, height: 18, fontSize: 11, display: 'flex', alignItems: 'center', justifyContent: 'center', fontWeight: 800 }}>
-                !
-              </span>
-            )}
-          </button>
+          <div style={{ display: 'flex', alignItems: 'center', gap: 10, flex: '1 1 260px', maxWidth: 420 }}>
+            {/* Search bar — always visible */}
+            <div style={{ position: 'relative', flex: 1 }}>
+              <Search size={16} style={{ position: 'absolute', left: 12, top: '50%', transform: 'translateY(-50%)', color: '#94a3b8', pointerEvents: 'none' }} />
+              <input
+                type="text"
+                value={search}
+                onChange={e => setSearch(e.target.value)}
+                placeholder="Search crackers..."
+                style={{
+                  width: '100%', boxSizing: 'border-box',
+                  height: 42, borderRadius: 10,
+                  paddingLeft: 36, paddingRight: search ? 36 : 14,
+                  fontSize: '0.9rem', border: '1.5px solid #e2e8f0',
+                  background: '#fff', outline: 'none', fontFamily: 'inherit',
+                }}
+                onFocus={e => e.target.style.borderColor = '#ff7011'}
+                onBlur={e => e.target.style.borderColor = '#e2e8f0'}
+              />
+              {search && (
+                <button onClick={() => setSearch('')} style={{ position: 'absolute', right: 10, top: '50%', transform: 'translateY(-50%)', background: 'none', border: 'none', cursor: 'pointer', color: '#94a3b8', display: 'flex' }}>
+                  <X size={15} />
+                </button>
+              )}
+            </div>
+            {/* Mobile filter toggle */}
+            <button
+              onClick={() => setMobileFilter(o => !o)}
+              className="lg:hidden"
+              style={{
+                display: 'flex', alignItems: 'center', gap: 6, flexShrink: 0,
+                background: '#ff7011', color: '#fff', border: 'none',
+                borderRadius: 8, padding: '8px 14px', fontSize: 14, fontWeight: 600, cursor: 'pointer',
+              }}
+            >
+              <SlidersVertical size={16} /> Filters
+              {hasAnyFilter && (
+                <span style={{ background: '#fff', color: '#ff7011', borderRadius: '50%', width: 18, height: 18, fontSize: 11, display: 'flex', alignItems: 'center', justifyContent: 'center', fontWeight: 800 }}>
+                  !
+                </span>
+              )}
+            </button>
+          </div>
         </div>
       </div>
 

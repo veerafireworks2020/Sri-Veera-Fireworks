@@ -2,7 +2,7 @@ import { useEffect, useRef } from 'react'
 
 // ── Configuration ─────────────────────────────────────────────────────────────
 const CFG = {
-  maxRockets: 5,
+  maxRockets: 3,
   burstCount: 3,            // rockets per burst
   burstSpacing: 400,        // ms between rockets in a burst
   gapMin: 18000,            // min gap between bursts (ms)
