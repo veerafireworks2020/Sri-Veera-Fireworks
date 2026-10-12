@@ -43,7 +43,7 @@ export default function Header() {
 
   return (
     <>
-      <header className="sticky top-0 z-50" style={{ background: '#1a1a2e', boxShadow: '0 2px 16px rgba(0,0,0,0.35)', paddingBottom: 8 }}>
+      <header className="sticky top-0 z-50" style={{ background: '#1a1a2e', boxShadow: '0 2px 16px rgba(0,0,0,0.35)', paddingTop: 8, paddingBottom: 8 }}>
         <div className="max-w-[1400px] mx-auto px-4">
           <div className="flex items-center justify-between h-20 gap-4">
 

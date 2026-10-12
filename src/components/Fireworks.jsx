@@ -3,10 +3,10 @@ import { useEffect, useRef } from 'react'
 // ── Configuration ─────────────────────────────────────────────────────────────
 const CFG = {
   maxRockets: 3,
-  burstCount: 3,            // rockets per burst
+  burstCount: 2,            // rockets per burst
   burstSpacing: 400,        // ms between rockets in a burst
-  gapMin: 18000,            // min gap between bursts (ms)
-  gapMax: 22000,            // max gap between bursts (ms)
+  gapMin: 25000,            // min gap between bursts (ms)
+  gapMax: 25000,            // max gap between bursts (ms)
   particleDensity: 2.0,
   maxDpr: 2,
 }
@@ -29,7 +29,7 @@ function randInt(a, b) { return Math.floor(rand(a, b + 1)) }
 function choice(arr) { return arr[Math.floor(Math.random() * arr.length)] }
 
 // ── Explosion types ───────────────────────────────────────────────────────────
-const EXPLOSION_TYPES = ['chrysanthemum', 'peony', 'willow', 'ring', 'palm', 'starburst', 'double']
+const EXPLOSION_TYPES = ['chrysanthemum', 'peony', 'willow', 'palm', 'starburst', 'double']
 
 // ── Particle factory ──────────────────────────────────────────────────────────
 function createParticle(x, y, color, vx, vy, opts = {}) {

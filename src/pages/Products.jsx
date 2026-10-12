@@ -403,9 +403,13 @@ function FilterSidebar({ categories, selectedCats, onToggleCat, search, onSearch
                       style={{ width: 15, height: 15, accentColor: '#ff7011', cursor: 'pointer', flexShrink: 0 }}
                     />
                     <span style={{
+                      width: 7, height: 7, borderRadius: '50%', flexShrink: 0,
+                      background: checked ? '#ff7011' : '#cbd5e1',
+                      display: 'inline-block',
+                    }} />
+                    <span style={{
                       fontSize: '0.88rem', fontWeight: checked ? 700 : 400,
                       color: checked ? '#ff7011' : '#334155',
-                      whiteSpace: 'nowrap', overflow: 'hidden', textOverflow: 'ellipsis', maxWidth: 130,
                     }}>{name}</span>
                   </div>
                   <span style={{ fontSize: '0.72rem', background: '#f1f5f9', color: '#64748b', borderRadius: 999, padding: '1px 8px', flexShrink: 0 }}>
