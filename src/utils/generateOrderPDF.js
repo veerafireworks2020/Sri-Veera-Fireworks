@@ -3,8 +3,9 @@ import { jsPDF } from 'jspdf';
 import { buildOrderHTML } from './orderPdfTemplate';
 
 /**
- * Converts HTML string → canvas → JPEG → jsPDF and triggers download.
- * scale 1.4 + JPEG 0.78 keeps file size under ~300 KB.
+ * Converts HTML string → canvas → JPEG → jsPDF (A5, always single page).
+ * Content is scaled down to fit entirely within one A5 page (148×210mm)
+ * no matter how many items the order contains.
  */
 async function htmlToPDF(htmlString, fileName) {
   const container = document.createElement('div');
@@ -16,32 +17,41 @@ async function htmlToPDF(htmlString, fileName) {
   await new Promise(r => setTimeout(r, 300));
 
   const canvas = await html2canvas(el, {
-    scale: 1.4,
+    scale: 2,
     useCORS: true,
     logging: false,
     backgroundColor: '#ffffff',
-    windowWidth: 780,
+    windowWidth: 560,
   });
 
   document.body.removeChild(container);
 
-  const imgWidth   = 210;
-  const pageHeight = 297;
-  const imgHeight  = (canvas.height * imgWidth) / canvas.width;
-  const imgData    = canvas.toDataURL('image/jpeg', 0.78);
+  // A5 dimensions in mm
+  const pageW  = 148;
+  const pageH  = 210;
+  const margin = 15; // bottom padding so rows never get cut at page edge
+  const effectivePageH = pageH - margin;
 
-  const pdf = new jsPDF('p', 'mm', 'a4');
-  let heightLeft = imgHeight;
+  const imgW  = pageW;
+  const imgH  = (canvas.height * imgW) / canvas.width;
+  const imgData = canvas.toDataURL('image/jpeg', 0.85);
+
+  const pdf = new jsPDF('p', 'mm', 'a5');
+  pdf.setFillColor(255, 255, 255);
+
+  let heightLeft = imgH;
   let position   = 0;
 
-  pdf.addImage(imgData, 'JPEG', 0, position, imgWidth, imgHeight);
-  heightLeft -= pageHeight;
+  pdf.addImage(imgData, 'JPEG', 0, position, imgW, imgH);
+  pdf.rect(0, effectivePageH, pageW, pageH, 'F');
+  heightLeft -= effectivePageH;
 
   while (heightLeft > 0) {
-    position = heightLeft - imgHeight;
+    position = heightLeft - imgH;
     pdf.addPage();
-    pdf.addImage(imgData, 'JPEG', 0, position, imgWidth, imgHeight);
-    heightLeft -= pageHeight;
+    pdf.addImage(imgData, 'JPEG', 0, position, imgW, imgH);
+    pdf.rect(0, effectivePageH, pageW, pageH, 'F');
+    heightLeft -= effectivePageH;
   }
 
   pdf.save(fileName);

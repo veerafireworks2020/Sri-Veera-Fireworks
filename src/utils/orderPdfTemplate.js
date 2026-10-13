@@ -1,6 +1,7 @@
 /**
  * Generates the HTML string for the order enquiry PDF.
- * Accepts a normalised data object — same shape for both cart and admin.
+ * Designed for A5 (560px wide). Font sizes and padding are compact
+ * so that even large orders scale gracefully to a single A5 page.
  *
  * @param {object} data
  *   name      {string}
@@ -11,7 +12,7 @@
  *   total     {number}
  */
 export function buildOrderHTML({ name, phone, state, address, items, total }) {
-  const INR = (n) => `Rs.\u00a0${parseFloat(n || 0).toLocaleString('en-IN')}`;
+  const INR  = (n) => `Rs.\u00a0${parseFloat(n || 0).toLocaleString('en-IN')}`;
   const date = new Date().toLocaleDateString('en-IN', { day: '2-digit', month: 'short', year: 'numeric' });
 
   const rows = items.map((item, i) => {
@@ -35,60 +36,56 @@ export function buildOrderHTML({ name, phone, state, address, items, total }) {
 <style>
   * { box-sizing: border-box; margin: 0; padding: 0; }
   body { font-family: Arial, Helvetica, sans-serif; background: #fff; }
-  .wrap { width: 780px; background: #fff; }
+  .wrap { width: 560px; background: #fff; }
 
   /* ── Header ── */
-  .hdr { background: #e87316; padding: 20px 26px; display: flex; justify-content: space-between; align-items: center; }
-  .hdr-l .brand { font-size: 22px; font-weight: 900; color: #fff; letter-spacing: 0.5px; }
-  .hdr-l .addr  { font-size: 11px; color: rgba(255,255,255,.88); margin-top: 3px; }
+  .hdr { background: #e87316; padding: 12px 18px; display: flex; justify-content: space-between; align-items: center; }
+  .hdr-l .brand { font-size: 15px; font-weight: 900; color: #fff; letter-spacing: 0.4px; }
+  .hdr-l .addr  { font-size: 8px; color: rgba(255,255,255,.88); margin-top: 2px; }
   .hdr-r        { text-align: right; }
-  .hdr-r .phone { font-size: 14px; font-weight: 800; color: #fff; }
-  .hdr-r .lbl   { font-size: 11px; color: rgba(255,255,255,.88); margin-top: 3px; }
+  .hdr-r .phone { font-size: 11px; font-weight: 800; color: #fff; }
+  .hdr-r .lbl   { font-size: 8px; color: rgba(255,255,255,.88); margin-top: 2px; }
 
   /* ── Body ── */
-  .body { padding: 22px 26px; }
-  .title { font-size: 16px; font-weight: 900; color: #0f172a; border-bottom: 2.5px solid #e87316; padding-bottom: 7px; margin-bottom: 16px; }
+  .body { padding: 10px 14px; }
+  .title { font-size: 11px; font-weight: 900; color: #0f172a; border-bottom: 2px solid #e87316; padding-bottom: 4px; margin-bottom: 9px; }
 
   /* ── Customer box ── */
-  .cust { background: #fffbf5; border: 1.5px solid #f5d87a; border-radius: 8px; padding: 14px 16px; margin-bottom: 18px; }
-  .cust-lbl { font-size: 9.5px; font-weight: 900; color: #b45309; letter-spacing: 1px; text-transform: uppercase; margin-bottom: 9px; }
-  .cust-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 5px 20px; font-size: 12.5px; color: #0f172a; }
+  .cust { background: #fffbf5; border: 1.5px solid #f5d87a; border-radius: 6px; padding: 8px 10px; margin-bottom: 9px; }
+  .cust-lbl { font-size: 7.5px; font-weight: 900; color: #b45309; letter-spacing: 1px; text-transform: uppercase; margin-bottom: 5px; }
+  .cust-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 3px 14px; font-size: 9px; color: #0f172a; }
   .cust-grid strong { font-weight: 700; }
-  .cust-addr { font-size: 12.5px; color: #0f172a; margin-top: 6px; }
+  .cust-addr { font-size: 9px; color: #0f172a; margin-top: 4px; }
   .cust-addr strong { font-weight: 700; }
 
   /* ── Table ── */
-  table { width: 100%; border-collapse: collapse; margin-bottom: 18px; }
+  table { width: 100%; border-collapse: collapse; margin-bottom: 9px; }
   thead tr { background: #1a1a1a; }
-  th { padding: 9px 10px; color: #fff; font-size: 11.5px; font-weight: 800; }
-  td { padding: 8px 10px; font-size: 12.5px; color: #0f172a; border-bottom: 1px solid #f1e8d8; }
+  th { padding: 5px 6px; color: #fff; font-size: 8.5px; font-weight: 800; }
+  td { padding: 3.5px 6px; font-size: 9px; color: #0f172a; border-bottom: 1px solid #f1e8d8; }
   .tc { text-align: center; }
   .tl { text-align: left; }
   .tr { text-align: right; }
   .nm { font-weight: 700; }
-  .un { color: #555; font-size: 11.5px; }
+  .un { color: #555; font-size: 8px; }
   .qt { font-weight: 800; }
   .sb { font-weight: 800; color: #e87316; }
 
   /* column widths */
-  .col-no   { width: 36px; }
+  .col-no   { width: 24px; }
   .col-name { }
-  .col-unit { width: 130px; }
-  .col-qty  { width: 44px; }
-  .col-price{ width: 90px; }
-  .col-sub  { width: 100px; }
+  .col-unit { width: 90px; }
+  .col-qty  { width: 30px; }
+  .col-price{ width: 62px; }
+  .col-sub  { width: 70px; }
 
   /* ── Total ── */
-  .total-wrap { display: flex; justify-content: flex-end; margin-bottom: 18px; }
-  .total-box  { background: #e87316; border-radius: 8px; padding: 11px 22px; display: flex; gap: 24px; align-items: center; }
-  .total-box .lbl { font-size: 14px; font-weight: 800; color: #fff; }
-  .total-box .val { font-size: 17px; font-weight: 900; color: #fff; }
-
-  /* ── Disclaimer ── */
-  .disc { background: #fff8f0; border: 1px solid #fed7aa; border-radius: 6px; padding: 9px 12px; margin-bottom: 14px; font-size: 10px; color: #92400e; line-height: 1.6; }
+  .total-wrap { display: flex; justify-content: flex-end; margin-bottom: 9px; }
+  .total-box .lbl { font-size: 11px; font-weight: 800; color: #0f172a; }
+  .total-box .val { font-size: 13px; font-weight: 900; color: #e87316; margin-left: 10px; }
 
   /* ── Footer ── */
-  .ftr { border-top: 1.5px solid #e2e8f0; padding-top: 9px; display: flex; justify-content: space-between; font-size: 10.5px; color: #64748b; }
+  .ftr { border-top: 1px solid #e2e8f0; padding-top: 5px; display: flex; justify-content: space-between; font-size: 7.5px; color: #64748b; }
   .ftr strong { font-weight: 700; }
 </style>
 </head>
@@ -150,13 +147,8 @@ export function buildOrderHTML({ name, phone, state, address, items, total }) {
       </div>
     </div>
 
-    <div class="disc">
-      As per 2018 Supreme Court order, online sale of firecrackers are not permitted. This is an order enquiry sheet only.
-      Our team will confirm your order via WhatsApp or phone call within 24 hrs.
-    </div>
-
     <div class="ftr">
-      <strong>Sri Veera Fireworks — sriveerafireworks.com</strong>
+      <strong>https://www.sriveerafireworks.com</strong>
       <span>Generated: ${new Date().toLocaleString('en-IN')}</span>
     </div>
 
