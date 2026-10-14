@@ -17,7 +17,7 @@ export function buildOrderHTML({ name, phone, state, address, items, total }) {
 
   const rows = items.map((item, i) => {
     const sub = parseFloat(item.price || 0) * parseInt(item.qty || 0);
-    const bg  = i % 2 === 0 ? '#ffffff' : '#fffbf5';
+    const bg  = i % 2 === 0 ? '#ffffff' : '#f5f5f5';
     return `
       <tr style="background:${bg}">
         <td class="tc">${i + 1}</td>
@@ -39,37 +39,38 @@ export function buildOrderHTML({ name, phone, state, address, items, total }) {
   .wrap { width: 560px; background: #fff; }
 
   /* ── Header ── */
-  .hdr { background: #e87316; padding: 12px 18px; display: flex; justify-content: space-between; align-items: center; }
-  .hdr-l .brand { font-size: 15px; font-weight: 900; color: #fff; letter-spacing: 0.4px; }
-  .hdr-l .addr  { font-size: 8px; color: rgba(255,255,255,.88); margin-top: 2px; }
+  .hdr { background: #fff; padding: 12px 18px; display: flex; justify-content: space-between; align-items: center; border-bottom: 2px solid #000; }
+  .hdr-l .brand { font-size: 15px; font-weight: 900; color: #000; letter-spacing: 0.4px; }
+  .hdr-l .tagline { font-size: 9px; font-weight: 700; color: #333; margin-top: 2px; letter-spacing: 0.5px; }
+  .hdr-l .addr  { font-size: 8px; color: #555; margin-top: 2px; }
   .hdr-r        { text-align: right; }
-  .hdr-r .phone { font-size: 11px; font-weight: 800; color: #fff; }
-  .hdr-r .lbl   { font-size: 8px; color: rgba(255,255,255,.88); margin-top: 2px; }
+  .hdr-r .phone { font-size: 11px; font-weight: 800; color: #000; }
+  .hdr-r .lbl   { font-size: 8px; color: #555; margin-top: 2px; }
 
   /* ── Body ── */
   .body { padding: 10px 14px; }
-  .title { font-size: 11px; font-weight: 900; color: #0f172a; border-bottom: 2px solid #e87316; padding-bottom: 4px; margin-bottom: 9px; }
+  .title { font-size: 11px; font-weight: 900; color: #000; border-bottom: 2px solid #000; padding-bottom: 4px; margin-bottom: 9px; }
 
   /* ── Customer box ── */
-  .cust { background: #fffbf5; border: 1.5px solid #f5d87a; border-radius: 6px; padding: 8px 10px; margin-bottom: 9px; }
-  .cust-lbl { font-size: 7.5px; font-weight: 900; color: #b45309; letter-spacing: 1px; text-transform: uppercase; margin-bottom: 5px; }
-  .cust-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 3px 14px; font-size: 9px; color: #0f172a; }
+  .cust { background: #f5f5f5; border: 1.5px solid #ccc; border-radius: 6px; padding: 8px 10px; margin-bottom: 9px; }
+  .cust-lbl { font-size: 7.5px; font-weight: 900; color: #000; letter-spacing: 1px; text-transform: uppercase; margin-bottom: 5px; }
+  .cust-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 3px 14px; font-size: 9px; color: #000; }
   .cust-grid strong { font-weight: 700; }
-  .cust-addr { font-size: 9px; color: #0f172a; margin-top: 4px; }
+  .cust-addr { font-size: 9px; color: #000; margin-top: 4px; }
   .cust-addr strong { font-weight: 700; }
 
   /* ── Table ── */
   table { width: 100%; border-collapse: collapse; margin-bottom: 9px; }
-  thead tr { background: #1a1a1a; }
+  thead tr { background: #000; }
   th { padding: 5px 6px; color: #fff; font-size: 8.5px; font-weight: 800; }
-  td { padding: 3.5px 6px; font-size: 9px; color: #0f172a; border-bottom: 1px solid #f1e8d8; }
+  td { padding: 3.5px 6px; font-size: 9px; color: #000; border-bottom: 1px solid #ddd; }
   .tc { text-align: center; }
   .tl { text-align: left; }
   .tr { text-align: right; }
   .nm { font-weight: 700; }
   .un { color: #555; font-size: 8px; }
   .qt { font-weight: 800; }
-  .sb { font-weight: 800; color: #e87316; }
+  .sb { font-weight: 800; color: #000; }
 
   /* column widths */
   .col-no   { width: 24px; }
@@ -81,11 +82,11 @@ export function buildOrderHTML({ name, phone, state, address, items, total }) {
 
   /* ── Total ── */
   .total-wrap { display: flex; justify-content: flex-end; margin-bottom: 9px; }
-  .total-box .lbl { font-size: 11px; font-weight: 800; color: #0f172a; }
-  .total-box .val { font-size: 13px; font-weight: 900; color: #e87316; margin-left: 10px; }
+  .total-box .lbl { font-size: 11px; font-weight: 800; color: #000; }
+  .total-box .val { font-size: 13px; font-weight: 900; color: #000; margin-left: 10px; }
 
   /* ── Footer ── */
-  .ftr { border-top: 1px solid #e2e8f0; padding-top: 5px; display: flex; justify-content: space-between; font-size: 7.5px; color: #64748b; }
+  .ftr { border-top: 1px solid #ccc; padding-top: 5px; display: flex; justify-content: space-between; font-size: 7.5px; color: #555; }
   .ftr strong { font-weight: 700; }
 </style>
 </head>
@@ -95,10 +96,11 @@ export function buildOrderHTML({ name, phone, state, address, items, total }) {
   <div class="hdr">
     <div class="hdr-l">
       <div class="brand">SRI VEERA FIREWORKS</div>
+      <div class="tagline">Treats on Fire</div>
       <div class="addr">1/204-6, NH-07, Chatram Road, Vachakkarapatti, RR Nagar, Virudhunagar District - 626204</div>
     </div>
     <div class="hdr-r">
-      <div class="phone">83000 57711</div>
+      <div class="phone">83000 57711 / 83000 57722</div>
       <div class="lbl">Order Enquiry Sheet</div>
     </div>
   </div>
