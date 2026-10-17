@@ -78,39 +78,48 @@ export default function Cart() {
       '_Sent from sriveerafireworks.com_',
     ].join('\n')
 
-    // Generate and download PDF
-    await generateOrderPDF({ form, cartItems, cartTotal })
+    const SUPABASE_URL = import.meta.env.VITE_SUPABASE_URL
+    const SUPABASE_KEY = import.meta.env.VITE_SUPABASE_ANON_KEY
+
+    // Save order first to get the order ID for the PDF
+    let orderNo = null
+    try {
+      const res = await fetch(`${SUPABASE_URL}/rest/v1/orders`, {
+        method: 'POST',
+        headers: {
+          apikey: SUPABASE_KEY,
+          Authorization: `Bearer ${SUPABASE_KEY}`,
+          'Content-Type': 'application/json',
+          Prefer: 'return=representation',
+        },
+        body: JSON.stringify({
+          customer_name: form.name,
+          phone: form.phone,
+          address: `[${form.isTN ? labelTN : labelOther}] ${form.address}`,
+          items: JSON.stringify(cartItems.map(i => ({
+            product_code: i.product.product_code,
+            name: i.product.name,
+            quantity: i.qty,
+            price: parseFloat(i.product.price || 0),
+            mrp: parseFloat(i.product.mrp || i.product.price || 0),
+            discount_percentage: parseFloat(i.product.discount_percentage || 0),
+            unit: i.product.order_unit || '',
+          }))),
+          total: cartTotal,
+          status: 'Payment Pending',
+        }),
+      })
+      const saved = await res.json()
+      orderNo = Array.isArray(saved) ? saved[0]?.id : saved?.id
+    } catch {}
+
+    // Generate and download PDF with the order ID
+    await generateOrderPDF({ form, cartItems, cartTotal, estimateNo: orderNo })
 
     const wa = siteSettings.whatsapp || '918300057711'
     setTimeout(() => {
       window.open(`https://wa.me/${wa}?text=${encodeURIComponent(msg)}`, '_blank')
     }, 600)
-
-    const SUPABASE_URL = import.meta.env.VITE_SUPABASE_URL
-    const SUPABASE_KEY = import.meta.env.VITE_SUPABASE_ANON_KEY
-    fetch(`${SUPABASE_URL}/rest/v1/orders`, {
-      method: 'POST',
-      headers: {
-        apikey: SUPABASE_KEY,
-        Authorization: `Bearer ${SUPABASE_KEY}`,
-        'Content-Type': 'application/json',
-        Prefer: 'return=representation',
-      },
-      body: JSON.stringify({
-        customer_name: form.name,
-        phone: form.phone,
-        address: `[${form.isTN ? labelTN : labelOther}] ${form.address}`,
-        items: JSON.stringify(cartItems.map(i => ({
-          product_code: i.product.product_code,
-          name: i.product.name,
-          quantity: i.qty,
-          price: parseFloat(i.product.price || 0),
-          unit: i.product.order_unit || '',
-        }))),
-        total: cartTotal,
-        status: 'Payment Pending',
-      }),
-    }).catch(() => {})
 
     clearCart()
     setSubmitted(true)

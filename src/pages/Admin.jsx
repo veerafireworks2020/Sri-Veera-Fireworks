@@ -3045,7 +3045,7 @@ export function AdminOrders() {
                           💬 Reply
                         </a>
                       )}
-                      <button onClick={() => downloadAdminOrderPDF(order)} className="adm-btn adm-btn-sm adm-btn-secondary" style={{ padding: '6px 12px', fontSize: '0.78rem', fontWeight: 600 }} title="Download PDF">
+                      <button onClick={() => downloadAdminOrderPDF(order, filteredOrders.length - idx)} className="adm-btn adm-btn-sm adm-btn-secondary" style={{ padding: '6px 12px', fontSize: '0.78rem', fontWeight: 600 }} title="Download PDF">
                         <Download size={12} style={{ marginRight: 4 }} /> PDF
                       </button>
                       <CustomSelect

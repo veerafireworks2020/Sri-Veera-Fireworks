@@ -40,15 +40,18 @@ function buildPageContent({ name, phone, state, address, pageItems, startIdx,
 
   const rows = pageItems.map((item, i) => {
     const idx = startIdx + i + 1;
-    const sub = parseFloat(item.price||0) * parseInt(item.qty||0);
+    const rate = parseFloat(item.price||0);
+    const mrp  = parseFloat(item.mrp||0) || rate;
+    const dis  = mrp > rate ? Math.round((1 - rate / mrp) * 100) : 0;
+    const sub  = rate * parseInt(item.qty||0);
     return `<tr>
       <td class="tc">${idx}</td>
       <td class="tc">${item.code||''}</td>
       <td class="tl nm">${item.name||'\u2014'}</td>
-      <td class="tr">${fmt(item.price)}</td>
-      <td class="tc">0%</td>
+      <td class="tr">${fmt(mrp)}</td>
+      <td class="tc">${dis}%</td>
       <td class="tc">${item.qty}</td>
-      <td class="tr">${fmt(item.price)}</td>
+      <td class="tr">${fmt(rate)}</td>
       <td class="tr">${fmt(sub)}</td>
     </tr>`;
   }).join('');

@@ -55,17 +55,20 @@ async function buildPDF(data, fileName) {
 }
 
 /** Called from Cart.jsx */
-export async function generateOrderPDF({ form, cartItems, cartTotal }) {
+export async function generateOrderPDF({ form, cartItems, cartTotal, estimateNo }) {
   const data = {
-    name:    form.name,
-    phone:   form.phone,
-    state:   form.isTN ? 'Tamil Nadu' : 'Other State',
-    address: form.address || '',
-    items:   cartItems.map(({ product, qty }) => ({
-      code:  product.product_code || '',
-      name:  product.name,
+    name:       form.name,
+    phone:      form.phone,
+    state:      form.isTN ? 'Tamil Nadu' : 'Other State',
+    address:    form.address || '',
+    estimateNo: estimateNo ? 2000 + estimateNo : null,
+    items:      cartItems.map(({ product, qty }) => ({
+      code:     product.product_code || '',
+      name:     product.name,
       qty,
-      price: parseFloat(product.price || 0),
+      price:    parseFloat(product.price || 0),
+      mrp:      parseFloat(product.mrp || product.price || 0),
+      discount: parseFloat(product.discount_percentage || 0),
     })),
     total: cartTotal,
   };
@@ -76,7 +79,7 @@ export async function generateOrderPDF({ form, cartItems, cartTotal }) {
 }
 
 /** Called from Admin.jsx */
-export async function downloadAdminOrderPDF(order) {
+export async function downloadAdminOrderPDF(order, serialNo) {
   let items = [];
   try { items = typeof order.items === 'string' ? JSON.parse(order.items) : (order.items || []); } catch {}
 
@@ -88,15 +91,18 @@ export async function downloadAdminOrderPDF(order) {
   const total = items.reduce((s, i) => s + parseFloat(i.price || 0) * parseInt(i.quantity || 0), 0);
 
   const data = {
-    name:    order.customer_name,
-    phone:   order.phone,
+    name:       order.customer_name,
+    phone:      order.phone,
     state,
     address,
-    items:   items.map(i => ({
-      code:  i.product_code || '',
-      name:  i.name,
-      qty:   i.quantity,
-      price: i.price,
+    estimateNo: serialNo ? 2000 + serialNo : null,
+    items:      items.map(i => ({
+      code:     i.product_code || '',
+      name:     i.name,
+      qty:      i.quantity,
+      price:    parseFloat(i.price || 0),
+      mrp:      parseFloat(i.mrp || i.price || 0),
+      discount: parseFloat(i.discount_percentage || 0),
     })),
     total,
   };
