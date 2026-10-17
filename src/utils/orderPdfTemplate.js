@@ -17,9 +17,8 @@ export function buildOrderHTML({ name, phone, state, address, items, total }) {
 
   const rows = items.map((item, i) => {
     const sub = parseFloat(item.price || 0) * parseInt(item.qty || 0);
-    const bg  = i % 2 === 0 ? '#ffffff' : '#f5f5f5';
     return `
-      <tr style="background:${bg}">
+      <tr>
         <td class="tc">${i + 1}</td>
         <td class="tl nm">${item.name || '—'}</td>
         <td class="tl un">${item.unit || '—'}</td>
@@ -52,7 +51,7 @@ export function buildOrderHTML({ name, phone, state, address, items, total }) {
   .title { font-size: 11px; font-weight: 900; color: #000; border-bottom: 2px solid #000; padding-bottom: 4px; margin-bottom: 9px; }
 
   /* ── Customer box ── */
-  .cust { background: #f5f5f5; border: 1.5px solid #ccc; border-radius: 6px; padding: 8px 10px; margin-bottom: 9px; }
+  .cust { background: #fff; border: 1.5px solid #ccc; border-radius: 6px; padding: 8px 10px; margin-bottom: 9px; }
   .cust-lbl { font-size: 7.5px; font-weight: 900; color: #000; letter-spacing: 1px; text-transform: uppercase; margin-bottom: 5px; }
   .cust-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 3px 14px; font-size: 9px; color: #000; }
   .cust-grid strong { font-weight: 700; }
@@ -61,8 +60,8 @@ export function buildOrderHTML({ name, phone, state, address, items, total }) {
 
   /* ── Table ── */
   table { width: 100%; border-collapse: collapse; margin-bottom: 9px; }
-  thead tr { background: #000; }
-  th { padding: 5px 6px; color: #fff; font-size: 8.5px; font-weight: 800; }
+  thead tr { background: #fff; border-bottom: 2px solid #000; }
+  th { padding: 5px 6px; color: #000; font-size: 8.5px; font-weight: 800; }
   td { padding: 3.5px 6px; font-size: 9px; color: #000; border-bottom: 1px solid #ddd; }
   .tc { text-align: center; }
   .tl { text-align: left; }

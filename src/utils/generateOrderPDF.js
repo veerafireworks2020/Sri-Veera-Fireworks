@@ -27,31 +27,34 @@ async function htmlToPDF(htmlString, fileName) {
   document.body.removeChild(container);
 
   // A5 dimensions in mm
-  const pageW  = 148;
-  const pageH  = 210;
-  const margin = 15; // bottom padding so rows never get cut at page edge
-  const effectivePageH = pageH - margin;
+  const pageW       = 148;
+  const pageH       = 210;
+  const marginBot   = 15; // bottom padding
+  const marginTop   = 12; // top padding for page 2+
+  const effectiveH1 = pageH - marginBot;               // usable height on page 1
+  const effectiveH2 = pageH - marginBot - marginTop;   // usable height on page 2+
 
-  const imgW  = pageW;
-  const imgH  = (canvas.height * imgW) / canvas.width;
+  const imgW    = pageW;
+  const imgH    = (canvas.height * imgW) / canvas.width;
   const imgData = canvas.toDataURL('image/jpeg', 0.85);
 
   const pdf = new jsPDF('p', 'mm', 'a5');
   pdf.setFillColor(255, 255, 255);
 
   let heightLeft = imgH;
-  let position   = 0;
 
-  pdf.addImage(imgData, 'JPEG', 0, position, imgW, imgH);
-  pdf.rect(0, effectivePageH, pageW, pageH, 'F');
-  heightLeft -= effectivePageH;
+  pdf.addImage(imgData, 'JPEG', 0, 0, imgW, imgH);
+  pdf.rect(0, effectiveH1, pageW, pageH, 'F');
+  heightLeft -= effectiveH1;
 
   while (heightLeft > 0) {
-    position = heightLeft - imgH;
+    const position = marginTop - (imgH - heightLeft);
     pdf.addPage();
     pdf.addImage(imgData, 'JPEG', 0, position, imgW, imgH);
-    pdf.rect(0, effectivePageH, pageW, pageH, 'F');
-    heightLeft -= effectivePageH;
+    pdf.setFillColor(255, 255, 255);                        // reset after addPage resets it
+    pdf.rect(0, 0, pageW, marginTop, 'F');                  // white top margin
+    pdf.rect(0, effectiveH1, pageW, pageH, 'F');            // white bottom overflow
+    heightLeft -= effectiveH2;
   }
 
   pdf.save(fileName);
