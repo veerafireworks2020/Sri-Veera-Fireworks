@@ -67,9 +67,7 @@ export function buildPageHTML(p) {
 
   const subtotRow = isLastPage
     ? `<tr class="subtot">
-        <td colspan="4"><strong>No Of Items : ${allCount}</strong></td>
-        <td></td>
-        <td class="tc">${allCount}</td>
+        <td colspan="6"><strong>No Of Items : ${allCount}</strong></td>
         <td></td>
         <td class="tr">${fmt(allTotal)}</td>
       </tr>`
