@@ -1,30 +1,45 @@
 /**
  * Generates the HTML string for the order enquiry PDF.
- * Designed for A5 (560px wide). Font sizes and padding are compact
- * so that even large orders scale gracefully to a single A5 page.
- *
- * @param {object} data
- *   name      {string}
- *   phone     {string}
- *   state     {string}  e.g. "Tamil Nadu" | "Other State"
- *   address   {string}
- *   items     {Array<{ name, unit, qty, price }>}
- *   total     {number}
+ * Layout matches the Sri Veera Fireworks reference estimate format.
  */
-export function buildOrderHTML({ name, phone, state, address, items, total }) {
-  const INR  = (n) => `Rs.\u00a0${parseFloat(n || 0).toLocaleString('en-IN')}`;
-  const date = new Date().toLocaleDateString('en-IN', { day: '2-digit', month: 'short', year: 'numeric' });
+
+function numberToWords(amount) {
+  const ones = ['', 'One', 'Two', 'Three', 'Four', 'Five', 'Six', 'Seven', 'Eight', 'Nine',
+    'Ten', 'Eleven', 'Twelve', 'Thirteen', 'Fourteen', 'Fifteen', 'Sixteen',
+    'Seventeen', 'Eighteen', 'Nineteen'];
+  const tens = ['', '', 'Twenty', 'Thirty', 'Forty', 'Fifty', 'Sixty', 'Seventy', 'Eighty', 'Ninety'];
+
+  function convert(n) {
+    if (n === 0) return '';
+    if (n < 20) return ones[n] + ' ';
+    if (n < 100) return tens[Math.floor(n / 10)] + ' ' + ones[n % 10] + ' ';
+    if (n < 1000) return ones[Math.floor(n / 100)] + ' Hundred ' + convert(n % 100);
+    if (n < 100000) return convert(Math.floor(n / 1000)) + 'Thousand ' + convert(n % 1000);
+    if (n < 10000000) return convert(Math.floor(n / 100000)) + 'Lakh ' + convert(n % 100000);
+    return convert(Math.floor(n / 10000000)) + 'Crore ' + convert(n % 10000000);
+  }
+
+  return convert(Math.round(parseFloat(amount || 0))).trim() || 'Zero';
+}
+
+export function buildOrderHTML({ name, phone, state, address, items, total, estimateNo }) {
+  const fmt  = (n) => parseFloat(n || 0).toFixed(2);
+  const date = new Date().toLocaleDateString('en-IN', { day: '2-digit', month: '2-digit', year: 'numeric' }).replace(/\//g, '-');
+  const estNo = estimateNo || String(Date.now()).slice(-4);
+  const words = numberToWords(total);
 
   const rows = items.map((item, i) => {
     const sub = parseFloat(item.price || 0) * parseInt(item.qty || 0);
     return `
       <tr>
         <td class="tc">${i + 1}</td>
+        <td class="tc">${item.code || ''}</td>
         <td class="tl nm">${item.name || '—'}</td>
-        <td class="tl un">${item.unit || '—'}</td>
-        <td class="tc qt">${item.qty}</td>
-        <td class="tr pr">${INR(item.price)}</td>
-        <td class="tr sb">${INR(sub)}</td>
+        <td class="tr">${fmt(item.price)}</td>
+        <td class="tc">0%</td>
+        <td class="tc">${item.qty}</td>
+        <td class="tr">${fmt(item.price)}</td>
+        <td class="tr">${fmt(sub)}</td>
       </tr>`;
   }).join('');
 
@@ -35,125 +50,120 @@ export function buildOrderHTML({ name, phone, state, address, items, total }) {
 <style>
   * { box-sizing: border-box; margin: 0; padding: 0; }
   body { font-family: Arial, Helvetica, sans-serif; background: #fff; }
-  .wrap { width: 560px; background: #fff; }
+  .wrap { width: 560px; background: #fff; border: 1.5px solid #000; }
 
-  /* ── Header ── */
-  .hdr { background: #fff; padding: 12px 18px; display: flex; justify-content: space-between; align-items: center; border-bottom: 2px solid #000; }
-  .hdr-l .brand { font-size: 15px; font-weight: 900; color: #000; letter-spacing: 0.4px; }
-  .hdr-l .tagline { font-size: 9px; font-weight: 700; color: #333; margin-top: 2px; letter-spacing: 0.5px; }
-  .hdr-l .addr  { font-size: 8px; color: #555; margin-top: 2px; }
-  .hdr-r        { text-align: right; }
-  .hdr-r .phone { font-size: 11px; font-weight: 800; color: #000; }
-  .hdr-r .lbl   { font-size: 8px; color: #555; margin-top: 2px; }
+  /* Header */
+  .hdr { padding: 6px 12px 5px; border-bottom: 1.5px solid #000; }
+  .gstin { text-align: right; font-size: 7px; font-weight: 700; letter-spacing: 0.3px; }
+  .brand { text-align: center; font-size: 20px; font-weight: 900; font-style: italic; letter-spacing: 1px; line-height: 1.1; }
+  .brand-sub { text-align: center; font-size: 8px; font-style: italic; margin-top: 1px; letter-spacing: 0.3px; }
+  .hdr-row { display: flex; justify-content: space-between; align-items: center; margin-top: 5px; }
+  .hdr-left { font-size: 7.5px; }
+  .hdr-left div { margin-bottom: 1px; }
+  .hdr-phones { font-size: 9px; font-weight: 800; text-align: right; }
+  .hdr-phones div { margin-bottom: 1px; }
 
-  /* ── Body ── */
-  .body { padding: 10px 14px; }
-  .title { font-size: 11px; font-weight: 900; color: #000; border-bottom: 2px solid #000; padding-bottom: 4px; margin-bottom: 9px; }
+  /* Customer info */
+  .cust { display: grid; grid-template-columns: 1fr 1fr; border-bottom: 1.5px solid #000; padding: 5px 10px; font-size: 8.5px; }
+  .cust-right { text-align: right; }
+  .cust div { margin-bottom: 2px; }
 
-  /* ── Customer box ── */
-  .cust { background: #fff; border: 1.5px solid #ccc; border-radius: 6px; padding: 8px 10px; margin-bottom: 9px; }
-  .cust-lbl { font-size: 7.5px; font-weight: 900; color: #000; letter-spacing: 1px; text-transform: uppercase; margin-bottom: 5px; }
-  .cust-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 3px 14px; font-size: 9px; color: #000; }
-  .cust-grid strong { font-weight: 700; }
-  .cust-addr { font-size: 9px; color: #000; margin-top: 4px; }
-  .cust-addr strong { font-weight: 700; }
-
-  /* ── Table ── */
-  table { width: 100%; border-collapse: collapse; margin-bottom: 9px; }
-  thead tr { background: #fff; border-bottom: 2px solid #000; }
-  th { padding: 5px 6px; color: #000; font-size: 8.5px; font-weight: 800; }
-  td { padding: 3.5px 6px; font-size: 9px; color: #000; border-bottom: 1px solid #ddd; }
+  /* Table */
+  table { width: 100%; border-collapse: collapse; }
+  th { border: 1px solid #000; padding: 4px 4px; font-size: 8.5px; font-weight: 700; text-align: center; }
+  td { border: 1px solid #000; padding: 2.5px 4px; font-size: 8.5px; color: #000; }
   .tc { text-align: center; }
   .tl { text-align: left; }
   .tr { text-align: right; }
-  .nm { font-weight: 700; }
-  .un { color: #555; font-size: 8px; }
-  .qt { font-weight: 800; }
-  .sb { font-weight: 800; color: #000; }
+  .nm { font-weight: 600; }
 
-  /* column widths */
-  .col-no   { width: 24px; }
-  .col-name { }
-  .col-unit { width: 90px; }
-  .col-qty  { width: 30px; }
-  .col-price{ width: 62px; }
-  .col-sub  { width: 70px; }
+  /* Subtotal row */
+  tr.subtot td { font-weight: 700; border-top: 1.5px solid #000; }
 
-  /* ── Total ── */
-  .total-wrap { display: flex; justify-content: flex-end; margin-bottom: 9px; }
-  .total-box .lbl { font-size: 11px; font-weight: 800; color: #000; }
-  .total-box .val { font-size: 13px; font-weight: 900; color: #000; margin-left: 10px; }
+  /* Summary */
+  .summary { border-top: 1.5px solid #000; }
+  .sum-items { display: flex; justify-content: space-between; padding: 4px 10px; font-size: 8.5px; font-weight: 700; border-bottom: 1px solid #ccc; }
+  .bill-total { display: flex; justify-content: flex-end; gap: 30px; padding: 4px 10px; font-size: 9px; font-weight: 700; border-bottom: 1px solid #000; }
+  .rupees { padding: 5px 10px; font-size: 8.5px; font-weight: 700; }
 
-  /* ── Footer ── */
-  .ftr { border-top: 1px solid #ccc; padding-top: 5px; display: flex; justify-content: space-between; font-size: 7.5px; color: #555; }
-  .ftr strong { font-weight: 700; }
+  /* Footer */
+  .footer { border-top: 1px solid #000; padding: 4px 10px; display: flex; justify-content: space-between; font-size: 7.5px; color: #444; }
 </style>
 </head>
 <body>
 <div class="wrap">
 
   <div class="hdr">
-    <div class="hdr-l">
-      <div class="brand">SRI VEERA FIREWORKS</div>
-      <div class="tagline">Treats on Fire</div>
-      <div class="addr">1/204-6, NH-07, Chatram Road, Vachakkarapatti, RR Nagar, Virudhunagar District - 626204</div>
-    </div>
-    <div class="hdr-r">
-      <div class="phone">83000 57711 / 83000 57722</div>
-      <div class="lbl">Order Enquiry Sheet</div>
+    <div class="gstin">GSTIN:33GWUPS8883M1Z1</div>
+    <div class="brand">SRI VEERA FIREWORKS. SIVAKASI.</div>
+    <div class="brand-sub">The Fireworks Manufacturer &amp; Factory Outlet Shop</div>
+    <div class="hdr-row">
+      <div class="hdr-left">
+        <div>&#127760; www.sriveerafireworks.com</div>
+        <div>&#128100; Sri Veera Fireworks Sivakasi</div>
+      </div>
+      <div class="hdr-phones">
+        <div>&#128222; 83000 577 11</div>
+        <div>&#128222; 83000 577 22</div>
+        <div>&#128222; 80000 577 33</div>
+      </div>
     </div>
   </div>
 
-  <div class="body">
-
-    <div class="title">ORDER ENQUIRY DETAILS</div>
-
-    <div class="cust">
-      <div class="cust-lbl">Customer Information</div>
-      <div class="cust-grid">
-        <div><strong>Name:</strong> ${name || '—'}</div>
-        <div><strong>Date:</strong> ${date}</div>
-        <div><strong>Phone:</strong> ${phone || '—'}</div>
-        <div><strong>State:</strong> ${state || '—'}</div>
-      </div>
-      ${address ? `<div class="cust-addr"><strong>Address:</strong> ${address}</div>` : ''}
+  <div class="cust">
+    <div>
+      <div><strong>Name &nbsp;&nbsp;&nbsp;:</strong> ${name || '—'}</div>
+      <div><strong>Address :</strong> ${address || '—'}</div>
+      <div><strong>Contact &nbsp;:</strong> ${phone || '—'}</div>
     </div>
-
-    <table>
-      <colgroup>
-        <col class="col-no"/>
-        <col class="col-name"/>
-        <col class="col-unit"/>
-        <col class="col-qty"/>
-        <col class="col-price"/>
-        <col class="col-sub"/>
-      </colgroup>
-      <thead>
-        <tr>
-          <th class="tc">#</th>
-          <th class="tl">Product Name</th>
-          <th class="tl">Unit</th>
-          <th class="tc">Qty</th>
-          <th class="tr">Price</th>
-          <th class="tr">Subtotal</th>
-        </tr>
-      </thead>
-      <tbody>${rows}</tbody>
-    </table>
-
-    <div class="total-wrap">
-      <div class="total-box">
-        <span class="lbl">Total Payable:</span>
-        <span class="val">${INR(total)}</span>
-      </div>
+    <div class="cust-right">
+      <div><strong>Estimate No : ${estNo}</strong></div>
+      <div><strong>Date : ${date}</strong></div>
+      <div><strong>State : ${state || '—'}</strong></div>
     </div>
-
-    <div class="ftr">
-      <strong>https://www.sriveerafireworks.com</strong>
-      <span>Generated: ${new Date().toLocaleString('en-IN')}</span>
-    </div>
-
   </div>
+
+  <table>
+    <thead>
+      <tr>
+        <th style="width:26px">SIno</th>
+        <th style="width:32px">Code</th>
+        <th>Cracker name</th>
+        <th style="width:50px">Actual</th>
+        <th style="width:36px">Dis %</th>
+        <th style="width:26px">Qty</th>
+        <th style="width:50px">Rate</th>
+        <th style="width:56px">Total</th>
+      </tr>
+    </thead>
+    <tbody>
+      ${rows}
+      <tr class="subtot">
+        <td colspan="5"></td>
+        <td class="tc">${items.length}</td>
+        <td></td>
+        <td class="tr">${fmt(total)}</td>
+      </tr>
+    </tbody>
+  </table>
+
+  <div class="summary">
+    <div class="sum-items">
+      <span>No Of Items : ${items.length}</span>
+      <span>${items.length} &nbsp;&nbsp;&nbsp;&nbsp; ${fmt(total)}</span>
+    </div>
+    <div class="bill-total">
+      <span>Bill total</span>
+      <span>${fmt(total)}</span>
+    </div>
+    <div class="rupees">Rupees : ${words} Only</div>
+  </div>
+
+  <div class="footer">
+    <span>Thank you for business with us!</span>
+    <span>www.sriveerafireworks.com</span>
+  </div>
+
 </div>
 </body>
 </html>`;
