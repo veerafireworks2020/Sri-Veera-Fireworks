@@ -1,32 +1,57 @@
-import { buildPrintHTML } from './orderPdfTemplate';
+import html2canvas from 'html2canvas';
+import { jsPDF } from 'jspdf';
+import { buildPageHTML, ITEMS_PER_PAGE } from './orderPdfTemplate';
 
-/**
- * Opens the order HTML in a hidden iframe and triggers the browser's
- * native print dialog. User selects "Save as PDF" → perfect A5 output
- * with no screenshot scaling artifacts.
- */
-function printViaIframe(html) {
-  return new Promise((resolve) => {
-    const iframe = document.createElement('iframe');
-    iframe.style.cssText = 'position:fixed;left:-9999px;top:0;width:1px;height:1px;border:0;';
-    document.body.appendChild(iframe);
+async function renderPage(html) {
+  const container = document.createElement('div');
+  container.style.cssText = 'position:fixed;left:-9999px;top:0;z-index:-1;background:#fff;';
+  container.innerHTML = html;
+  document.body.appendChild(container);
+  const el = container.querySelector('.wrap') || container.firstElementChild;
 
-    const doc = iframe.contentDocument || iframe.contentWindow.document;
-    doc.open();
-    doc.write(html);
-    doc.close();
+  await new Promise(r => setTimeout(r, 400));
 
-    iframe.contentWindow.onafterprint = () => {
-      document.body.removeChild(iframe);
-      resolve();
-    };
-
-    // Small delay so the browser fully renders before printing
-    setTimeout(() => {
-      iframe.contentWindow.focus();
-      iframe.contentWindow.print();
-    }, 600);
+  const canvas = await html2canvas(el, {
+    scale: 2,
+    useCORS: true,
+    logging: false,
+    backgroundColor: '#ffffff',
+    windowWidth: 560,
   });
+
+  document.body.removeChild(container);
+  return canvas;
+}
+
+async function buildPDF(data, fileName) {
+  const { name, phone, state, address, items, total, estimateNo } = data;
+
+  const chunks = [];
+  for (let i = 0; i < items.length; i += ITEMS_PER_PAGE) chunks.push(items.slice(i, i + ITEMS_PER_PAGE));
+  if (chunks.length === 0) chunks.push([]);
+
+  const pdf = new jsPDF('p', 'mm', 'a5');
+
+  for (let idx = 0; idx < chunks.length; idx++) {
+    const html = buildPageHTML({
+      name, phone, state, address,
+      pageItems: chunks[idx],
+      startIdx:  idx * ITEMS_PER_PAGE,
+      pageNum:   idx + 1,
+      isLastPage: idx === chunks.length - 1,
+      allTotal:  total,
+      allCount:  items.length,
+      estimateNo,
+    });
+
+    const canvas  = await renderPage(html);
+    const imgData = canvas.toDataURL('image/jpeg', 0.9);
+
+    if (idx > 0) { pdf.addPage(); pdf.setFillColor(255, 255, 255); }
+    pdf.addImage(imgData, 'JPEG', 0, 0, 148, 210);
+  }
+
+  pdf.save(fileName);
 }
 
 /** Called from Cart.jsx */
@@ -45,11 +70,12 @@ export async function generateOrderPDF({ form, cartItems, cartTotal }) {
     total: cartTotal,
   };
 
-  const html = buildPrintHTML(data);
-  await printViaIframe(html);
+  const cleanName  = (form.name  || 'Customer').replace(/\s+/g, '_');
+  const cleanPhone = (form.phone || 'NoPhone').replace(/\s+/g, '_');
+  await buildPDF(data, `SriVeera_Order_${cleanName}_${cleanPhone}.pdf`);
 }
 
-/** Called from Admin.jsx — pass the raw order row from Supabase */
+/** Called from Admin.jsx */
 export async function downloadAdminOrderPDF(order) {
   let items = [];
   try { items = typeof order.items === 'string' ? JSON.parse(order.items) : (order.items || []); } catch {}
@@ -75,6 +101,7 @@ export async function downloadAdminOrderPDF(order) {
     total,
   };
 
-  const html = buildPrintHTML(data);
-  await printViaIframe(html);
+  const cleanName  = (order.customer_name || 'Customer').replace(/\s+/g, '_');
+  const cleanPhone = (order.phone || 'NoPhone').replace(/\s+/g, '_');
+  await buildPDF(data, `SriVeera_Order_${cleanName}_${cleanPhone}.pdf`);
 }

@@ -126,6 +126,60 @@ function buildPageContent({ name, phone, state, address, pageItems, startIdx,
   </div>`;
 }
 
+
+/**
+ * Single-page HTML for html2canvas rendering (px units, 560x795px = A5 proportions).
+ * Called once per page chunk; canvas is added to jsPDF for auto-download.
+ */
+export function buildPageHTML(params) {
+  // Get inner page content and swap .page class to .wrap for standalone rendering
+  const inner = buildPageContent(params)
+    .replace('<div class="page">', '<div class="wrap">');
+
+  return `<!DOCTYPE html>
+<html lang="en">
+<head><meta charset="UTF-8"/>
+<style>
+  * { box-sizing:border-box; margin:0; padding:0; }
+  body { font-family:Arial,Helvetica,sans-serif; background:#fff; }
+  .wrap {
+    width:560px; height:795px; background:#fff;
+    border:1px solid #000;
+    display:flex; flex-direction:column;
+  }
+  .hdr { border-bottom:1px solid #000; flex-shrink:0; }
+  .hdr img { width:100%; display:block; }
+  .cust { border-bottom:1px solid #000; padding:10px 18px; font-size:11px; flex-shrink:0; }
+  .cust-top { display:flex; justify-content:space-between; margin-bottom:5px; }
+  .cust-right { text-align:right; }
+  .cust div { margin-bottom:3px; }
+  .tbl-wrap { flex:1; display:flex; flex-direction:column; min-height:0; }
+  table { width:100%; border-collapse:collapse; }
+  th { border:1px solid #bbb; padding:6px 12px; font-size:11px; font-weight:700; text-align:center; }
+  td { border:1px solid #ccc; padding:4px 12px; font-size:11px; color:#000; }
+  .tc { text-align:center; }
+  .tl { text-align:left; }
+  .tr { text-align:right; }
+  .nm { font-weight:600; }
+  tr.subtot td { font-weight:700; border-top:1px solid #999; }
+  .spacer { flex:1; border-left:1px solid #ccc; border-right:1px solid #ccc; }
+  .continued-wrap { display:flex; border-top:1px solid #999; flex-shrink:0; }
+  .cont-left { flex:1; border-right:1px solid #ccc; }
+  .cont-right { flex:1; text-align:center; padding:10px 0; }
+  .continued { font-size:12px; font-style:italic; font-weight:700; margin-bottom:5px; }
+  .page-num { font-size:12px; font-weight:700; }
+  .bill-section { display:flex; border-top:1px solid #999; flex-shrink:0; }
+  .bill-left { flex:1; padding:10px 18px; border-right:1px solid #ccc; }
+  .rupees { font-size:11px; font-weight:700; }
+  .bill-right { display:flex; align-items:center; padding:8px 18px; min-width:140px; }
+  .bill-total-row { display:flex; justify-content:space-between; width:100%; font-size:12px; font-weight:700; gap:12px; }
+  .footer { border-top:1px solid #bbb; padding:6px 18px; display:flex; justify-content:space-between; font-size:10px; color:#444; flex-shrink:0; }
+</style>
+</head>
+<body>${inner}</body>
+</html>`;
+}
+
 export function buildPrintHTML({ name, phone, state, address, items, total, estimateNo }) {
   const chunks = [];
   for (let i = 0; i < items.length; i += ITEMS_PER_PAGE) {
