@@ -121,8 +121,8 @@ export function buildPageHTML(p) {
   /* Table section */
   .tbl-wrap { flex:1; display:flex; flex-direction:column; min-height:0; }
   table { width:100%; border-collapse:collapse; }
-  th { border:1px solid #bbb; padding:5px 4px; font-size:8.5px; font-weight:700; text-align:center; }
-  td { border:1px solid #ccc; padding:3px 4px; font-size:8.5px; color:#000; }
+  th { border:1px solid #bbb; padding:5px 8px; font-size:8.5px; font-weight:700; text-align:center; }
+  td { border:1px solid #ccc; padding:3px 8px; font-size:8.5px; color:#000; }
   .tc { text-align:center; }
   .tl { text-align:left; }
   .tr { text-align:right; }
