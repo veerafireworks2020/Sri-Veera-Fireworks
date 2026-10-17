@@ -110,40 +110,40 @@ export function buildPageHTML(p) {
     display:flex; flex-direction:column;
   }
   /* Header */
-  .hdr { border-bottom:1.5px solid #000; flex-shrink:0; }
+  .hdr { border-bottom:1px solid #000; flex-shrink:0; }
   .hdr img { width:100%; display:block; }
   /* Customer */
-  .cust { border-bottom:1.5px solid #000; padding:5px 10px; font-size:8.5px; flex-shrink:0; }
-  .cust-top { display:grid; grid-template-columns:1fr 1fr; }
+  .cust { border-bottom:1px solid #000; padding:8px 14px; font-size:8.5px; flex-shrink:0; }
+  .cust-top { display:grid; grid-template-columns:1fr 1fr; margin-bottom:4px; }
   .cust-right { text-align:right; }
-  .cust div { margin-bottom:2px; }
+  .cust div { margin-bottom:3px; }
   .cust-contact { margin-top:2px; }
   /* Table section */
   .tbl-wrap { flex:1; display:flex; flex-direction:column; min-height:0; }
   table { width:100%; border-collapse:collapse; }
-  th { border:1px solid #000; padding:4px 4px; font-size:8.5px; font-weight:700; text-align:center; }
-  td { border:1px solid #000; padding:2.5px 4px; font-size:8.5px; color:#000; }
+  th { border:1px solid #bbb; padding:5px 4px; font-size:8.5px; font-weight:700; text-align:center; }
+  td { border:1px solid #ccc; padding:3px 4px; font-size:8.5px; color:#000; }
   .tc { text-align:center; }
   .tl { text-align:left; }
   .tr { text-align:right; }
   .nm { font-weight:600; }
-  tr.subtot td { font-weight:700; border-top:1.5px solid #000; }
+  tr.subtot td { font-weight:700; border-top:1px solid #999; }
   /* Spacer keeps borders going down */
-  .spacer { flex:1; border-left:1px solid #000; border-right:1px solid #000; }
+  .spacer { flex:1; border-left:1px solid #ccc; border-right:1px solid #ccc; }
   /* Continued */
-  .continued-wrap { display:flex; border-top:1px solid #000; flex-shrink:0; }
-  .cont-left { flex:1; border-right:1px solid #000; }
+  .continued-wrap { display:flex; border-top:1px solid #999; flex-shrink:0; }
+  .cont-left { flex:1; border-right:1px solid #ccc; }
   .cont-right { flex:1; text-align:center; padding:6px 0; }
   .continued { font-size:9px; font-style:italic; font-weight:700; margin-bottom:4px; }
   .page-num { font-size:9px; font-weight:700; }
   /* Bill section (last page) */
-  .bill-section { display:flex; border-top:1.5px solid #000; flex-shrink:0; }
-  .bill-left { flex:1; padding:6px 10px; border-right:1px solid #000; }
+  .bill-section { display:flex; border-top:1px solid #999; flex-shrink:0; }
+  .bill-left { flex:1; padding:8px 14px; border-right:1px solid #ccc; }
   .rupees { font-size:8.5px; font-weight:700; }
-  .bill-right { display:flex; flex-direction:column; justify-content:center; padding:4px 10px; min-width:130px; }
+  .bill-right { display:flex; flex-direction:column; justify-content:center; padding:6px 14px; min-width:130px; }
   .bill-total-row { display:flex; justify-content:space-between; font-size:9px; font-weight:700; gap:16px; }
   /* Footer */
-  .footer { border-top:1px solid #000; padding:4px 10px; display:flex; justify-content:space-between; font-size:7.5px; color:#444; flex-shrink:0; }
+  .footer { border-top:1px solid #bbb; padding:5px 14px; display:flex; justify-content:space-between; font-size:7.5px; color:#444; flex-shrink:0; }
 </style>
 </head>
 <body>
