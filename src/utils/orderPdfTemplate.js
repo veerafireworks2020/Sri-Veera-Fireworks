@@ -161,7 +161,7 @@ export function buildPageHTML(params) {
   .tbl-wrap { flex:1; display:flex; flex-direction:column; min-height:0; }
   table { width:100%; border-collapse:collapse; }
   th { border:1px solid #aaa; padding:4px 8px; font-size:9px; font-weight:700; text-align:center; background:#fff; }
-  td { border:1px solid #ccc; padding:2px 8px; font-size:9px; color:#000; line-height:1.4; }
+  td { border:1px solid #ccc; padding:5px 8px; font-size:9px; color:#000; line-height:1.4; }
   .tc { text-align:center; }
   .tl { text-align:left; }
   .tr { text-align:right; }
