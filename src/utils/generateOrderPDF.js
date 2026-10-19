@@ -48,7 +48,7 @@ async function buildPDF(data, fileName) {
     const imgData = canvas.toDataURL('image/jpeg', 0.9);
 
     if (idx > 0) { pdf.addPage(); pdf.setFillColor(255, 255, 255); }
-    pdf.addImage(imgData, 'JPEG', 0, 0, 148, 210);
+    pdf.addImage(imgData, 'JPEG', 10, 10, 128, 190);
   }
 
   pdf.save(fileName);
