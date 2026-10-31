@@ -242,6 +242,7 @@ export default function Fireworks() {
       rafId = requestAnimationFrame(animate)
       const dt = Math.min(ts - lastTime, 50)
       lastTime = ts
+      const mul = dt / 16.667  // frame multiplier: 1.0 at 60fps, 2.0 at 30fps
 
       // Burst → gap → burst pattern
       launchTimer += dt
@@ -288,9 +289,9 @@ export default function Fireworks() {
         if (r.exploded) return false
 
         // Move
-        r.x += r.vx
-        r.y += r.vy
-        r.vy += 0.04 // slight gravity on ascent
+        r.x += r.vx * mul
+        r.y += r.vy * mul
+        r.vy += 0.04 * mul // slight gravity on ascent
 
         // Trail
         r.trail.unshift({ x: r.x, y: r.y })
@@ -353,15 +354,15 @@ export default function Fireworks() {
 
       // ── Draw particles ──────────────────────────────────────────────────────
       particles = particles.filter(p => {
-        p.life++
+        p.life += mul
         if (p.life >= p.maxLife) return false
 
         const progress = p.life / p.maxLife
-        p.vx *= p.drag
-        p.vy *= p.drag
-        p.vy += p.gravity
-        p.x += p.vx
-        p.y += p.vy
+        p.vx *= Math.pow(p.drag, mul)
+        p.vy *= Math.pow(p.drag, mul)
+        p.vy += p.gravity * mul
+        p.x += p.vx * mul
+        p.y += p.vy * mul
 
         const alpha = p.twinkle
           ? (1 - progress) * (0.5 + 0.5 * Math.sin(p.life * 0.5))
