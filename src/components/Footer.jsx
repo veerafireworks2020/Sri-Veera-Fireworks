@@ -72,51 +72,33 @@ export default function Footer() {
       <a
         href="tel:+918300057711"
         title="Call Us"
-        style={{ position: 'fixed', bottom: 180, right: 16, textDecoration: 'none', zIndex: 999, display: 'flex', alignItems: 'center', gap: 8 }}
+        style={{ position: 'fixed', bottom: 152, right: 14, zIndex: 999, textDecoration: 'none', display: 'flex', flexDirection: 'column', alignItems: 'center', gap: 3 }}
       >
-        <span style={{
-          fontSize: 11, fontWeight: 800, color: '#fff',
-          background: 'linear-gradient(135deg, #e87316, #f59e0b)',
-          borderRadius: 6, padding: '4px 10px', whiteSpace: 'nowrap',
-          boxShadow: '0 2px 8px rgba(232,115,22,0.4)',
-          animation: 'float-label 2s ease-in-out infinite',
-        }}>📞 Call Us</span>
-        <svg xmlns="http://www.w3.org/2000/svg" width="44" height="44" viewBox="0 0 52 52" style={{ display: 'block', flexShrink: 0 }}>
+        <svg xmlns="http://www.w3.org/2000/svg" width="36" height="36" viewBox="0 0 52 52" style={{ display: 'block' }}>
           <circle cx="26" cy="26" r="26" fill="#00b900"/>
           <path fill="#fff" d="M36.5 32.1c-.7-.7-4.4-2.9-5.2-2.9-.4 0-.8.2-1.1.5l-1.5 1.5c-.2.2-.5.3-.7.2-1-.4-3.2-2.2-4.6-3.6-1.4-1.4-3.2-3.6-3.6-4.6-.1-.3 0-.5.2-.7l1.5-1.5c.3-.3.5-.7.5-1.1 0-.8-2.2-4.5-2.9-5.2-.3-.3-.7-.5-1.1-.5-1.5 0-4.5 2-4.5 4 0 5.5 6.5 12.5 10.5 15.5 2 1.5 5.5 3.5 8 3.5 2 0 4-3 4-4.5 0-.4-.2-.8-.5-1.1z"/>
         </svg>
+        <span style={{ fontSize: 9, fontWeight: 700, color: '#fff', background: '#00b900', borderRadius: 4, padding: '2px 6px', whiteSpace: 'nowrap' }}>Call Us</span>
       </a>
 
       {/* WhatsApp Float */}
       <a
         href={`https://api.whatsapp.com/send?phone=${siteSettings?.whatsapp || '918300057711'}&text=Hello,%20Sri%20Veera%20Fireworks`}
         target="_blank" rel="noreferrer" title="Chat on WhatsApp"
-        style={{ position: 'fixed', bottom: 96, right: 16, textDecoration: 'none', zIndex: 999, display: 'flex', alignItems: 'center', gap: 8 }}
+        style={{ position: 'fixed', bottom: 84, right: 14, zIndex: 999, textDecoration: 'none', display: 'flex', flexDirection: 'column', alignItems: 'center', gap: 3 }}
       >
-        <span style={{
-          fontSize: 11, fontWeight: 800, color: '#fff',
-          background: 'linear-gradient(135deg, #8b5cf6, #ec4899)',
-          borderRadius: 6, padding: '4px 10px', whiteSpace: 'nowrap',
-          boxShadow: '0 2px 8px rgba(139,92,246,0.4)',
-          animation: 'float-label 2s ease-in-out infinite 0.5s',
-        }}>💬 WhatsApp</span>
-        <img src={whatsappImg} alt="WhatsApp" style={{ width: 56, height: 56, display: 'block', borderRadius: '50%', flexShrink: 0 }} />
+        <img src={whatsappImg} alt="WhatsApp" style={{ width: 36, height: 36, display: 'block', borderRadius: '50%' }} />
+        <span style={{ fontSize: 9, fontWeight: 700, color: '#fff', background: '#25d366', borderRadius: 4, padding: '2px 6px', whiteSpace: 'nowrap' }}>WhatsApp</span>
       </a>
 
       {/* Facebook Float */}
       <a
         href="https://www.facebook.com/profile.php?id=61579704510215"
         target="_blank" rel="noreferrer" title="Follow on Facebook"
-        style={{ position: 'fixed', bottom: 16, right: 16, textDecoration: 'none', zIndex: 999, display: 'flex', alignItems: 'center', gap: 8 }}
+        style={{ position: 'fixed', bottom: 14, right: 14, zIndex: 999, textDecoration: 'none', display: 'flex', flexDirection: 'column', alignItems: 'center', gap: 3 }}
       >
-        <span style={{
-          fontSize: 11, fontWeight: 800, color: '#fff',
-          background: 'linear-gradient(135deg, #1877f2, #0a5dc2)',
-          borderRadius: 6, padding: '4px 10px', whiteSpace: 'nowrap',
-          boxShadow: '0 2px 8px rgba(24,119,242,0.4)',
-          animation: 'float-label 2s ease-in-out infinite 1s',
-        }}>👍 Facebook</span>
-        <img src={facebookImg} alt="Facebook" style={{ width: 48, height: 48, display: 'block', borderRadius: '50%', flexShrink: 0 }} />
+        <img src={facebookImg} alt="Facebook" style={{ width: 36, height: 36, display: 'block', borderRadius: '50%' }} />
+        <span style={{ fontSize: 9, fontWeight: 700, color: '#fff', background: '#1877f2', borderRadius: 4, padding: '2px 6px', whiteSpace: 'nowrap' }}>Facebook</span>
       </a>
 
     </>

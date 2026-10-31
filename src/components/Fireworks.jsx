@@ -3,10 +3,10 @@ import { useEffect, useRef } from 'react'
 // ── Configuration ─────────────────────────────────────────────────────────────
 const CFG = {
   maxRockets: 3,
-  burstCount: 2,            // rockets per burst
-  burstSpacing: 400,        // ms between rockets in a burst
-  gapMin: 25000,            // min gap between bursts (ms)
-  gapMax: 25000,            // max gap between bursts (ms)
+  burstCount: 1,            // rockets per burst
+  burstSpacing: 300,        // ms between rockets in a burst
+  gapMin: 30000,            // 30 second gap between bursts
+  gapMax: 30000,            // 30 second gap between bursts
   particleDensity: 2.0,
   maxDpr: 2,
 }
@@ -150,7 +150,7 @@ function createRocket(canvasW, canvasH) {
   const dx = targetX - x
   const dy = targetY - canvasH
   const dist = Math.sqrt(dx * dx + dy * dy)
-  const speed = rand(9, 16)
+  const speed = rand(18, 24)
   const type = choice(EXPLOSION_TYPES)
   const palette = randPalette()
   return {
