@@ -5,8 +5,8 @@ const CFG = {
   maxRockets: 3,
   burstCount: 1,            // rockets per burst
   burstSpacing: 300,        // ms between rockets in a burst
-  gapMin: 30000,            // 30 second gap between bursts
-  gapMax: 30000,            // 30 second gap between bursts
+  gapMin: 150000,           // 150 second gap between bursts
+  gapMax: 150000,           // 150 second gap between bursts
   particleDensity: 2.0,
   maxDpr: 2,
 }
